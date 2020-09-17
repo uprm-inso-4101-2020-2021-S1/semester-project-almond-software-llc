@@ -1,3 +1,4 @@
+package macademia.backend.auth;
 //please work
 //I'm not quite sure how to organize this help me aaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAa
 
