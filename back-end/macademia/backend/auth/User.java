@@ -1,4 +1,6 @@
-package macademia.auth;
+package macademia.backend.auth;
+
+import macademia.backend.Student;
 
 /**
  * Holds a User in Macademia
