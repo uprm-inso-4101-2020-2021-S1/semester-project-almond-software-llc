@@ -1,4 +1,4 @@
-package macademia.backend;
+package macademia;
 
 import macademia.backend.auth.User;
 
