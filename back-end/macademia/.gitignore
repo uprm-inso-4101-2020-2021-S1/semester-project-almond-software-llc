@@ -1,6 +1,9 @@
+<<<<<<< Upstream, based on local-berm
 /Course.class
 /Section.class
 /Matricula.class
+=======
+>>>>>>> 99a40a9 Move to Macademia from Macademia.Backend
 /User.class
 /Student.class
 /Department.class
