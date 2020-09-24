@@ -1,7 +1,5 @@
 package macademia.backend.auth;
 
-import macademia.backend.Student;
-
 /**
  * Holds a User in Macademia
  * @author Igtampe
