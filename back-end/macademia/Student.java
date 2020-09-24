@@ -1,6 +1,6 @@
 package macademia;
 
-import macademia.backend.auth.User;
+import macademia.auth.User;
 
 /**
  * Class that holds a student, which contains:
