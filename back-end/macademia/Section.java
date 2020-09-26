@@ -1,5 +1,5 @@
-package macademia.backend;
-
+package macademia;
+import macademia.Course;
 /**
  * Holds a Class Section in Macademia
  * @author Giovanni Garcia
@@ -8,15 +8,15 @@ public class Section {
     //Variables
     private String secNum;
     private String day;
-    private int time;
-   //private Course class;
+    private String time;
+    private Course course;
 
     //Constructor
-    public Section(String secNum, String day, int time){
+    public Section(String secNum, String day, String time, Course course){
         this.secNum = secNum;
         this.day = day;
         this.time = time;
-        //this.class = class;
+        this.course = course;
     }
 
     /**
@@ -35,7 +35,9 @@ public class Section {
      * Sets the time of this object
      * @return N/A
      */
-    public void setTime(int t) {this.time = t;}
+    public void setTime(String t) {this.time = t;}
+
+    //Getters
 
     /**
      * Gets the section number of this object
@@ -53,13 +55,13 @@ public class Section {
      * Gets the time of this object
      * @return time
      */
-    public int getTime() {return this.time;}
+    public String getTime() {return this.time;}
 
     /**
      * Gets the parent object of this object
      * @return class
      */
-   //public Course getClass(){return this.class} ;
+   public Course getCourse(){return this.course;} 
 
     
 

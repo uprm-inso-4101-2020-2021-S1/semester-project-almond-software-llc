@@ -1,5 +1,7 @@
 package macademia;
+
 import java.util.List;
+import macademia.Section;
 
 /*
  * Contains information for a Course
@@ -14,6 +16,7 @@ public class Course {
 	private String dept;
 	private int code;
 	private List<Course> prereq;
+	private List<Section> sections;
 	
 	//-[Constructor]-----------------------------------------
 	
