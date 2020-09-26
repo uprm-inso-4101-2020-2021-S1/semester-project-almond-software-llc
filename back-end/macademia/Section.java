@@ -1,4 +1,4 @@
-package macademia.backend.auth;
+package macademia.backend;
 
 /**
  * Holds a Class Section in Macademia
@@ -9,7 +9,7 @@ public class Section {
     private String secNum;
     private String day;
     private int time;
-   //private Class class;
+   //private Course class;
 
     //Constructor
     public Section(String secNum, String day, int time){
@@ -59,7 +59,7 @@ public class Section {
      * Gets the parent object of this object
      * @return class
      */
-   //public Class getClass(){return this.class} ;
+   //public Course getClass(){return this.class} ;
 
     
 
