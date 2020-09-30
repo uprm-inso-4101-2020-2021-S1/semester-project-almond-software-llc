@@ -67,6 +67,11 @@ public class Section {
      */
    public Course getCourse(){return this.course;} 
 
+   /**
+	 * Returns a displayable string for this section
+	 * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE "DRAM3001-21 on Tuesday, Thursday during 5:30-7:00")
+    */
+   public String toString() {return getCourse().getDept().getShortName() + getCourse().getCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();}
     
 
 }

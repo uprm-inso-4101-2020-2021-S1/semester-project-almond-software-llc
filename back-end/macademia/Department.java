@@ -73,7 +73,7 @@ public class Department {
 	 * Returns a displayable string for this department.
 	 * @return NAME (CATALOG.COUNT Course(s))
 	 */
-	public String toString() {return Name + "(" + CourseCatalog.size() + " course(s))";		}
+	public String toString() {return Name + " (" + CourseCatalog.size() + " course(s))";		}
 	
 	/**
 	 * Checks if an object is equal to this Department

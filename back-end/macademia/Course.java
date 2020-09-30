@@ -88,4 +88,11 @@ public class Course {
 		this.sections.add(sect);
 	}
 	
+	/**
+	* Returns a displayable string for this course
+	* @return CourseName (DeptShortNameCourseCode) Credits Credit(s) (IE "Acting 1 (DRAM3001) 3 Credit(s)")
+	*/
+	public String toString() {return getName() + " (" + getDept().getShortName() + getCode() + ") " + getCredits() + " Credit(s)";}
+
+	
 }

@@ -84,7 +84,7 @@ public class Student extends User {
 	 * Returns this student as a displayable string
 	 * @return NAME (STUDENT_NUMBER)
 	 */
-	public String toString() {return Name + "(" + StudentNumber + ")";		}
+	public String toString() {return Name + " (" + StudentNumber + ")";		}
 	
 	/**
 	 * Checks if an object is equal to this student
