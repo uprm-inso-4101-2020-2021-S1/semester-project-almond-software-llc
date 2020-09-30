@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * Department class which holds its name, its shortname and a table with all of its courses.
+ * Department class which holds its name, its short name and a table with all of its courses.
  * @author igtampe
  */
 public class Department {
@@ -62,7 +62,7 @@ public class Department {
 	
 	//-[Functions]----------------------------------------------------------------------
 	
-	/*
+	/**
 	 * Adds/updates a course to the course directory.
 	 */
 	public void AddCourse(Object Course) {CourseCatalog.put(0, Course);}

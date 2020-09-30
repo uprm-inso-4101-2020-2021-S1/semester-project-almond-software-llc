@@ -15,11 +15,8 @@ public class Student extends User {
 	//-[Variables]----------------------------------------------------------------------
 	
 	//Change to Matricula once its created
-	Object matricula;
-	
-	//Change to Department once its created
-	Department department;
-	
+	private Object matricula;
+	private Department department;
 	private String Name;
 	private String StudentNumber;
 	
