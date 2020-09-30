@@ -65,7 +65,7 @@ public class Department {
 	/**
 	 * Adds/updates a course to the course directory.
 	 */
-	public void AddCourse(Course course) {CourseCatalog.put(0, course);}
+	public void AddCourse(Course course) {CourseCatalog.put(course.getCode(), course);}
 
 	//-[Overrides]----------------------------------------------------------------------
 	

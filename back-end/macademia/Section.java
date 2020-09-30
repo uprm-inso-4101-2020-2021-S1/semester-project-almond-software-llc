@@ -17,6 +17,10 @@ public class Section {
         this.day = day;
         this.time = time;
         this.course = course;
+        
+        //Link this Section's Course to this section
+        course.addSection(this);
+        
     }
 
     /**

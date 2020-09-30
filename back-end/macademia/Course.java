@@ -1,5 +1,6 @@
 package macademia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -12,7 +13,7 @@ public class Course {
 	//-[Fields]----------------------------------------------
 	
 	private String name;
-	private String dept;
+	private Department dept;
 	private int code;
 	private int credits;
 	private List<Course> prereq;
@@ -20,12 +21,19 @@ public class Course {
 	
 	//-[Constructor]-----------------------------------------
 	
-	public Course(String name, String dept, int code, int credits, List<Course> prereq) {
+	public Course(String name, Department dept, int Code, int Credits) {this(name,dept,Code,Credits,null);}
+	
+	public Course(String name, Department dept, int code, int credits, List<Course> prereq) {
 		this.name = name;
 		this.dept = dept;
+		
+		//Link this course's department to this course
+		dept.AddCourse(this);
+		
 		this.code = code;
 		this.credits = credits;
-		this.prereq = prereq;
+		if(prereq==null) {this.prereq = new ArrayList<Course>();} else {this.prereq = prereq;} //If there isn't a specified list, create the list
+		this.sections = new ArrayList<Section>(); //Create the list for later.
 	}
 	
 	//-[Getters]---------------------------------------------
@@ -33,7 +41,7 @@ public class Course {
 	public String getName() {
 		return name;
 	}
-	public String getDept() {
+	public Department getDept() {
 		return dept;
 	}
 	public int getCode() {
@@ -54,7 +62,7 @@ public class Course {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setDept(String dept) {
+	public void setDept(Department dept) {
 		this.dept = dept;
 	}
 	public void setCode(int code) {
@@ -75,4 +83,9 @@ public class Course {
 	public void addPrereq(Course course) {
 		this.prereq.add(course);
 	}
+	
+	public void addSection(Section sect) {
+		this.sections.add(sect);
+	}
+	
 }
