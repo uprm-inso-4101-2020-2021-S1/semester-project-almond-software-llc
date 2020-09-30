@@ -26,14 +26,13 @@ public class Course {
 	public Course(String name, Department dept, int code, int credits, List<Course> prereq) {
 		this.name = name;
 		this.dept = dept;
-		
-		//Link this course's department to this course
-		dept.AddCourse(this);
-		
 		this.code = code;
 		this.credits = credits;
 		if(prereq==null) {this.prereq = new ArrayList<Course>();} else {this.prereq = prereq;} //If there isn't a specified list, create the list
 		this.sections = new ArrayList<Section>(); //Create the list for later.
+		
+		//Link this course's department to this course
+		dept.AddCourse(this);
 	}
 	
 	//-[Getters]---------------------------------------------
