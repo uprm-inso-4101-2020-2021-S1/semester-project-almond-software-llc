@@ -1,6 +1,5 @@
 package macademia;
 import java.util.List;
-import macademia.Course;
 
 public class Matricula {
 	

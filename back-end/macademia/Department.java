@@ -11,7 +11,7 @@ public class Department {
 
 	//-[Variables]----------------------------------------------------------------------
 	
-	private Map<Integer, Object> CourseCatalog; //It's a map for *easy lookup*. I suggest the Data structure to store a table with all departments.
+	private Map<Integer, Course> CourseCatalog; //It's a map for *easy lookup*. I suggest the Data structure to store a table with all departments.
 	private final String Name;
 	private final String ShortName;
 	
@@ -25,7 +25,7 @@ public class Department {
 	public Department(String Name, String ShortName) {
 		this.Name=Name; //Set name
 		this.ShortName=ShortName;
-		CourseCatalog = new Hashtable<Integer, Object>(); //Initialize the Course Directory.
+		CourseCatalog = new Hashtable<Integer, Course>(); //Initialize the Course Directory.
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class Department {
 	 * @param ShortName Short name of the department (IE "ICOM")
 	 * @param CourseCatlog Catalog of courses, where the key is the course number (IE 3011) and the value is the course.
 	 */
-	public Department(String Name, String ShortName, Map<Integer, Object> CourseCatlog) {
+	public Department(String Name, String ShortName, Map<Integer, Course> CourseCatlog) {
 		this(Name,ShortName);
 		this.CourseCatalog=CourseCatlog;
 	}
@@ -58,14 +58,14 @@ public class Department {
 	 * Returns the Course Catalog of this department.
 	 * @return A map where the integer is the Course ID, and Value is the course itself.
 	 */
-	public Map<Integer, Object> getCatalog() {return CourseCatalog;}
+	public Map<Integer, Course> getCatalog() {return CourseCatalog;}
 	
 	//-[Functions]----------------------------------------------------------------------
 	
 	/**
 	 * Adds/updates a course to the course directory.
 	 */
-	public void AddCourse(Object Course) {CourseCatalog.put(0, Course);}
+	public void AddCourse(Course course) {CourseCatalog.put(0, course);}
 
 	//-[Overrides]----------------------------------------------------------------------
 	

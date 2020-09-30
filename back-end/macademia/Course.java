@@ -1,7 +1,6 @@
 package macademia;
 
 import java.util.List;
-import macademia.Section;
 
 /*
  * Contains information for a Course

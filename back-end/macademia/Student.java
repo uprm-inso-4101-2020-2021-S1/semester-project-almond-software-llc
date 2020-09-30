@@ -14,8 +14,7 @@ public class Student extends User {
 
 	//-[Variables]----------------------------------------------------------------------
 	
-	//Change to Matricula once its created
-	private Object matricula;
+	private Matricula matricula;
 	private Department department;
 	private String Name;
 	private String StudentNumber;
@@ -29,6 +28,8 @@ public class Student extends User {
 	public Student(User user) {
 		super(user);
 		
+		//TODO: Get Details from Database
+		
 		//Get details from this user from the database
 		//GetDetailsFromDatabase(this.getUsername()); or something like this.
 	}
@@ -38,18 +39,16 @@ public class Student extends User {
 	 * @param user User object
 	 * @param Name Name of the student
 	 * @param StudentNumber Student number of the student
-	 * @param Matricula Matricula of this student
+	 * @param matricula Matricula of this student
 	 * @param Department Department of this student
 	 */
-	public Student(User user, String Name, String StudentNumber, Object Matricula, Department Department) {
+	public Student(User user, String Name, String StudentNumber, Matricula matricula, Department Department) {
 		super(user);
 		
 		this.Name=Name;
 		this.StudentNumber=StudentNumber;
-		
-		//Uncomment this line once the Matricula/Department object is created
 		this.department=Department;
-		this.matricula=Matricula;
+		this.matricula=matricula;
 		
 	}
 	
@@ -77,7 +76,7 @@ public class Student extends User {
 	 * Gets this student's Matricula
 	 * @return
 	 */
-	public Object getMatricula() {return matricula;}
+	public Matricula getMatricula() {return matricula;}
 	
 	//-[Overrides]----------------------------------------------------------------------
 	

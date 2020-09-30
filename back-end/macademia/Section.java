@@ -1,5 +1,5 @@
 package macademia;
-import macademia.Course;
+
 /**
  * Holds a Class Section in Macademia
  * @author Giovanni Garcia
