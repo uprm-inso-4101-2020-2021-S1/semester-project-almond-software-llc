@@ -18,8 +18,6 @@ public class GeneralTest {
 		Department FunLand = new Department("The Department of Comedy", "FUNY");
 		Department Drama = new Department("The Department of Drama","DRAM");
 		
-		Department[] AllDepartments = {FunLand,Drama};
-		
 		//Create some courses
 		Course COM = new Course("Intro to Comedy", FunLand, 3101, 3); //creating a course with a department links it back to the department.
 		Course CL1 = new Course("Clowning I", FunLand, 3401, 3);
