@@ -39,15 +39,15 @@ public class GeneralTest {
 		//Lets create some sections for these courses
 		Random rand = new Random();
 		for (Course course : AllClasses) {
-			new Section(rand.nextInt(90)+"", "Monday, Wednesday, Friday", "5:30-6:30", course); //Creating a section linked to a course automatically links it back to the course.
-			new Section(rand.nextInt(90)+"", "Tuesday, Thursday", "5:30-7:00", course);
-			new Section(rand.nextInt(90)+"", "Monday, Wednesday", "5:30-7:00", course);
+			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", course); //Creating a section linked to a course automatically links it back to the course.
+			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", course);
+			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", course);
 		}
 		
 		//Create a user.
-		User Person1 = new User("Person 1", "Password");
-		User Person2 = new User("Person 2", "1234");
-		User Person3 = new User("Person 3", "This is a password that's very long wow que cool");
+		User Person1 = new User("Person1", "Password");
+		User Person2 = new User("Person2", "1234");
+		User Person3 = new User("Person3", "This is a password that's very long wow que cool");
 		
 		//Create some matriculas:
 		ArrayList<Course> CourseList1 = new ArrayList<Course>();
