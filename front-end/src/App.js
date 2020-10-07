@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from './Header/header';
-import Courses from './Courses/courses';
+import Matricula from './Matricula/matricula';
+import TempHeader from './Header/temp-header';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      {/* <Courses /> */}
+      <TempHeader />
     </div>
   );
 }

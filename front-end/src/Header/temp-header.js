@@ -1,51 +1,64 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MailIcon from '@material-ui/icons/Mail';
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
+import Matricula from '../Matricula/matricula';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
+import SearchIcon from '@material-ui/icons/Search';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import Badge from '@material-ui/core/Badge';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Courses from '../Courses/courses';
-import Matricula from '../Matricula/matricula';
+import clsx from 'clsx';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    drawer: {
+        [theme.breakpoints.up('sm')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+    },
     appBar: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    grow: {
-        flexGrow: 1,
+        [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
     },
     menuButton: {
         marginRight: theme.spacing(2),
-    },
-    title: {
-        display: 'none',
         [theme.breakpoints.up('sm')]: {
-            display: 'block',
+            display: 'none',
         },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
     },
     search: {
         position: 'relative',
@@ -96,26 +109,26 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
+    grow: {
+        flexGrow: 1,
+    },
 }));
 
-export default function Header() {
+export default function TempHeader(props) {
+    const { windows } = props;
     const classes = useStyles();
+    const theme = useTheme();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [showSearch, setSearchOpen] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(false);
-    const [showSearch, setSearchOpen] = React.useState(true);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-        setSearchOpen(window.innerWidth <= 760 ? false : true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-        setSearchOpen(true);
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+        setSearchOpen(!showSearch);
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -192,32 +205,52 @@ export default function Header() {
         </Menu>
     );
 
+    const drawer = (
+        <div>
+            <div className={classes.toolbar} />
+            <Divider />
+            <br />
+            <Typography variant="h6" noWrap>My List</Typography>
+            <List>
+                {['CURSO 1', 'CURSO 2', 'CURSO 3', 'CURSO 4'].map((text, index) => (
+                    <ListItem button key={text}>
+                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
+            <br />
+            <Typography variant="h6" noWrap>Department of INSO</Typography>
+            <List>
+                {['CURSO 5', 'CURSO 6', 'CURSO 7'].map((text, index) => (
+                    <ListItem button key={text}>
+                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+            </List>
+        </div>
+    );
+
+    const container = windows !== undefined ? () => window().document.body : undefined;
+
     return (
-        <div className={classes.grow}>
-
-            {/* the header component */}
-            <AppBar
-                position="static"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}>
-
-                {/* whole header component contained within toolbar */}
+        <div className={classes.root}>
+            <CssBaseline />
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-
-                    {/* drawer button */}
                     <IconButton
-                        edge="start"
-                        className={classes.menuButton}
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.hide)}
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography className={classes.title} variant="h6" noWrap>Macademia</Typography>
 
+                    <Typography variant="h6" noWrap>Macademia</Typography>
                     {/* added functionality to search bar to hide when drawer open on mobile */}
                     {showSearch && <div className={classes.search}>
                         <div className={classes.searchIcon}>
@@ -273,15 +306,46 @@ export default function Header() {
                     </div>
 
                 </Toolbar>
-
             </AppBar>
-
-            {/* drawer component using props to pass value down to child */}
-            <Courses open={open} handleDrawerClose={handleDrawerClose} />
-            <Matricula />
 
             {renderMobileMenu}
             {renderMenu}
+
+            <nav className={classes.drawer} aria-label="mailbox folders">
+                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                <Hidden smUp implementation="css">
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden xsDown implementation="css">
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant="permanent"
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+            </nav>
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Matricula />
+            </main>
 
         </div>
     );
