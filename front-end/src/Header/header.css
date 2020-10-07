@@ -1,44 +1,17 @@
 #Navbar{
   background-color: black;
 }
-#basic-navbar-nav{
-  display: inline;
-  align-content: center;
-  justify-content: flex-end;
+#MenuItem-MyName{
+  font-family: 'Epilogue';
+  text-shadow: 1px 1px 5px green;
+}
+#HeaderButton{
+  display: block;
+  font-family: "Epilogue";
+  text-shadow: 1px 1px 5px green;
+  text-decoration: none;
   background-color: black;
 }
-#Nav-Link{
-  color: white;
-  text-shadow: 3px 3px 5px #009900;
-  font-family: 'Epilogue',sans-serif;
-}
-#Nav-Link:hover{
-  color: green;
-}
-/* #search-button{
-  color: white;
-  background-color: green;
-}
-#search-button:hover{
-  background-color: darkgreen;
-  color: white;
-} */
-#Navbar-Text{
-  padding-left: 20rem;
-  color: white;
-  padding-right: 5rem;
-  text-shadow: 2px 2px 5px #009900;
-  font-family: 'Epilogue',sans-serif;
-}
-#name-link{
-  color: rgb(3, 184, 3);
-  text-decoration: none;
-  font-family: 'Epilogue',sans-serif;
-}
-#name-link:hover{
+#HeaderButton:hover{
   color: grey;
-  text-decoration: none;
-}
-button.navbar-toggler{
-  background-color: #009900;
 }

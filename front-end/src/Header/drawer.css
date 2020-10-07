@@ -1,0 +1,11 @@
+#ListItemText{
+font-family: 'Epilogue';
+text-shadow: 1px 1px 1px green;
+}
+#ListItemButton{
+    font-family: 'Epilogue';
+}
+#TypographyDrawer{
+    font-family: 'Epilogue';
+    font-weight: 700;
+}
