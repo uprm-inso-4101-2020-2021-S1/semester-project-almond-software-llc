@@ -1,51 +1,53 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
+import MailIcon from '@material-ui/icons/Mail';
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
+import SearchIcon from '@material-ui/icons/Search';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import Badge from '@material-ui/core/Badge';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Courses from '../Courses/courses';
-import Matricula from '../Matricula/matricula';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    drawer: {
+        [theme.breakpoints.up('sm')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+    },
     appBar: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    grow: {
-        flexGrow: 1,
+        [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
     },
     menuButton: {
         marginRight: theme.spacing(2),
-    },
-    title: {
-        display: 'none',
         [theme.breakpoints.up('sm')]: {
-            display: 'block',
+            display: 'none',
         },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
     },
     search: {
         position: 'relative',
@@ -96,26 +98,24 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
+    grow: {
+        flexGrow: 1,
+    },
 }));
 
-export default function Header() {
+export default function Header(props) {
     const classes = useStyles();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [showSearch, setSearchOpen] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(false);
-    const [showSearch, setSearchOpen] = React.useState(true);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-        setSearchOpen(window.innerWidth <= 760 ? false : true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-        setSearchOpen(true);
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+        setSearchOpen(!showSearch);
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -193,31 +193,21 @@ export default function Header() {
     );
 
     return (
-        <div className={classes.grow}>
-
-            {/* the header component */}
-            <AppBar
-                position="static"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}>
-
-                {/* whole header component contained within toolbar */}
+        <div className={classes.root}>
+            <CssBaseline />
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-
-                    {/* drawer button */}
                     <IconButton
-                        edge="start"
-                        className={classes.menuButton}
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.hide)}
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography className={classes.title} variant="h6" noWrap>Macademia</Typography>
 
+                    <Typography variant="h6" noWrap>Macademia</Typography>
                     {/* added functionality to search bar to hide when drawer open on mobile */}
                     {showSearch && <div className={classes.search}>
                         <div className={classes.searchIcon}>
@@ -273,12 +263,7 @@ export default function Header() {
                     </div>
 
                 </Toolbar>
-
             </AppBar>
-
-            {/* drawer component using props to pass value down to child */}
-            <Courses open={open} handleDrawerClose={handleDrawerClose} />
-            <Matricula />
 
             {renderMobileMenu}
             {renderMenu}
