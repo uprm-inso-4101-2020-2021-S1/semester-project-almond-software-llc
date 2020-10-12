@@ -180,7 +180,7 @@ public class LoadHandler {
 	}
 	
 	/**
-	 * Gets a list of courses from a department.
+	 * Gets a list of all courses in the database.
 	 * @param department
 	 * @return
 	 * @throws SQLException 
@@ -253,7 +253,7 @@ public class LoadHandler {
 	}
 	
 	/**
-	 * Gets a list of sections from a course
+	 * Gets a list of all sections in the database
 	 * @param course
 	 * @return
 	 * @throws SQLException 
@@ -318,10 +318,17 @@ public class LoadHandler {
 	
 	/**
 	 * Handles getting a result set from a given table where the column matches the value
-	 * @return SELECT * FROM (TABLE) WHERE (COLUMN) + '(VALUE)';
+	 * @return SELECT * FROM (TABLE) WHERE (COLUMN) = '(VALUE)';
 	 * @throws SQLException 
 	 */
 	private ResultSet GetFromWhere(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeQuery("SELECT * FROM " + Table + " WHERE " + Column + " = '" + Value + "';");}
+
+	/**
+	 * Handles getting a result from a given table, where the column is *like* the value
+	 * @return SELECT * FROM (TABLE) WHERE (COLUM) LIKE '(VALUE)'
+	 * @throws SQLException
+	 */
+	private ResultSet GetFromWhereLike(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeQuery("SELECT * FROM " + Table + " WHERE " + Column + " LIKE '" + Value + "';");}
 	
 	/**
 	 * Handles getting all values from a table
@@ -342,11 +349,11 @@ public class LoadHandler {
 	private ResultSet selectDepartment(String ShortName) throws SQLException {return GetFromWhere("Departments", "ID", ShortName);}
 	
 	private ResultSet selectAllCourses() throws SQLException {return GetEverythingFrom("Courses");}
-	private ResultSet selectCourses(String Department) throws SQLException {return GetFromWhere("Courses", "ID", Department + "*");}
+	private ResultSet selectCourses(String Department) throws SQLException {return GetFromWhereLike("Courses", "ID", Department + "%");}
 	private ResultSet selectCourse(String ID) throws SQLException {return GetFromWhere("Courses", "ID", ID.substring(0,8));}
 	
 	private ResultSet selectAllSections() throws SQLException {return GetEverythingFrom("Sections");}
-	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhere("Sections", "ID", Course + "*");}
+	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhereLike("Sections", "ID", Course + "%");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
 	
 	
