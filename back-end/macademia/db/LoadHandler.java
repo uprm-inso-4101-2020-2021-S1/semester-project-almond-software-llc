@@ -185,10 +185,28 @@ public class LoadHandler {
 	 * @return
 	 * @throws SQLException 
 	 */
+	public List<Course> getAllCourses() throws SQLException {
+		ResultSet RS = selectAllCourses();
+		ArrayList<Course> Courses = new ArrayList<Course>();
+		while(RS.next()) {
+			Courses.add(getCourse(RS.getString("ID")));
+		} 
+		RS.close();
+		return Courses;
+	}
+	
+	/**
+	 * Gets a list of courses from a department.
+	 * @param department
+	 * @return
+	 * @throws SQLException 
+	 */
 	public List<Course> getCourses(Department department) throws SQLException {
 		ResultSet RS = selectCourses(department.getShortName());
 		ArrayList<Course> Courses = new ArrayList<Course>();
-		while(RS.next()) {Courses.add(getCourse(RS.getString("ID")));} 
+		while(RS.next()) {
+			Courses.add(getCourse(RS.getString("ID")));
+		} 
 		RS.close();
 		return Courses;
 	}
@@ -217,7 +235,7 @@ public class LoadHandler {
 		String CourseName = RS.getString("Name");
 		int CourseCredits = RS.getInt("Credits");
 		String[] Prereq = RS.getString("Prereq").split(",");
-		String[] Coreq = RS.getString("Prereq").split(",");
+		String[] Coreq = RS.getString("Coreq").split(",");
 		
 		Course TheCourse = new Course(CourseName, dep, Integer.parseInt(CourseID), CourseCredits);
 		
@@ -232,6 +250,20 @@ public class LoadHandler {
 		} //TODO: Switch to addCoreq once it is created.
 		
 		return TheCourse;
+	}
+	
+	/**
+	 * Gets a list of sections from a course
+	 * @param course
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Section> getAllSections() throws SQLException {
+		ResultSet RS = selectAllSections();
+		ArrayList<Section> Sections = new ArrayList<Section>();
+		while(RS.next()) {Sections.add(getSection(RS.getString("ID")));} 
+		RS.close();
+		return Sections;
 	}
 	
 	/**
@@ -309,9 +341,11 @@ public class LoadHandler {
 	private ResultSet selectDepartments() throws SQLException {return GetEverythingFrom("Departments");}
 	private ResultSet selectDepartment(String ShortName) throws SQLException {return GetFromWhere("Departments", "ID", ShortName);}
 	
+	private ResultSet selectAllCourses() throws SQLException {return GetEverythingFrom("Courses");}
 	private ResultSet selectCourses(String Department) throws SQLException {return GetFromWhere("Courses", "ID", Department + "*");}
 	private ResultSet selectCourse(String ID) throws SQLException {return GetFromWhere("Courses", "ID", ID.substring(0,8));}
 	
+	private ResultSet selectAllSections() throws SQLException {return GetEverythingFrom("Sections");}
 	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhere("Sections", "ID", Course + "*");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
 	
