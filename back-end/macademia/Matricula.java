@@ -4,20 +4,20 @@ import java.util.List;
 public class Matricula {
 	
 	//-[Fields]----------------------------------------------
-	private List<Course> courses;
+	private List<Section> Sections;
 	private int totalCredits; 
 	private String period; 
 
 	//-[Constructor]-----------------------------------------
-	public Matricula(List<Course> courses, int totalCredits, String period) {
-		this.courses = courses;
+	public Matricula(List<Section> Sections, int totalCredits, String period) {
+		this.Sections = Sections;
 		this.totalCredits = totalCredits;
 		this.period = period; 		
 	}
 	
 	//-[Getters]---------------------------------------------
-	public List<Course> getCourses() {
-		return courses;
+	public List<Section> getSections() {
+		return Sections;
 	}
 	public int getTotalCredits() {
 		return totalCredits;
@@ -26,8 +26,8 @@ public class Matricula {
 		return period;
 	}
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setSections(List<Section> Sections) {
+		this.Sections = Sections;
 	}
 	public void setTotalCredits(int totalCredits) {
 		this.totalCredits = totalCredits;
@@ -40,6 +40,6 @@ public class Matricula {
 	 * Returns a displayable string for this Matricula
 	 * @return CourseNumber Course(s) (Credits Credit(s)) during Period (IE "2 Course(s) totaling 6 Credit(s) during FALL")
 	*/
-	public String toString() {return courses.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();}
+	public String toString() {return Sections.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();}
 
 }
