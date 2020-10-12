@@ -222,10 +222,14 @@ public class LoadHandler {
 		Course TheCourse = new Course(CourseName, dep, Integer.parseInt(CourseID), CourseCredits);
 		
 		//Load Prerequesites
-		for (String prereq : Prereq) {TheCourse.addPrereq(getCourse(prereq));}
+		for (String prereq : Prereq) {
+			if(prereq.length()!=0) {TheCourse.addPrereq(getCourse(prereq));} //If because empty prereqs still returns "" 
+		}
 		
 		//Load CoRequesites
-		for (String coreq : Coreq) {TheCourse.addPrereq(getCourse(coreq));} //TODO: Switch to addCoreq once it is created.
+		for (String coreq : Coreq) {
+			if(coreq.length()!=0) {TheCourse.addPrereq(getCourse(coreq));}
+		} //TODO: Switch to addCoreq once it is created.
 		
 		return TheCourse;
 	}
