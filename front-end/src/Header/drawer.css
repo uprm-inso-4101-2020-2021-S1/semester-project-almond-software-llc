@@ -1,11 +1,57 @@
-#ListItemText{
-font-family: 'Epilogue';
-text-shadow: 1px 1px 1px green;
+#root {
+  display: flex;
 }
-#ListItemButton{
-    font-family: 'Epilogue';
+#appBar {
+  transition: ease-in;
+  transition-timing-function: cubic-bezier(0.42, 0, 1, 1);
 }
-#TypographyDrawer{
-    font-family: 'Epilogue';
-    font-weight: 700;
+#appBarShift {
+  width: calc(100% - 240px);
+  margin-left: 240px;
+  transition: ease-out;
+  transition-timing-function: cubic-bezier(0, 0, 0.58, 1);
+}
+#menuButton {
+  margin-right: 10rem;
+}
+#hide {
+  display: none;
+}
+#drawer {
+  width: 240px;
+  flex-shrink: 0;
+}
+#drawerPaper {
+  width: 240px;
+}
+#drawerHeader {
+  display: flex;
+  align-items: center;
+  padding: 10rem;
+  z-index: 1;
+  transition: 0.5s;
+  justify-content: flex-end;
+}
+#content {
+    flex-grow: 1;
+    padding: 10rem;
+    transition: ease-in;
+    transition-timing-function: cubic-bezier(0.42, 0, 1, 1);
+    margin-left: -240px;
+  }
+#contentShift {
+    transition: ease-out;
+    transition-timing-function: cubic-bezier(0, 0, 0.58, 1);
+    margin-left: 0;
+  }
+#ListItemText {
+  font-family: "Epilogue";
+  text-shadow: 1px 1px 1px green;
+}
+#ListItemButton {
+  font-family: "Epilogue";
+}
+#TypographyDrawer {
+  font-family: "Epilogue";
+  font-weight: 700;
 }

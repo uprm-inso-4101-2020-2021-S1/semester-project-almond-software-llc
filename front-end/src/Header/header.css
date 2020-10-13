@@ -15,3 +15,15 @@
 #HeaderButton:hover{
   color: grey;
 }
+.grow{
+  flex-grow: 1;
+}
+.menuButton{
+  margin-right: 2rem;
+}
+.sectionDesktop{
+  display: none;
+}
+.sectionMobile{
+  display: flex;
+}
