@@ -1,5 +1,5 @@
 package macademia;
-import macademia.Course;
+
 /**
  * Holds a Class Section in Macademia
  * @author Giovanni Garcia
@@ -17,6 +17,10 @@ public class Section {
         this.day = day;
         this.time = time;
         this.course = course;
+        
+        //Link this Section's Course to this section
+        course.addSection(this);
+        
     }
 
     /**
@@ -63,6 +67,11 @@ public class Section {
      */
    public Course getCourse(){return this.course;} 
 
+   /**
+	 * Returns a displayable string for this section
+	 * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE "DRAM3001-21 on Tuesday, Thursday during 5:30-7:00")
+    */
+   public String toString() {return getCourse().getDept().getShortName() + getCourse().getCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();}
     
 
 }

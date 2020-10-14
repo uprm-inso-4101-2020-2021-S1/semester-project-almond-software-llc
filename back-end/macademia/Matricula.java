@@ -1,6 +1,5 @@
 package macademia;
 import java.util.List;
-import macademia.Course;
 
 public class Matricula {
 	
@@ -10,10 +9,20 @@ public class Matricula {
 	private String period; 
 
 	//-[Constructor]-----------------------------------------
-	public Matricula(List<Course> courses, int totalCredits, String period) {
+	public Matricula(List<Course> courses, String period) {
 		this.courses = courses;
-		this.totalCredits = totalCredits;
+		this.totalCredits = 0;
 		this.period = period; 		
+	}
+
+	//-[Add-Remove]]---------------------------------------------
+	public void addCourse(Course e){
+		courses.add(e);
+		totalCredits+=e.getCredits();
+	}
+
+	public void removeCourses(Course e){
+		courses.remove(e);
 	}
 	
 	//-[Getters]---------------------------------------------
@@ -36,4 +45,11 @@ public class Matricula {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	
+	/**
+	 * Returns a displayable string for this Matricula
+	 * @return CourseNumber Course(s) (Credits Credit(s)) during Period (IE "2 Course(s) totaling 6 Credit(s) during FALL")
+	*/
+	public String toString() {return courses.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();}
+
 }
