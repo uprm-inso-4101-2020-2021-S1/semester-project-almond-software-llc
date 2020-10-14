@@ -1,38 +1,46 @@
 package macademia;
 import java.util.List;
 
+import macademia.auth.MatriculaPeriod;
+
 public class Matricula {
-	
 	//-[Fields]----------------------------------------------
-	private List<Course> courses;
-	private int totalCredits; 
-	private String period; 
+	private List<Section> courses;
+	private int totalCredits;
+	private MatriculaPeriod period; 
 
 	//-[Constructor]-----------------------------------------
-	public Matricula(List<Course> courses, int totalCredits, String period) {
+	public Matricula(List<Section> courses, int totalCredits, MatriculaPeriod period) {
 		this.courses = courses;
-		this.totalCredits = totalCredits;
+		this.totalCredits = getCredits();
 		this.period = period; 		
+	}
+
+	public int getCredits() {
+		int cred = 0;
+		if (this.courses.isEmpty()) return cred;
+		for (Section s : courses) {cred = cred + s.getCourse().getCredits();}
+		return cred;
 	}
 	
 	//-[Getters]---------------------------------------------
-	public List<Course> getCourses() {
+	public List<Section> getCourses() {
 		return courses;
 	}
 	public int getTotalCredits() {
 		return totalCredits;
 	}
-	public String getPeriod() {
+	public MatriculaPeriod getPeriod() {
 		return period;
 	}
 
-	public void setCourses(List<Course> courses) {
+	public void setCourses(List<Section> courses) {
 		this.courses = courses;
 	}
 	public void setTotalCredits(int totalCredits) {
 		this.totalCredits = totalCredits;
 	}
-	public void setPeriod(String period) {
+	public void setPeriod(MatriculaPeriod period) {
 		this.period = period;
 	}
 	
@@ -43,3 +51,5 @@ public class Matricula {
 	public String toString() {return courses.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();}
 
 }
+
+

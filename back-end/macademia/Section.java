@@ -6,7 +6,7 @@ package macademia;
  */
 public class Section {
     enum Days {
-        MTWJ, MWF, MJ, S, MTWJF;
+        MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
     }
     //Variables
     private String secNum;
