@@ -1,11 +1,12 @@
 #root {
   display: flex;
 }
-#appBar {
-  transition: ease-in;
-  transition-timing-function: cubic-bezier(0.42, 0, 1, 1);
+.appBar {
+  background-color: black;
+  /* transition: ease-in;
+  transition-timing-function: cubic-bezier(0.42, 0, 1, 1); */
 }
-#appBarShift {
+.appBarShift {
   width: calc(100% - 240px);
   margin-left: 240px;
   transition: ease-out;
@@ -54,4 +55,5 @@
 #TypographyDrawer {
   font-family: "Epilogue";
   font-weight: 700;
+  padding: 1rem;
 }

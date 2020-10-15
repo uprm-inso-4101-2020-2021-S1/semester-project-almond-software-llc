@@ -1,8 +1,20 @@
-"use strict";
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 
-var useStyles = makeStyles(function (theme) {
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value, enumerable: true, configurable: true, writable: true
+    });
+  }
+  else {
+    obj[key] = value;
+  }
+  return obj;
+}
+
+var useStyles = StyleSheet.create(makeStyles((theme) =>{
   return {
     grow: {
       flexGrow: 1
@@ -15,41 +27,6 @@ var useStyles = makeStyles(function (theme) {
     }, theme.breakpoints.up('sm'), {
       display: 'block'
     }),
-    search: _defineProperty({
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
-      },
-      marginRight: theme.spacing(2),
-      marginLeft: 0,
-      width: '100%'
-    }, theme.breakpoints.up('sm'), {
-      marginLeft: theme.spacing(3),
-      width: 'auto'
-    }),
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    inputRoot: {
-      color: 'inherit'
-    },
-    inputInput: _defineProperty({
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: "calc(1em + ".concat(theme.spacing(4), "px)"),
-      transition: theme.transitions.create('width'),
-      width: '100%'
-    }, theme.breakpoints.up('md'), {
-      width: '20ch'
-    }),
     sectionDesktop: _defineProperty({
       display: 'none'
     }, theme.breakpoints.up('md'), {
@@ -61,4 +38,6 @@ var useStyles = makeStyles(function (theme) {
       display: 'none'
     })
   };
-});
+}));
+
+export default useStyles;

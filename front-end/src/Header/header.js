@@ -1,19 +1,19 @@
 import React from "react";
-//import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import Macademia from "./macademia.png";
-import './header.css';
+import useStyles from './dist/header-styles.dev';
 import Drawer from "./drawer.js";
 import Button from "@material-ui/core/Button";
 
 
 export default function PrimarySearchAppBar() {
+  //const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -115,11 +115,10 @@ export default function PrimarySearchAppBar() {
           </Button>
 
 
-          <div className="grow" />
+          <div className={useStyles.grow} />
 
-          <div className="sectionMobile">
+          <div className={useStyles.sectionMobile}>
             <IconButton
-              aria-label="show more"
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
