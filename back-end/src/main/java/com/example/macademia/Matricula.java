@@ -9,10 +9,20 @@ public class Matricula {
 	private String period; 
 
 	//-[Constructor]-----------------------------------------
-	public Matricula(List<Course> courses, int totalCredits, String period) {
+	public Matricula(List<Course> courses, String period) {
 		this.courses = courses;
-		this.totalCredits = totalCredits;
+		this.totalCredits = 0;
 		this.period = period; 		
+	}
+
+	//-[Add-Remove]]---------------------------------------------
+	public void addCourse(Course e){
+		courses.add(e);
+		totalCredits+=e.getCredits();
+	}
+
+	public void removeCourses(Course e){
+		courses.remove(e);
 	}
 	
 	//-[Getters]---------------------------------------------
