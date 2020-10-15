@@ -9,12 +9,12 @@ import { Table } from '@material-ui/core';
 export default function CourseCard() {
 
     return (
-        <Card variant="outlined" style={{width: '450px', height: '150px', borderColor: '#707070', fontFamily: 'Times New Roman'}}>
-            <div style={{display: "flex"}}>
-            <div style={{width: 410}}>
-            <CardContent style={{}}>
-                <Typography>
-                    <Table>
+        <Card variant="outlined" style={{ width: '200px', height: '75px', borderColor: '#707070', fontFamily: 'Times New Roman' }}>
+            <div style={{ display: "flex" }}>
+                <div style={{ width: 410 }}>
+                    <CardContent style={{}}>
+                        <Typography>
+                            {/* <Table>
                         <td>
                             <span style={{fontSize: 32, fontWeight: "bold"}}>CIIC3001</span>
                             <span style={{fontSize: 20, color: '#7f7f7f', position:"relative", bottom: 4}}> - 001</span>
@@ -28,12 +28,12 @@ export default function CourseCard() {
                                 <ErrorOutlineIcon />
                             </IconButton>
                         </td>
-                    </Table>
-                </Typography>
-            </CardContent>
-            </div>
-            <div style={{backgroundColor: '#707070', width: 2}}></div>
-            <div style={{backgroundColor: '#71a772', width: 38}}></div>
+                    </Table> */}
+                        </Typography>
+                    </CardContent>
+                </div>
+                {/* <div style={{ backgroundColor: '#707070', width: 2 }}></div>
+                <div style={{ backgroundColor: '#71a772', width: 38 }}></div> */}
             </div>
         </Card>
     );
