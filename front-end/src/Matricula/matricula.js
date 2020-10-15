@@ -1,14 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import CourseCard from '../CourseCard/coursecard';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: '100%',
@@ -24,90 +23,66 @@ const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
-});
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+}));
 
 export default function Matricula() {
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
 
     return (
-        <Card className={classes.root}>
-            <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>2020-2021</Typography>
-                <Divider />
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-around"
-                    alignItems="center"
-                    style={{ padding: '0px' }}
-                >
-                    <div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
+        <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Card className={classes.root}>
+                <CardContent>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>2020-2021</Typography>
+                    <Divider />
+                    <Grid
+                        container
+                        direction="row"
+                        justify="space-around"
+                        alignItems="center"
+                        style={{ padding: '10px' }}
+                    >
 
-                    <Divider orientation='vertical' flexItem />
+                        <div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                        </div>
 
-                    <div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        <div style={{ padding: '10px' }}>
-                            <Card style={{ width: '150px', height: '50px', }}>
-                                <CardContent >
-                                    <Typography className={classes.title} color="textSecondary" gutterBottom>CURSO 4200</Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
+                        <Divider orientation='vertical' flexItem />
 
-                </Grid>
-            </CardContent>
-        </Card>
+                        <div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                            <div style={{ padding: '10px' }}>
+                                <CourseCard />
+                            </div>
+                        </div>
+
+                    </Grid>
+                </CardContent>
+            </Card>
+        </main>
+
     );
 }

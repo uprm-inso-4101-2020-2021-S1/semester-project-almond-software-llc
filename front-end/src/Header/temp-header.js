@@ -1,22 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
-import Matricula from '../Matricula/matricula';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,7 +15,6 @@ import Badge from '@material-ui/core/Badge';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import clsx from 'clsx';
 
 const drawerWidth = 240;
 
@@ -117,7 +106,6 @@ const useStyles = makeStyles((theme) => ({
 export default function TempHeader(props) {
     const { windows } = props;
     const classes = useStyles();
-    const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [showSearch, setSearchOpen] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -205,36 +193,6 @@ export default function TempHeader(props) {
         </Menu>
     );
 
-    const drawer = (
-        <div>
-            <div className={classes.toolbar} />
-            <Divider />
-            <br />
-            <Typography variant="h6" noWrap>My List</Typography>
-            <List>
-                {['CURSO 1', 'CURSO 2', 'CURSO 3', 'CURSO 4'].map((text, index) => (
-                    <ListItem button key={text}>
-                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <br />
-            <Typography variant="h6" noWrap>Department of INSO</Typography>
-            <List>
-                {['CURSO 5', 'CURSO 6', 'CURSO 7'].map((text, index) => (
-                    <ListItem button key={text}>
-                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-    );
-
-    const container = windows !== undefined ? () => window().document.body : undefined;
-
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -310,42 +268,6 @@ export default function TempHeader(props) {
 
             {renderMobileMenu}
             {renderMenu}
-
-            <nav className={classes.drawer} aria-label="mailbox folders">
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Hidden smUp implementation="css">
-                    <Drawer
-                        container={container}
-                        variant="temporary"
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation="css">
-                    <Drawer
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        variant="permanent"
-                        open
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-            </nav>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <Matricula />
-            </main>
 
         </div>
     );
