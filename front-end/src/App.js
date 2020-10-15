@@ -103,11 +103,11 @@ function App() {
     <div className={classes.root}>
 
       <Header />
-      <Drawer/>
+      {/* <Drawer/> */}
 
-      <nav className={classes.drawer} aria-label="mailbox folders">
+      {/* <nav className={classes.drawer} aria-label="mailbox folders">
         <CourseList />
-      </nav>
+      </nav> */}
 
       <main className={classes.content}>
         <div className={classes.toolbar} />
