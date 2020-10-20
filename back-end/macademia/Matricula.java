@@ -14,6 +14,16 @@ public class Matricula {
 		this.totalCredits = totalCredits;
 		this.period = period; 		
 	}
+
+	//-[Add-Remove]]---------------------------------------------
+	public void addCourse(Course e){
+		courses.add(e);
+		totalCredits+=e.getCredits();
+	}
+
+	public void removeCourses(Course e){
+		courses.remove(e);
+	}
 	
 	//-[Getters]---------------------------------------------
 	public List<Section> getSections() {
