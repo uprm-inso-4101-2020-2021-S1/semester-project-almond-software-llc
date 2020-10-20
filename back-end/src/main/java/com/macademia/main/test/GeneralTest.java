@@ -37,12 +37,12 @@ public class GeneralTest {
 		DRK.addPrereq(CL2);
 		
 		//Lets create some sections for these courses
-		Random rand = new Random();
-		for (Course course : AllClasses) {
-			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", course); //Creating a section linked to a course automatically links it back to the course.
-			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", course);
-			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", course);
-		}
+		// Random rand = new Random();
+		// for (Course course : AllClasses) {
+		// 	new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", course); //Creating a section linked to a course automatically links it back to the course.
+		// 	new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", course);
+		// 	new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", course);
+		// }
 		
 		//Create a user.
 		User Person1 = new User("Person1", "Password");
@@ -96,10 +96,16 @@ public class GeneralTest {
 		System.out.println(Prefix + " =");
 	}
 	
+	// public static void PrintDepartmentDetails(String Prefix, Department department) {
+	// 	System.out.println(Prefix + " |- SHORT: " + department.getShortName());
+	// 	for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
+	// 	System.out.println(Prefix + " =");
+	// }
+
 	public static void PrintDepartmentDetails(String Prefix, Department department) {
 		System.out.println(Prefix + " |- SHORT: " + department.getShortName());
-		for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
-		System.out.println(Prefix + " =");
+		// for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
+		// System.out.println(Prefix + " =");
 	}
 
 	public static void PrintCourseDetails(String Prefix, Course course) {

@@ -34,8 +34,8 @@ export default function CourseCard() {
                         </Typography>
                     </CardContent>
                 </div>
-                {/* <div style={{ backgroundColor: '#707070', width: 2 }}></div>
-                <div style={{ backgroundColor: '#71a772', width: 38 }}></div> */}
+                <div style={{ backgroundColor: '#707070', width: 2 }}></div>
+                <div style={{ backgroundColor: '#71a772', width: 38 }}></div>
             </div>
         </Card>
     );

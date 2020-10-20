@@ -13,7 +13,7 @@ public class Course {
 	// -[Fields]----------------------------------------------
 
 	private String name;
-	private Department dept;
+	private String dept;
 	private int code;
 	private int credits;
 	private List<Course> prereq;
@@ -28,7 +28,7 @@ public class Course {
 
 	public Course(String name, Department dept, int code, int credits, List<Course> prereq, List<Course> coreq) {
 		this.name = name;
-		this.dept = dept;
+		this.dept = dept.getShortName();
 		this.code = code;
 		this.credits = credits;
 		if (prereq == null) {
@@ -53,7 +53,7 @@ public class Course {
 		return name;
 	}
 
-	public Department getDept() {
+	public String getDept() {
 		return dept;
 	}
 
@@ -84,7 +84,7 @@ public class Course {
 	}
 
 	public void setDept(Department dept) {
-		this.dept = dept;
+		this.dept = dept.getShortName();
 	}
 
 	public void setCode(int code) {
@@ -128,7 +128,7 @@ public class Course {
 	 *         (DRAM3001) 3 Credit(s)")
 	 */
 	public String toString() {
-		return getName() + " (" + getDept().getShortName() + getCode() + ") " + getCredits() + " Credit(s)";
+		return getName() + " (" + getDept() + getCode() + ") " + getCredits() + " Credit(s)";
 	}
 
 }

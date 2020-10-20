@@ -114,8 +114,7 @@ public class Student extends User {
 	}
 
 	public Matricula createMatricula(String p) {
-		List<Course> l = new ArrayList<Course>();
-		Matricula m = new Matricula(l, p);
+		Matricula m = new Matricula(p);
 		return m;
 	}
 
