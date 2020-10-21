@@ -317,13 +317,57 @@ public class DBHandler {
 	
 	//-[Check Exists]-----------------------------------------------------------------------------
 	
+	//These could probably be made more efficient but oh well
 	public boolean UserExists(String Username) throws SQLException {return getUser(Username)!=null;}
 	public boolean StudentExists(String StudentNumber) throws SQLException {return getStudent(StudentNumber)!=null;}
 	public boolean MatriculaExists(int ID) throws SQLException {return getMatricula(ID)!=null;}
 	public boolean DepartmentExists(String ShortNameID) throws SQLException {return getDepartment(ShortNameID)!=null;}
 	public boolean CourseExists(String Course) throws SQLException {return getCourse(Course)!=null;}
 	public boolean SectionExists(String SectionID) throws SQLException {return getSection(SectionID)!=null;}
-		
+
+	//-[Publicly facing Saves]-----------------------------------------------------------------------------
+	
+	/**
+	 * Does what it says: Saves everything \n\n
+	 * Saves every department, and within it saves every course, and within it saves every section.
+	 */
+	public void SaveEverything() throws SQLException {}
+	
+	/**
+	 * Saves a user to the SQL Database
+	 * @param user
+	 */
+	public void SaveUser(User user) throws SQLException {}
+	
+	/**
+	 * Saves a student to the SQL Database, including saving every Matricula 
+	 */
+	public void SaveStudent(Student stud) throws SQLException {}
+	
+	/**
+	 * Saves a Matricula to the SQL Database
+	 * @param Mat
+	 */
+	public void SaveMatricula(Matricula Mat) throws SQLException {}
+	
+	/**
+	 * Saves the specified department to the SQL Database, including saving every course within, and every section within those courses.
+	 * @param dep
+	 */
+	public void SaveDepartment(Department dep) throws SQLException{}
+	
+	/**
+	 * Saves the specified course to the SQL Database, including saving every department within
+	 * @param course
+	 */
+	public void SaveCourse(Course course) throws SQLException {}
+	
+	/**
+	 * Saves the specifed section to the SQL Database
+	 * @param sect
+	 */
+	public void SaveSeciton(Section sect) throws SQLException {}
+	
 	//-[privately facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -366,5 +410,20 @@ public class DBHandler {
 	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhereLike("Sections", "ID", Course + "%");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
 	
+	//-[privately facing saves]-----------------------------------------------------------------------------
 	
+	private void InsertIntoUsers() throws SQLException {}
+	private void InsertIntoStudents() throws SQLException {}
+	private void InsertIntoMatriculas() throws SQLException {}
+	private void InsertIntoDepartments() throws SQLException {}
+	private void InsertIntoCourses() throws SQLException {}
+	private void InsertIntoSections() throws SQLException {}
+
+	private void UpdateUsers() throws SQLException {}
+	private void UpdateStudents() throws SQLException {}
+	private void UpdateMatriculas() throws SQLException {}
+	private void UpdateDepartments() throws SQLException {}
+	private void UpdateCourses() throws SQLException {}
+	private void UpdateSections() throws SQLException {}
+
 }
