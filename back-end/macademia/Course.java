@@ -14,16 +14,16 @@ public class Course {
 	
 	private String name;
 	private Department dept;
-	private int code;
+	private String code;
 	private int credits;
 	private List<Course> prereq;
 	private List<Section> sections;
 	
 	//-[Constructor]-----------------------------------------
 	
-	public Course(String name, Department dept, int Code, int Credits) {this(name,dept,Code,Credits,null);}
+	public Course(String name, Department dept, String Code, int Credits) {this(name,dept,Code,Credits,null);}
 	
-	public Course(String name, Department dept, int code, int credits, List<Course> prereq) {
+	public Course(String name, Department dept, String code, int credits, List<Course> prereq) {
 		this.name = name;
 		this.dept = dept;
 		this.code = code;
@@ -43,7 +43,7 @@ public class Course {
 	public Department getDept() {
 		return dept;
 	}
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 	public int getCredits() {
@@ -64,7 +64,7 @@ public class Course {
 	public void setDept(Department dept) {
 		this.dept = dept;
 	}
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 	public void setCredits(int credits) {

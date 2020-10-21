@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -140,7 +138,10 @@ public class DBHandler {
 		//get an arraylist of all the sections:
 		for (String Section : Sections) {SectionsList.add(getSection(Section));}
 		
-		return new Matricula(SectionsList, 0, Period);
+		Matricula mat =new Matricula(SectionsList, 0, Period); 
+		mat.setID(IDFromDatabase);
+		
+		return mat;
 		
 	}
 
@@ -242,7 +243,7 @@ public class DBHandler {
 		String[] Prereq = RS.getString("Prereq").split(",");
 		String[] Coreq = RS.getString("Coreq").split(",");
 		
-		Course TheCourse = new Course(CourseName, dep, Integer.parseInt(CourseID), CourseCredits);
+		Course TheCourse = new Course(CourseName, dep, CourseID, CourseCredits);
 		
 		//Load Prerequesites
 		for (String prereq : Prereq) {
@@ -335,36 +336,79 @@ public class DBHandler {
 	 * Does what it says: Saves everything \n\n
 	 * Saves every department, and within it saves every course, and within it saves every section.
 	 */
-	public void SaveEverything() throws SQLException {}
+	public void SaveEverything() throws SQLException {for (Department Dep : DepartmentMap.values()) {SaveDepartment(Dep);}}
 	
 	/**
 	 * Saves a user to the SQL Database
 	 * @param user
 	 */
-	public void SaveUser(User user) throws SQLException {}
+	public void SaveUser(User user) throws SQLException {
+		if(UserExists(user.getUsername())) {UpdateUsers(user.getUsername(),user.getPassword());}
+		else {InsertIntoUsers(user.getUsername(), user.getPassword());}
+	}
 	
 	/**
 	 * Saves a student to the SQL Database, including saving every Matricula 
 	 */
-	public void SaveStudent(Student stud) throws SQLException {}
+	public void SaveStudent(Student stud) throws SQLException {
+		//TODO Save every matricula first, keeping track of its IDs.
+		//TODO Then save the user
+	}
 	
 	/**
 	 * Saves a Matricula to the SQL Database
 	 * @param Mat
+	 * @return Returns the ID of the saved matricula
 	 */
-	public void SaveMatricula(Matricula Mat) throws SQLException {}
+	public int SaveMatricula(Matricula Mat) throws SQLException {
+		String Sections=""; //TODO Prepare a list of sections
+		int Year = 2020; //TODO: Replace this with Mat.GetPeriod().GetYear;
+		String Period = Mat.getPeriod(); //TODO: Replace this with a switch case to turn the Enum to a String
+				
+		
+		if(Mat.getID()==-1) {
+			//This is a new matricula. We need to add it
+			
+			//TODO Get an ID for this matricula
+			
+			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year);
+		} else {
+			//This is an edited matricula. We need to update it			
+			UpdateMatriculas(Mat.getID(), Sections, Period, Year);
+		}
+		
+		return Mat.getID();
+	}
 	
 	/**
 	 * Saves the specified department to the SQL Database, including saving every course within, and every section within those courses.
 	 * @param dep
 	 */
-	public void SaveDepartment(Department dep) throws SQLException{}
+	public void SaveDepartment(Department dep) throws SQLException{
+		//Save the department itself
+		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName());}
+		else {InsertIntoDepartments(dep.getShortName(), dep.getName());}
+		
+		//Save the course
+		for (Course course : dep.getCatalog().values()) {SaveCourse(course);}
+	}
 	
 	/**
 	 * Saves the specified course to the SQL Database, including saving every department within
 	 * @param course
 	 */
-	public void SaveCourse(Course course) throws SQLException {}
+	public void SaveCourse(Course course) throws SQLException {
+		String CourseID = course.getDept().getShortName()+course.getCode();
+		boolean L = false;
+		
+		//INEL4101L
+		
+		if(CourseID.endsWith("L")) {
+			L=true;
+		}
+		
+		if(CourseExists(CourseID)) {}
+	}
 	
 	/**
 	 * Saves the specifed section to the SQL Database
