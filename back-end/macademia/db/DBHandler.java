@@ -523,14 +523,14 @@ public class DBHandler {
 	private void InsertIntoSections(String ID, boolean L, String Days, String Time, String Location, String Prof, int CurCap, int MaxCap) throws SQLException {
     	String SQLString =  "INSERT INTO Sections(ID, L, Days, Time, Location, Prof, CurCap, MaxCap) VALUES(?,?,?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-        pstmt.setString(1, "DRAM3001-020"); //ID
-        pstmt.setBoolean(2, false); //L
-        pstmt.setString(3, "MWF"); //Days
-        pstmt.setString(4, "8:30-9:30"); //Time
-        pstmt.setString(5, "STEF512A"); //Location
-        pstmt.setString(7, "Mr. Caesar"); //Prof
-        pstmt.setInt(8, 1); //CurCap
-        pstmt.setInt(8, 30); //MaxCap
+        pstmt.setString(1, ID); //ID
+        pstmt.setBoolean(2, L); //L
+        pstmt.setString(3, Days); //Days
+        pstmt.setString(4, Time); //Time
+        pstmt.setString(5, Location); //Location
+        pstmt.setString(7, Prof); //Prof
+        pstmt.setInt(8, CurCap); //CurCap
+        pstmt.setInt(8, MaxCap); //MaxCap
         pstmt.executeUpdate();
 	}
 
@@ -543,7 +543,9 @@ public class DBHandler {
 	 * @param Password of the user
 	 * @throws SQLException
 	 */
-	private void UpdateUsers(String Username, String Password) throws SQLException {}
+	private void UpdateUsers(String Username, String Password) throws SQLException {
+		
+	}
 	
 	/**
 	 * UPDATES a record in Students. Searches by Student ID.
