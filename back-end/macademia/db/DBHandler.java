@@ -393,7 +393,8 @@ public class DBHandler {
 	 * @return Returns the ID of the saved matricula (For the SaveStudent function)
 	 */
 	public int SaveMatricula(Matricula Mat) throws SQLException {
-		String Sections=""; //TODO Prepare a list of sections
+		String Sections=ListOfSectionsToString(Mat.getSections());
+		
 		int Year = 2020; //TODO: Replace this with Mat.GetPeriod().GetYear;
 		String Period = Mat.getPeriod(); //TODO: Replace this with a switch case to turn the Enum to a String
 				
@@ -792,6 +793,15 @@ public class DBHandler {
 		String ListAsString= "";
 		for (Course course : Courses) {
 			ListAsString+= "," + course.getDept().getShortName() + course.getCode(); //TODO: Chagne to new shortname var
+		}
+		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
+		return ListAsString;
+	}
+	
+	public static String ListOfSectionsToString(List<Section> Sections) {
+		String ListAsString= "";
+		for (Section section : Sections) {
+			ListAsString+= "," + section.getCourse().getDept().getShortName() + section.getCourse().getCode() + "-" + section.getSecNum(); //TODO: Chagne to new shortname var
 		}
 		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
 		return ListAsString;

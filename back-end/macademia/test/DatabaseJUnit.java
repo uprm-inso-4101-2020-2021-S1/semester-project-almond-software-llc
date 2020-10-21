@@ -106,7 +106,7 @@ class DatabaseJUnit {
 		assertEquals(MatriculaBeforeSave.getSections().size(), MatriculaAfterSave.getSections().size());
 		
 		for (int i = 0; i < MatriculaBeforeSave.getSections().size(); i++) {
-			assertEquals(MatriculaBeforeSave.getSections().get(i), MatriculaAfterSave.getSections().get(i));
+			assertEquals(MatriculaBeforeSave.getSections().get(i).toString(), MatriculaAfterSave.getSections().get(i).toString());
 		}
 		
 		
@@ -149,7 +149,7 @@ class DatabaseJUnit {
 		
 		//Verify that its the same:
 		assertEquals(CourseBeforeSaving.getCode(), CourseAfterSaving.getCode());
-		assertEquals(CourseBeforeSaving.getDept(), CourseAfterSaving.getDept());
+		assertEquals(CourseBeforeSaving.getDept().getShortName(), CourseAfterSaving.getDept().getShortName());
 		assertEquals(CourseBeforeSaving.getCredits(), CourseAfterSaving.getCredits());
 		
 		assertEquals(CourseBeforeSaving.getPrereq().size(), CourseBeforeSaving.getPrereq().size());
