@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -412,18 +413,84 @@ public class DBHandler {
 	
 	//-[privately facing saves]-----------------------------------------------------------------------------
 	
-	private void InsertIntoUsers() throws SQLException {}
-	private void InsertIntoStudents() throws SQLException {}
-	private void InsertIntoMatriculas() throws SQLException {}
-	private void InsertIntoDepartments() throws SQLException {}
-	private void InsertIntoCourses() throws SQLException {}
-	private void InsertIntoSections() throws SQLException {}
+	private void InsertIntoUsers() throws SQLException {
+    	String SQLString = "INSERT INTO Users(Username, Password) VALUES(?,?)";
+        PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);  
+        pstmt.setString(1, "Person3"); //Username
+        pstmt.setString(2, "This is a password that's very long wow que cool"); //Password (maybe encrypted)
+        pstmt.executeUpdate();
+	}
+	
+	private void InsertIntoStudents() throws SQLException {
+    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses) VALUES(?,?,?,?,?,?)";
+    	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setString(1, "802-55-5555"); //ID
+        pstmt.setString(2, "Robert Robertson Robington"); //Name
+        pstmt.setString(3, "Person3"); //TiedUser
+        pstmt.setString(4, "DRAM"); //Department
+        pstmt.setString(5, "1"); //Matriculas
+        pstmt.setString(6, "DRAM3002"); //PriorityCourses
+        pstmt.executeUpdate();
 
+	}
+	
+	private void InsertIntoMatriculas() throws SQLException {
+		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year) VALUES(?,?,?,?)";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setInt(1, 1);//ID
+        pstmt.setString(2, "DRAM3001-020");//SECTIONS
+        pstmt.setString(3, "FALL");//PERIOD
+        pstmt.setInt(4,2020);//YEAR
+        pstmt.executeUpdate();
+
+	}
+
+	private void InsertIntoDepartments() throws SQLException {
+		String SQLString = "INSERT INTO Departments(ID, Name) VALUES(?,?)";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setString(1, "DRAM");  //Short Name
+        pstmt.setString(2, "Department of Drama"); //Name  
+        pstmt.executeUpdate();  
+	}
+	
+	private void InsertIntoCourses() throws SQLException {
+    	String SQLString = "INSERT INTO Courses(ID, L, Name, Credits, Prereq, Coreq) VALUES(?,?,?,?,?,?)";
+    	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setString(1, "DRAM3001"); //ID
+        pstmt.setBoolean(2, false); //Lab
+        pstmt.setString(3, "Acting I"); //Name
+        pstmt.setInt(4, 3); //Credits
+        pstmt.setString(5, ""); //Prereqs
+        pstmt.setString(6, ""); //Coreqs
+        pstmt.executeUpdate();
+	}
+	
+	private void InsertIntoSections() throws SQLException {
+    	String SQLString =  "INSERT INTO Sections(ID, L, Days, Time, Location, Prof, CurCap, MaxCap) VALUES(?,?,?,?,?,?,?,?)";
+    	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setString(1, "DRAM3001-020"); //ID
+        pstmt.setBoolean(2, false); //L
+        pstmt.setString(3, "MWF"); //Days
+        pstmt.setString(4, "8:30-9:30"); //Time
+        pstmt.setString(5, "STEF512A"); //Location
+        pstmt.setString(7, "Mr. Caesar"); //Prof
+        pstmt.setInt(8, 1); //CurCap
+        pstmt.setInt(8, 30); //MaxCap
+        pstmt.executeUpdate();
+	}
+
+	
+	
 	private void UpdateUsers() throws SQLException {}
+	
 	private void UpdateStudents() throws SQLException {}
+	
 	private void UpdateMatriculas() throws SQLException {}
+	
 	private void UpdateDepartments() throws SQLException {}
+	
 	private void UpdateCourses() throws SQLException {}
+	
 	private void UpdateSections() throws SQLException {}
 
 }
