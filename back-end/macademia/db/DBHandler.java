@@ -551,6 +551,8 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Password);
+		pstmt.setString(2, Username);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -571,6 +573,12 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Name);
+		pstmt.setString(2, TiedUsername);
+		pstmt.setString(3, Department);
+		pstmt.setString(4, Matriculas);
+		pstmt.setString(5, PriorityCourses);
+		pstmt.setString(7, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -589,6 +597,10 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Sections);
+		pstmt.setString(2, Period);
+		pstmt.setInt(3, Year);
+		pstmt.setInt(4, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -606,6 +618,8 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Name);
+		pstmt.setString(2, ShortName);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -626,6 +640,12 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Name);
+		pstmt.setInt(2, Credits);
+		pstmt.setString(3, Prereqs);
+		pstmt.setString(4, Coreqs);
+		pstmt.setString(5, ID);
+		pstmt.setBoolean(6, L);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -648,6 +668,14 @@ public class DBHandler {
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
+		pstmt.setString(1, Days);
+		pstmt.setString(2, Time);
+		pstmt.setString(3, Location);
+		pstmt.setString(4, Prof);
+		pstmt.setInt(5, CurCap);
+		pstmt.setInt(6, MaxCap);
+		pstmt.setString(7, ID);
+		pstmt.setBoolean(8, L);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
