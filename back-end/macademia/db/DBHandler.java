@@ -17,39 +17,33 @@ import macademia.Student;
 import macademia.auth.User;
 
 /**
- * Handles loading anything from the database
+ * Handles loading and saving anything from and to the database
  * @author igtampe
  */
-public class LoadHandler {
+public class DBHandler {
 
 	/*
 	 * Holds a map of all departments
 	 */
 	private Map<String, Department> DepartmentMap;
 	
+	/**
+	 * Holds connection to the database
+	 */
 	private Connection SQLConn;
 	
 	/**
 	 * Initializes the department map and connection to the SQL database
 	 * @throws SQLException if a connection could not be created.
 	 */
-	public LoadHandler(String FileName) throws SQLException {
+	public DBHandler(String FileName) throws SQLException {
 		DepartmentMap = new HashMap<String, Department>();
 		SQLConn = DriverManager.getConnection("jdbc:sqlite:"+FileName);
+		
+		//Sabes que lazy loading everything is probably not a good idea. Everything should be loaded as soon as the de-esta cosa is istantiated.
+		
 	}
-	
-	/**
-	 * Gets the department map so that it can be saved
-	 * @return
-	 */
-	public Map<String, Department> getDepartmentMap(){return DepartmentMap;}
-	
-	/**
-	 * Gets the SQL Connection for the save handler
-	 * @return
-	 */
-	public Connection getConnection() {return SQLConn;}
-	
+
 	//-[Publicly facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -314,6 +308,15 @@ public class LoadHandler {
 		return new Section(sectionSplit[1], day, time, course); //Creating a section automatically links it to a course.
 	}
 	
+	//-[Check Exists]-----------------------------------------------------------------------------
+	
+	public boolean UserExists(String Username) throws SQLException {return getUser(Username)!=null;}
+	public boolean StudentExists(String StudentNumber) throws SQLException {return getStudent(StudentNumber)!=null;}
+	public boolean MatriculaExists(int ID) throws SQLException {return getMatricula(ID)!=null;}
+	public boolean DepartmentExists(String ShortNameID) throws SQLException {return getDepartment(ShortNameID)!=null;}
+	public boolean CourseExists(String Course) throws SQLException {return getCourse(Course)!=null;}
+	public boolean SectionExists(String SectionID) throws SQLException {return getSection(SectionID)!=null;}
+		
 	//-[privately facing gets]-----------------------------------------------------------------------------
 	
 	/**

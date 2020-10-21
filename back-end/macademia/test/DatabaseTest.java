@@ -13,7 +13,7 @@ public class DatabaseTest {
 		
 		//Eventual Save/load test here.
 		try {
-			LoadHandler Handler = LoadEverything("A:/MacademiaTest.db");
+			DBHandler Handler = LoadEverything("A:/MacademiaTest.db");
 			
 			//These three lines test everything in the handler.
 			
@@ -26,8 +26,8 @@ public class DatabaseTest {
 		catch (SQLException e) {e.printStackTrace();}
 	}
 	
-	public static LoadHandler LoadEverything(String Filename) throws SQLException {
-		LoadHandler Handler = new LoadHandler(Filename);
+	public static DBHandler LoadEverything(String Filename) throws SQLException {
+		DBHandler Handler = new DBHandler(Filename);
 		System.out.println("Loading everything");
 		Handler.getDepartments();
 		Handler.getAllCourses();
