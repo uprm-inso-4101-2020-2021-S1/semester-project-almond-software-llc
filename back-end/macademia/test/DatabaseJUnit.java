@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runners.MethodSorters;
 
-import jdk.internal.org.objectweb.asm.Handle;
-import junit.framework.Assert;
 import macademia.Course;
 import macademia.Department;
 import macademia.Matricula;
@@ -18,6 +18,7 @@ import macademia.Student;
 import macademia.auth.User;
 import macademia.db.DBHandler;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class DatabaseJUnit {
 
 	/**
