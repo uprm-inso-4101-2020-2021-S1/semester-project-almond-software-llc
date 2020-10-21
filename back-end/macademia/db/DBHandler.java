@@ -428,6 +428,7 @@ public class DBHandler {
         pstmt.setString(1, Username); //Username
         pstmt.setString(2, Password); //Password (maybe encrypted)
         pstmt.executeUpdate();
+        pstmt.close();
 	}
 	
 	/**
@@ -450,7 +451,7 @@ public class DBHandler {
         pstmt.setString(5, Matriculas); //Matriculas
         pstmt.setString(6, PriorityCourses); //PriorityCourses
         pstmt.executeUpdate();
-
+        pstmt.close();
 	}
 	 	
 	/**
@@ -469,7 +470,7 @@ public class DBHandler {
         pstmt.setString(3, Period);//PERIOD
         pstmt.setInt(4,Year);//YEAR
         pstmt.executeUpdate();
-
+        pstmt.close();
 	}
 
 	/**
@@ -506,6 +507,7 @@ public class DBHandler {
         pstmt.setString(5, Prereqs); //Prereqs
         pstmt.setString(6, Coreqs); //Coreqs
         pstmt.executeUpdate();
+        pstmt.close();
 	}
 	
 	/**
@@ -532,6 +534,7 @@ public class DBHandler {
         pstmt.setInt(8, CurCap); //CurCap
         pstmt.setInt(8, MaxCap); //MaxCap
         pstmt.executeUpdate();
+        pstmt.close();
 	}
 
 	//-[privately facing UPDATEs]-----------------------------------------------------------------------------
@@ -544,6 +547,7 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	private void UpdateUsers(String Username, String Password) throws SQLException {
+		String SQLString = "UPDATE USERS SET Password = ? WHERE Username = ?;";
 		
 	}
 	
