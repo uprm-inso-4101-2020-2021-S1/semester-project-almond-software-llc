@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Random;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -351,14 +351,18 @@ public class DBHandler {
 	 * Saves a student to the SQL Database, including saving every Matricula 
 	 */
 	public void SaveStudent(Student stud) throws SQLException {
-		//TODO Save every matricula first, keeping track of its IDs.
-		//TODO Then save the user
+		String Matriculas = ""; //TODO Save every matricula first, keeping track of its IDs.
+		String PriorityCourses=""; //TODO Prepare Priority Courses
+		
+		//Then save the user
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
 	}
 	
 	/**
 	 * Saves a Matricula to the SQL Database
 	 * @param Mat
-	 * @return Returns the ID of the saved matricula
+	 * @return Returns the ID of the saved matricula (For the SaveStudent function)
 	 */
 	public int SaveMatricula(Matricula Mat) throws SQLException {
 		String Sections=""; //TODO Prepare a list of sections
@@ -368,8 +372,11 @@ public class DBHandler {
 		
 		if(Mat.getID()==-1) {
 			//This is a new matricula. We need to add it
+			int NewID;
+			Random rand = new Random();
+			do {NewID=rand.nextInt();}while(MatriculaExists(NewID)); //Generate a new ID while there exists a matricula with that ID
 			
-			//TODO Get an ID for this matricula
+			Mat.setID(NewID); //We now have a new unique ID. Save it with that ID
 			
 			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year);
 		} else {
@@ -403,8 +410,19 @@ public class DBHandler {
 		String CourseID = course.getDept().getShortName()+course.getCode(); //TODO: Change to new shortname var 
 		boolean L = CourseID.endsWith("L");
 		
-		String Prereqs = ""; //TODO: Prepare prereqs
-		String Coreqs = ""; //TODO: Prepare Coreqs
+		//Prepare Prereqs
+		String Prereqs = "";
+		for (Course prereq : course.getPrereq()) {
+			Prereqs+= "," + prereq.getDept().getShortName() + prereq.getCode(); //TODO: Chagne to new shortname var
+		}
+		if(Prereqs.length()>0) {Prereqs=Prereqs.substring(1);} //Handles the first comma
+		
+		//Prepare coreqs
+		String Coreqs = ""; 
+		for (Course coreq : course.getPrereq()) { //TODO: Switch to course.GetCoreq()
+			Coreqs+= "," + coreq.getDept().getShortName() + coreq.getCode(); //TODO: Chagne to new shortname var
+		}
+		if(Coreqs.length()>0) {Coreqs=Coreqs.substring(1);} //Handles the first comma
 				
 		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
