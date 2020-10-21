@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,25 +36,46 @@ public class DBHandler {
 	private Connection SQLConn;
 	
 	/**
-	 * Initializes the department map and connection to the SQL database
+	 * Creates a DBHandler without overwriting the specified file
+	 * @param FileName
+	 * @throws SQLException
+	 */
+	public DBHandler(String FileName) throws SQLException {this(FileName,false);}
+	
+	/**
+	 * Initializes the department map and connection to the SQL database \n\n
+	 * If a file does not exist at the specified location, or if the overwrite flag is set to true, it will create a new Macademia DB at that location. 
 	 * @throws SQLException if a connection could not be created.
 	 */
-	public DBHandler(String FileName) throws SQLException {
+	public DBHandler(String FileName, Boolean Overwrite) throws SQLException {
 		DepartmentMap = new HashMap<String, Department>();
+		
+		//Time to make this thing create databases if it doesn't find one. haha.
+		Creator.createNewMacademiaDatabase(FileName, Overwrite); //Creator doesn't overwrite tables if they already exist so this is safe
+		
 		SQLConn = DriverManager.getConnection("jdbc:sqlite:"+FileName);
 		
 		//Sabes que lazy loading everything is probably not a good idea.
 		//Deps, Courses, and Sections should be loaded as soon as the de-esta cosa is istantiated.
 		
-		getDepartments();
-		getAllCourses();
-		getAllSections();
+		LoadEverything();
 		
 		//Remove these lines of code to have the DBHandler *not* load Deps, Courses, and Sections upon instantiation.
 		
 	}
 
 	//-[Publicly facing gets]-----------------------------------------------------------------------------
+	
+	/**
+	 * Does what it says: Loads everything \n\n
+	 * Loads every Department, Course, and Section from the database.
+	 * @throws SQLException
+	 */
+	public void LoadEverything() throws SQLException {
+		getDepartments();
+		getAllCourses();
+		getAllSections();		
+	}
 	
 	/**
 	 * Gets a user from the database.
