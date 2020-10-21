@@ -548,7 +548,12 @@ public class DBHandler {
 	 */
 	private void UpdateUsers(String Username, String Password) throws SQLException {
 		String SQLString = "UPDATE USERS SET Password = ? WHERE Username = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
 	}
 	
 	/**
@@ -561,7 +566,15 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {}
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
+		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ? WHERE ID = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
+	}
 
 	/**
 	 * UPDATES a record in Matriculas. Searches by Matricula ID.
@@ -571,7 +584,15 @@ public class DBHandler {
 	 * @param Year Year of this Matricula
 	 * @throws SQLException
 	 */
-	private void UpdateMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {}
+	private void UpdateMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
+		String SQLString = "UPDATE Matriculas SET Sections = ?, Period = ?, Year= ? WHERE ID = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
+	}
 	
 	
 	/**
@@ -580,7 +601,15 @@ public class DBHandler {
 	 * @param Name Name of this department (IE: Department of Software Engineering)
 	 * @throws SQLException
 	 */
-	private void UpdateDepartments(String ShortName, String Name) throws SQLException {}
+	private void UpdateDepartments(String ShortName, String Name) throws SQLException {
+		String SQLString = "UPDATE Departments SET Name = ? WHERE ID = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
+	}
 	
 	/**
 	 * UPDATES a record in Courses. Searches by ID and L Flag
@@ -592,7 +621,15 @@ public class DBHandler {
 	 * @param Coreqs Comma separated list of  Course IDs that are Corequesites (IE: DRAM3003, ENGL3003)
 	 * @throws SQLException
 	 */
-	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs ) throws SQLException {}
+	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs ) throws SQLException {
+		String SQLString = "UPDATE Courses SET Name = ?, Credits = ?, PreReqs = ?, CoReqs = ? WHERE ID = ? AND L = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
+	}
 	
 	/**
 	 * UPDATES a record in Sections. Searches by ID and L flag
@@ -606,6 +643,14 @@ public class DBHandler {
 	 * @param MaxCap Maximum number of students in this section
 	 * @throws SQLException
 	 */
-	private void UpdateSections(String ID, boolean L, String Days, String Time, String Location, String Prof, int CurCap, int MaxCap) throws SQLException {}
+	private void UpdateSections(String ID, boolean L, String Days, String Time, String Location, String Prof, int CurCap, int MaxCap) throws SQLException {
+		String SQLString = "UPDATE Sections SET Days = ?, Time = ?, Location = ?, Prof = ?, CurCap = ?, MaxCap = ? WHERE ID = ? AND L = ?;";
+		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+		
+		//Set the things
+		
+		pstmt.executeUpdate();
+		pstmt.close();		
+	}
 
 }
