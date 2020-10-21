@@ -440,7 +440,9 @@ public class DBHandler {
 		String Prereqs = ListOfCoursesToString(course.getPrereq());
 		
 		//Prepare coreqs
-		String Coreqs = ListOfCoursesToString(course.getPrereq()); //TODO: Switch to course.GetCoreq() 
+		String Coreqs = ""; //TODO: Remove this line once the comment below is uncommented
+		//String Coreqs = ListOfCoursesToString(course.getPrereq()); //TODO: Switch to course.GetCoreq()
+		
 				
 		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
