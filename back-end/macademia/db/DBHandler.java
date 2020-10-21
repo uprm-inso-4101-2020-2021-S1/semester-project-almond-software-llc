@@ -40,7 +40,14 @@ public class DBHandler {
 		DepartmentMap = new HashMap<String, Department>();
 		SQLConn = DriverManager.getConnection("jdbc:sqlite:"+FileName);
 		
-		//Sabes que lazy loading everything is probably not a good idea. Everything should be loaded as soon as the de-esta cosa is istantiated.
+		//Sabes que lazy loading everything is probably not a good idea.
+		//Deps, Courses, and Sections should be loaded as soon as the de-esta cosa is istantiated.
+		
+		getDepartments();
+		getAllCourses();
+		getAllSections();
+		
+		//Remove these lines of code to have the DBHandler *not* load Deps, Courses, and Sections upon instantiation.
 		
 	}
 

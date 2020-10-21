@@ -27,11 +27,8 @@ public class DatabaseTest {
 	}
 	
 	public static DBHandler LoadEverything(String Filename) throws SQLException {
-		DBHandler Handler = new DBHandler(Filename);
 		System.out.println("Loading everything");
-		Handler.getDepartments();
-		Handler.getAllCourses();
-		Handler.getAllSections();
+		DBHandler Handler = new DBHandler(Filename);
 		return Handler;
 	}
 	
