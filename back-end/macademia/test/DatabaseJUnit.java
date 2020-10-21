@@ -177,7 +177,7 @@ class DatabaseJUnit {
 		assertEquals(SectionBeforeSave.getDay(), SectionAfterSave.getDay());
 		assertEquals(SectionBeforeSave.getSecNum(), SectionAfterSave.getSecNum());
 		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //TODO: Switch to period once its done
-		assertEquals(SectionBeforeSave.getCourse(), SectionAfterSave.getCourse());
+		assertEquals(SectionBeforeSave.getCourse().getCode(), SectionAfterSave.getCourse().getCode());
 		
 		//TODO: Assert Location, Prof, CurCap, and MaxCap once added
 		

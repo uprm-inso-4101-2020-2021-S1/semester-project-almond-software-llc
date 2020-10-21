@@ -158,7 +158,7 @@ public class DBHandler {
 		ArrayList<Section> SectionsList = new ArrayList<Section>(Sections.length);
 		
 		//get an arraylist of all the sections:
-		for (String Section : Sections) {SectionsList.add(getSection(Section));}
+		for (String Section : Sections) {if(Section.length()>0) {SectionsList.add(getSection(Section));}}
 		
 		Matricula mat =new Matricula(SectionsList, 0, Period); 
 		mat.setID(IDFromDatabase);
@@ -253,6 +253,7 @@ public class DBHandler {
 		
 		//See if it already exists:
 		Department dep = getDepartment(DepartmentID);
+		if(dep==null) {return null;} //If the department doesn't exist, then obviously neither does the course.
 		if(dep.getCatalog().containsKey(CourseID)) {return dep.getCatalog().get(CourseID);}
 		
 		//Load it:
@@ -318,6 +319,7 @@ public class DBHandler {
 		//Split the ID into the relevant parts:
 		String[] sectionSplit = SectionID.split("-"); //ICOM4050-20
 		Course course = getCourse(sectionSplit[0]);
+		if(course==null) {return null;} //if the course doesn't exist, neither will the section.		
 		
 		//See if the section already exists:
 		//TODO Probably switch this to a map
@@ -325,7 +327,7 @@ public class DBHandler {
 		
 		//If we're here then the section doesn't exist. Time to find it in the database.
 		ResultSet RS = selectSection(SectionID);
-		RS.next();
+		if(!RS.next()) {RS.close(); return null;}
 
 		//TODO: Once course gets the L flag
 		//if(RS.getBoolean("L")!=course.isLab()) {RS.next();}
@@ -734,7 +736,7 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs ) throws SQLException {
-		String SQLString = "UPDATE Courses SET Name = ?, Credits = ?, PreReqs = ?, CoReqs = ? WHERE ID = ? AND L = ?;";
+		String SQLString = "UPDATE Courses SET Name = ?, Credits = ?, PreReq = ?, CoReq = ? WHERE ID = ? AND L = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
