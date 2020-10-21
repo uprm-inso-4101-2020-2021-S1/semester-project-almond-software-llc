@@ -375,6 +375,13 @@ public class DBHandler {
 	 * Saves a student to the SQL Database, including saving every Matricula 
 	 */
 	public void SaveStudent(Student stud) throws SQLException {
+		
+		//Verify the TiedUser already exists in the system
+		if(!UserExists(stud.getUsername())) {
+			//The tiedUser is not in the system, but we can actually just *a d d    i t      o u r s e l v e s * :woah:
+			SaveUser(stud); //And since Student Extends User we can just do this. *AMAZING*
+		}
+		
 		String Matriculas = ""; 
 		//Matricuals = ListOfMatriculasToString(stud.getMatriculas()) //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
 		Matriculas = SaveMatricula(stud.getMatricula())+""; //TODO: THIS IS A TEMPORARY LINE. REMOVE THIS ONCE THE PREVIOUS TODO IS COMPLETE
@@ -435,6 +442,10 @@ public class DBHandler {
 	 */
 	public void SaveCourse(Course course) throws SQLException {
 		
+		//Verify department exists
+		//TODO: Use the new shortname accessor when it is done
+		if(!DepartmentExists(course.getDept().getShortName())) {throw new IllegalArgumentException("Department is not in the database! Register it *BEFORE* adding this course");}
+		
 		//Save the course
 		String CourseID = course.getDept().getShortName()+course.getCode(); //TODO: Change to new shortname var 
 		boolean L = CourseID.endsWith("L");
@@ -460,6 +471,11 @@ public class DBHandler {
 	 * @param sect
 	 */
 	public void SaveSeciton(Section sect) throws SQLException {
+		
+		//Verify Course exists
+		if(!CourseExists(sect.getCourse().getDept().getShortName() + sect.getCourse().getCode())) {throw new IllegalArgumentException("Course is not in the database! Register it *BEFORE* adding this course");}
+		
+		
 		String SectionID = sect.getCourse().getDept().getShortName() + sect.getCourse().getCode() + "-" + sect.getSecNum(); //TODO: Change to CourseID Var
 		boolean L = sect.getCourse().getCode().endsWith("L"); //TODO: Change to CourseID Var
 		

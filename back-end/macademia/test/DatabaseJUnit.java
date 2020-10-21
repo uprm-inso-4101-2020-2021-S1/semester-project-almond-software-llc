@@ -4,11 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import macademia.Course;
 import macademia.Department;
@@ -18,7 +19,7 @@ import macademia.Student;
 import macademia.auth.User;
 import macademia.db.DBHandler;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(OrderAnnotation.class)
 class DatabaseJUnit {
 
 	/**
@@ -62,6 +63,7 @@ class DatabaseJUnit {
 	}
 
 	@Test
+	@Order(1)
 	void UserTest() throws Exception {
 		Handler.SaveUser(UserBeforeSave); //Save the user
 		assert(Handler.UserExists(UserBeforeSave.getUsername())); //Verify that the user now exists in the database
@@ -74,6 +76,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
+	@Order(2)
 	void StudentsTest() throws Exception {
 		Handler.SaveStudent(StudentBeforeSave); //Save the student
 		assert(Handler.StudentExists(StudentBeforeSave.getStudentNumber())); //Assert the student exists in the database.
@@ -93,6 +96,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
+	@Order(8)
 	void MatriculasTest()  throws Exception {
 		int ID = Handler.SaveMatricula(MatriculaBeforeSave); //Save the matricula
 		
@@ -116,6 +120,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
+	@Order(3)
 	void DepartmentsTest()  throws Exception {
 		Handler.SaveDepartment(DepartmentBeforeSave); //Save the department
 		
@@ -131,12 +136,15 @@ class DatabaseJUnit {
 
 
 	@Test
+	@Order(4)
 	void NoPrereqCourseTest()  throws Exception {CourseTester(ActingI);}
 	
 	@Test
+	@Order(5)
 	void PrereqCourseTest()  throws Exception {CourseTester(Magic);}
 	
 	@Test
+	@Order(6)
 	void LabCourseTest()  throws Exception {CourseTester(MagicLab);}
 	
 	void CourseTester(Course CourseBeforeSaving) throws Exception{
@@ -155,17 +163,18 @@ class DatabaseJUnit {
 		
 		assertEquals(CourseBeforeSaving.getPrereq().size(), CourseBeforeSaving.getPrereq().size());
 		for (int i = 0; i < CourseBeforeSaving.getPrereq().size(); i++) {
-			assertEquals(CourseBeforeSaving.getPrereq().get(i), CourseAfterSaving.getPrereq().get(i));
+			assertEquals(CourseBeforeSaving.getPrereq().get(i).getCode(), CourseAfterSaving.getPrereq().get(i).getCode());
 		}//TODO: do the same for Coreq
 		
 		assertEquals(CourseBeforeSaving.getSections().size(), CourseAfterSaving.getSections().size());
 		for (int i = 0; i < CourseBeforeSaving.getSections().size(); i++) {
-			assertEquals(CourseBeforeSaving.getSections().get(i), CourseAfterSaving.getSections().get(i));
+			assertEquals(CourseBeforeSaving.getSections().get(i).getSecNum(), CourseAfterSaving.getSections().get(i).getSecNum());
 		}
 		
 	}
 	
 	@Test
+	@Order(7)
 	void SectionsTest() throws Exception {
 		Handler.SaveSeciton(SectionBeforeSave); //Save section
 		String SectionID = SectionBeforeSave.getCourse().getDept().getShortName()+SectionBeforeSave.getCourse().getCode()+"-"+SectionBeforeSave.getSecNum();
