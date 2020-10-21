@@ -398,23 +398,40 @@ public class DBHandler {
 	 * @param course
 	 */
 	public void SaveCourse(Course course) throws SQLException {
-		String CourseID = course.getDept().getShortName()+course.getCode();
-		boolean L = false;
 		
-		//INEL4101L
+		//Save the course
+		String CourseID = course.getDept().getShortName()+course.getCode(); //TODO: Change to new shortname var 
+		boolean L = CourseID.endsWith("L");
 		
-		if(CourseID.endsWith("L")) {
-			L=true;
-		}
+		String Prereqs = ""; //TODO: Prepare prereqs
+		String Coreqs = ""; //TODO: Prepare Coreqs
+				
+		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
+		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		
-		if(CourseExists(CourseID)) {}
+		//Save each section
+		for (Section sect : course.getSections()) {SaveSeciton(sect);}
+		
 	}
 	
 	/**
 	 * Saves the specifed section to the SQL Database
 	 * @param sect
 	 */
-	public void SaveSeciton(Section sect) throws SQLException {}
+	public void SaveSeciton(Section sect) throws SQLException {
+		String SectionID = sect.getCourse().getDept().getShortName() + sect.getCourse().getCode() + "-" + sect.getSecNum(); //TODO: Change to CourseID Var
+		boolean L = sect.getCourse().getCode().endsWith("L"); //TODO: Change to CourseID Var
+		
+		String Time=sect.getTime(); //TODO: Switch to Period for formatting
+		String Location="Loc"; //TODO: Switch to Sect.GetLocation()
+		String Prof = "Prof"; //TODO: Switch to Sect.GetProf()
+		int CurCap = 0; //TODO: Switch to Sect.GetCurCap()
+		int MaxCap = 30; //TODO: Switch to Sect.GetMaxCap()
+		
+		if(SectionExists(SectionID)) {UpdateSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}
+		else {InsertIntoSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}		
+		
+	}
 	
 	//-[privately facing gets]-----------------------------------------------------------------------------
 	
