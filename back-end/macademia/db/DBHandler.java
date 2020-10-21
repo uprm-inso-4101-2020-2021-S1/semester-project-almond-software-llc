@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -411,61 +414,113 @@ public class DBHandler {
 	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhereLike("Sections", "ID", Course + "%");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
 	
-	//-[privately facing saves]-----------------------------------------------------------------------------
+	//-[privately facing INSERTs]-----------------------------------------------------------------------------
 	
-	private void InsertIntoUsers() throws SQLException {
+	/**
+	 * INSERTS a user
+	 * @param Username of the user
+	 * @param Password of the user
+	 * @throws SQLException
+	 */
+	private void InsertIntoUsers(String Username, String Password) throws SQLException {
     	String SQLString = "INSERT INTO Users(Username, Password) VALUES(?,?)";
         PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);  
-        pstmt.setString(1, "Person3"); //Username
-        pstmt.setString(2, "This is a password that's very long wow que cool"); //Password (maybe encrypted)
+        pstmt.setString(1, Username); //Username
+        pstmt.setString(2, Password); //Password (maybe encrypted)
         pstmt.executeUpdate();
 	}
 	
-	private void InsertIntoStudents() throws SQLException {
+	/**
+	 * INSERTS into students
+	 * @param ID Student ID (IE: 802-55-5555)
+	 * @param Name Name of the student
+	 * @param TiedUsername Username tied to this Student
+	 * @param Department Department shortname of this student (IE: INSO)
+	 * @param Matriculas Comma separated list of Matricula IDs (IE: 1,2,3,4)
+	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
+	 * @throws SQLException
+	 */
+	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
     	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses) VALUES(?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-        pstmt.setString(1, "802-55-5555"); //ID
-        pstmt.setString(2, "Robert Robertson Robington"); //Name
-        pstmt.setString(3, "Person3"); //TiedUser
-        pstmt.setString(4, "DRAM"); //Department
-        pstmt.setString(5, "1"); //Matriculas
-        pstmt.setString(6, "DRAM3002"); //PriorityCourses
+        pstmt.setString(1, ID); //ID
+        pstmt.setString(2, Name); //Name
+        pstmt.setString(3, TiedUsername); //TiedUser
+        pstmt.setString(4, Department); //Department
+        pstmt.setString(5, Matriculas); //Matriculas
+        pstmt.setString(6, PriorityCourses); //PriorityCourses
         pstmt.executeUpdate();
 
 	}
-	
-	private void InsertIntoMatriculas() throws SQLException {
+	 	
+	/**
+	 * INSERTS into Matriculas
+	 * @param ID UNIQUE NUMERICAL ID FOR THIS MATRICULA
+	 * @param Sections Comma separated list of Section IDs (IE: DRAM3001-020, DRAM3002-020)
+	 * @param Period Period of this matricula (One of the following: SPRING, SUMMER1, SUMMER2, EXT_SUMMER, FALL)
+	 * @param Year Year of this Matricula
+	 * @throws SQLException
+	 */
+	private void InsertIntoMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
 		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year) VALUES(?,?,?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-        pstmt.setInt(1, 1);//ID
-        pstmt.setString(2, "DRAM3001-020");//SECTIONS
-        pstmt.setString(3, "FALL");//PERIOD
-        pstmt.setInt(4,2020);//YEAR
+        pstmt.setInt(1, ID);//ID
+        pstmt.setString(2, Sections);//SECTIONS
+        pstmt.setString(3, Period);//PERIOD
+        pstmt.setInt(4,Year);//YEAR
         pstmt.executeUpdate();
 
 	}
 
-	private void InsertIntoDepartments() throws SQLException {
+	/**
+	 * INSERTS into Departments
+	 * @param ShortName Department ShortName (IE: INSO)
+	 * @param Name Name of this department (IE: Department of Software Engineering)
+	 * @throws SQLException
+	 */
+	private void InsertIntoDepartments(String ShortName, String Name) throws SQLException {
 		String SQLString = "INSERT INTO Departments(ID, Name) VALUES(?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-        pstmt.setString(1, "DRAM");  //Short Name
-        pstmt.setString(2, "Department of Drama"); //Name  
+        pstmt.setString(1, ShortName);  //Short Name
+        pstmt.setString(2, Name); //Name  
         pstmt.executeUpdate();  
 	}
 	
-	private void InsertIntoCourses() throws SQLException {
+	/**
+	 * INSERTS into courses
+	 * @param ID ID of this course (IE: DRAM3001)
+	 * @param L L Flag (If this course is a lab)
+	 * @param Name Name of this course (IE: Acting I)
+	 * @param Credits Credits of this course
+	 * @param Prereqs Comma separated list of Course IDs that are Prerequesites (IE: DRAM3000, ENGL3001)
+	 * @param Coreqs Comma separated list of  Course IDs that are Corequesites (IE: DRAM3003, ENGL3003)
+	 * @throws SQLException
+	 */
+	private void InsertIntoCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs ) throws SQLException {
     	String SQLString = "INSERT INTO Courses(ID, L, Name, Credits, Prereq, Coreq) VALUES(?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-        pstmt.setString(1, "DRAM3001"); //ID
-        pstmt.setBoolean(2, false); //Lab
-        pstmt.setString(3, "Acting I"); //Name
-        pstmt.setInt(4, 3); //Credits
-        pstmt.setString(5, ""); //Prereqs
-        pstmt.setString(6, ""); //Coreqs
+        pstmt.setString(1, ID); //ID
+        pstmt.setBoolean(2, L); //Lab
+        pstmt.setString(3, Name); //Name
+        pstmt.setInt(4, Credits); //Credits
+        pstmt.setString(5, Prereqs); //Prereqs
+        pstmt.setString(6, Coreqs); //Coreqs
         pstmt.executeUpdate();
 	}
 	
-	private void InsertIntoSections() throws SQLException {
+	/**
+	 * INSERTS into Sections
+	 * @param ID ID of this Section (IE: DRAM3001-020)
+	 * @param L L Flag (If this course is a lab)
+	 * @param Days Days this section meets (IE: MWF)
+	 * @param Time Times of this course in MILITARY TIME. Split by a DASH (IE: 8:30-9:30)
+	 * @param Location Location of this section (IE: STEF512A)
+	 * @param Prof Professor of this section (IE: Mr. Caesar)
+	 * @param CurCap Current number of students in this section
+	 * @param MaxCap Maximum number of students in this section
+	 * @throws SQLException
+	 */
+	private void InsertIntoSections(String ID, boolean L, String Days, String Time, String Location, String Prof, int CurCap, int MaxCap) throws SQLException {
     	String SQLString =  "INSERT INTO Sections(ID, L, Days, Time, Location, Prof, CurCap, MaxCap) VALUES(?,?,?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, "DRAM3001-020"); //ID
@@ -479,18 +534,72 @@ public class DBHandler {
         pstmt.executeUpdate();
 	}
 
+	//-[privately facing UPDATEs]-----------------------------------------------------------------------------
 	
 	
-	private void UpdateUsers() throws SQLException {}
+	/**
+	 * UPDATES a record in Users. Searches by Username.
+	 * @param Username of the user
+	 * @param Password of the user
+	 * @throws SQLException
+	 */
+	private void UpdateUsers(String Username, String Password) throws SQLException {}
 	
-	private void UpdateStudents() throws SQLException {}
+	/**
+	 * UPDATES a record in Students. Searches by Student ID.
+	 * @param ID Student ID (IE: 802-55-5555)
+	 * @param Name Name of the student
+	 * @param TiedUsername Username tied to this Student
+	 * @param Department Department shortname of this student (IE: INSO)
+	 * @param Matriculas Comma separated list of Matricula IDs (IE: 1,2,3,4)
+	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
+	 * @throws SQLException
+	 */
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {}
+
+	/**
+	 * UPDATES a record in Matriculas. Searches by Matricula ID.
+	 * @param ID UNIQUE NUMERICAL ID FOR THIS MATRICULA
+	 * @param Sections Comma separated list of Section IDs (IE: DRAM3001-020, DRAM3002-020)
+	 * @param Period Period of this matricula (One of the following: SPRING, SUMMER1, SUMMER2, EXT_SUMMER, FALL)
+	 * @param Year Year of this Matricula
+	 * @throws SQLException
+	 */
+	private void UpdateMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {}
 	
-	private void UpdateMatriculas() throws SQLException {}
 	
-	private void UpdateDepartments() throws SQLException {}
+	/**
+	 * UPDATES a record in Departments. Searches by ShortName
+	 * @param ShortName Department ShortName (IE: INSO)
+	 * @param Name Name of this department (IE: Department of Software Engineering)
+	 * @throws SQLException
+	 */
+	private void UpdateDepartments(String ShortName, String Name) throws SQLException {}
 	
-	private void UpdateCourses() throws SQLException {}
+	/**
+	 * UPDATES a record in Courses. Searches by ID and L Flag
+	 * @param ID ID of this course (IE: DRAM3001)
+	 * @param L L Flag (If this course is a lab)
+	 * @param Name Name of this course (IE: Acting I)
+	 * @param Credits Credits of this course
+	 * @param Prereqs Comma separated list of Course IDs that are Prerequesites (IE: DRAM3000, ENGL3001)
+	 * @param Coreqs Comma separated list of  Course IDs that are Corequesites (IE: DRAM3003, ENGL3003)
+	 * @throws SQLException
+	 */
+	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs ) throws SQLException {}
 	
-	private void UpdateSections() throws SQLException {}
+	/**
+	 * UPDATES a record in Sections. Searches by ID and L flag
+	 * @param ID ID of this Section (IE: DRAM3001-020)
+	 * @param L L Flag (If this course is a lab)
+	 * @param Days Days this section meets (IE: MWF)
+	 * @param Time Times of this course in MILITARY TIME. Split by a DASH (IE: 8:30-9:30)
+	 * @param Location Location of this section (IE: STEF512A)
+	 * @param Prof Professor of this section (IE: Mr. Caesar)
+	 * @param CurCap Current number of students in this section
+	 * @param MaxCap Maximum number of students in this section
+	 * @throws SQLException
+	 */
+	private void UpdateSections(String ID, boolean L, String Days, String Time, String Location, String Prof, int CurCap, int MaxCap) throws SQLException {}
 
 }
