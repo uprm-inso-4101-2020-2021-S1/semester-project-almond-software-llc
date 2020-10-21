@@ -337,7 +337,7 @@ public class DBHandler {
 	 * Saves every department, and within it saves every course, and within it saves every section.
 	 */
 	public void SaveEverything() throws SQLException {for (Department Dep : DepartmentMap.values()) {SaveDepartment(Dep);}}
-	
+
 	/**
 	 * Saves a user to the SQL Database
 	 * @param user
@@ -351,8 +351,12 @@ public class DBHandler {
 	 * Saves a student to the SQL Database, including saving every Matricula 
 	 */
 	public void SaveStudent(Student stud) throws SQLException {
-		String Matriculas = ""; //TODO Save every matricula first, keeping track of its IDs.
-		String PriorityCourses=""; //TODO Prepare Priority Courses
+		String Matriculas = ""; 
+		//Matricuals = ListOfMatriculasToString(stud.getMatriculas()) //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
+		Matriculas = SaveMatricula(stud.getMatricula())+""; //TODO: THIS IS A TEMPORARY LINE. REMOVE THIS ONCE THE PREVIOUS TODO IS COMPLETE
+		
+		String PriorityCourses=""; 
+		//PriorityCourses = ListOfCoursesToString(stud.getPriorityCourses()) //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF PRIORITY COURSES
 		
 		//Then save the user
 		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
@@ -411,18 +415,10 @@ public class DBHandler {
 		boolean L = CourseID.endsWith("L");
 		
 		//Prepare Prereqs
-		String Prereqs = "";
-		for (Course prereq : course.getPrereq()) {
-			Prereqs+= "," + prereq.getDept().getShortName() + prereq.getCode(); //TODO: Chagne to new shortname var
-		}
-		if(Prereqs.length()>0) {Prereqs=Prereqs.substring(1);} //Handles the first comma
+		String Prereqs = ListOfCoursesToString(course.getPrereq());
 		
 		//Prepare coreqs
-		String Coreqs = ""; 
-		for (Course coreq : course.getPrereq()) { //TODO: Switch to course.GetCoreq()
-			Coreqs+= "," + coreq.getDept().getShortName() + coreq.getCode(); //TODO: Chagne to new shortname var
-		}
-		if(Coreqs.length()>0) {Coreqs=Coreqs.substring(1);} //Handles the first comma
+		String Coreqs = ListOfCoursesToString(course.getPrereq()); //TODO: Switch to course.GetCoreq() 
 				
 		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
@@ -618,7 +614,6 @@ public class DBHandler {
 
 	//-[privately facing UPDATEs]-----------------------------------------------------------------------------
 	
-	
 	/**
 	 * UPDATES a record in Users. Searches by Username.
 	 * @param Username of the user
@@ -760,4 +755,35 @@ public class DBHandler {
 		pstmt.close();		
 	}
 
+	//-[Utilities]-----------------------------------------------------------------------------
+	
+	/**
+	 * Utility to turn a list of courses to a comma separated list of Course IDs
+	 * @param Courses
+	 * @return
+	 */
+	public static String ListOfCoursesToString(List<Course> Courses) {
+		String ListAsString= "";
+		for (Course course : Courses) {
+			ListAsString+= "," + course.getDept().getShortName() + course.getCode(); //TODO: Chagne to new shortname var
+		}
+		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
+		return ListAsString;
+	}
+	
+	/**
+	 * Utility to turn a list of matriculas into a saved list of comma separated Matricula IDs
+	 * @param Matriculas
+	 * @return
+	 * @throws SQLException 
+	 */
+	private String ListOfMatriculasToString(List<Matricula> Matriculas) throws SQLException {
+		String Mats = ""; //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
+		for (Matricula mat : Matriculas) {
+			Mats+= "," + SaveMatricula(mat);
+		}
+		if(Mats.length()>0) {Mats=Mats.substring(1);} //Handles the first comma
+		return Mats;
+	}
+	
 }
