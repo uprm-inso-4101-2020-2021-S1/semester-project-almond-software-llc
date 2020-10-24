@@ -14,22 +14,24 @@ public class Course {
 
 	private String name;
 	private String dept;
-	private int code;
+	private String code;
+	private String courseCode;
 	private int credits;
 	private List<Course> prereq;
 	private List<Course> coreq;
-	private List<Section> sections;
+	private final List<Section> sections;
 
 	// -[Constructor]-----------------------------------------
 
-	public Course(String name, Department dept, int code, int credits) {
+	public Course(String name, Department dept, String code, int credits) {
 		this(name, dept, code, credits, null, null);
 	}
 
-	public Course(String name, Department dept, int code, int credits, List<Course> prereq, List<Course> coreq) {
+	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq) {
 		this.name = name;
 		this.dept = dept.getShortName();
 		this.code = code;
+		this.courseCode = dept.getShortName() + code;
 		this.credits = credits;
 		if (prereq == null) {
 			this.prereq = new ArrayList<Course>();
@@ -57,8 +59,12 @@ public class Course {
 		return dept;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
+	}
+
+	public String getCourseCode() {
+		return courseCode;
 	}
 
 	public int getCredits() {
@@ -87,8 +93,12 @@ public class Course {
 		this.dept = dept.getShortName();
 	}
 
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 
 	public void setCredits(int credits) {
@@ -101,10 +111,6 @@ public class Course {
 
 	public void setCoreq(List<Course> coreq) {
 		this.coreq = coreq;
-	}
-
-	public void setSections(List<Section> sections) {
-		this.sections = sections;
 	}
 
 	// -[Methods]--------------------------------------------

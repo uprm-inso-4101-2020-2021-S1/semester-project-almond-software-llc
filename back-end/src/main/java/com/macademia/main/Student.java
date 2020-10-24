@@ -56,6 +56,7 @@ public class Student extends User {
 		this.department = Department;
 		this.matricula = matricula;
 		this.matriculas = new ArrayList<Matricula>();
+		this.matriculas.add(0, this.matricula);
 		this.priorities = new ArrayList<Course>();
 
 	}
@@ -100,9 +101,9 @@ public class Student extends User {
 
 	// -[Check-Up]----------------------------------------------------------------------
 
-	public void addCourse(Course e) throws IOException {
-		if ((verifyPrereqs(e) || e.getPrereq().isEmpty()) && (verifyCoreqs(e) || e.getCoreq().isEmpty())) {
-			this.matricula.addCourse(e);
+	public void addSections(Section e, Course f) throws IOException {
+		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
+			this.matricula.addSections(e, f);
 		} else {
 			throw new IOException("Course pre-requisites not met.");
 		}
@@ -122,7 +123,7 @@ public class Student extends User {
 		int counter = 0;
 		for (int i = 1; i < matriculas.size(); i++) {
 			for (int j = 0; j < e.getPrereq().size(); j++) {
-				if (matriculas.get(i).getCourses().contains(e.getPrereq().get(j))) {
+				if (matriculas.get(i).getCoursesTaken().contains(e.getPrereq().get(j))) {
 					counter++;
 				}
 			}
@@ -134,7 +135,7 @@ public class Student extends User {
 		int counter = 0;
 		for (int i = 0; i < matriculas.size(); i++) {
 			for (int j = 0; j < e.getCoreq().size(); j++) {
-				if (matriculas.get(i).getCourses().contains(e.getCoreq().get(j))) {
+				if (matriculas.get(i).getCoursesTaken().contains(e.getCoreq().get(j))) {
 					counter++;
 				}
 			}

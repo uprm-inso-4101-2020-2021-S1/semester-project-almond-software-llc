@@ -10,16 +10,18 @@ public class Section {
     private String secNum;
     private String day;
     private String time;
-    private String dept;
-    private int code;
+    private String courseCode;
+    private int capacity;
+    private int credits;
 
     // Constructor
-    public Section(String secNum, String day, String time, Course course) {
+    public Section(String secNum, String day, String time, Course course, int capacity) {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
-        this.dept = course.getDept();
-        this.code = course.getCode();
+        courseCode = course.getDept() + course.getCode();
+        this.credits = course.getCredits();
+        this.capacity = capacity;
 
         // Link this Section's Course to this section
         course.addSection(this);
@@ -52,12 +54,16 @@ public class Section {
         this.time = t;
     }
 
-    public void setDept(Department dept) {
-        this.dept = dept.getShortName();
+    public void setCourseCode(Course course) {
+        this.courseCode = course.getDept() + course.getCode();
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     // Getters
@@ -89,12 +95,16 @@ public class Section {
         return this.time;
     }
 
-    public String getDept() {
-        return this.dept;
+    public String getCourseCode() {
+        return this.courseCode;
     }
 
-    public int getCode() {
-        return this.code;
+    public int getCredits() {
+        return this.credits;
+    }
+
+    public int getCapacity() {
+        return this.capacity;
     }
 
     /**
@@ -105,7 +115,7 @@ public class Section {
      */
 
     public String toString() {
-        return getDept() + getCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
+        return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
     }
 
 }

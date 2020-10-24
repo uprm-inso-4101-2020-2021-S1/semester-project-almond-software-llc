@@ -29,7 +29,7 @@ public class MacademiaController {
 
 	@GetMapping("/section")
 	public Section section() {
-		return tester.testSectionA;
+		return tester.testSectionA01;
 	}
 
 	@GetMapping("/department")

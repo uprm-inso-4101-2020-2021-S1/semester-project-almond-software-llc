@@ -13,7 +13,7 @@ public class Department {
 
 	// -[Variables]----------------------------------------------------------------------
 
-	private Map<Integer, Course> CourseCatalog; // It's a map for *easy lookup*. I suggest the Data structure to store a table with all departments.
+	private Map<String, Course> CourseCatalog; // It's a map for *easy lookup*. I suggest the Data structure to store a table with all departments.
 	private final String Name;
 	private final String ShortName;
 
@@ -29,7 +29,7 @@ public class Department {
 	public Department(String Name, String ShortName) {
 		this.Name = Name; // Set name
 		this.ShortName = ShortName;
-		CourseCatalog = new Hashtable<Integer, Course>(); // Initialize the Course
+		CourseCatalog = new Hashtable<String, Course>(); // Initialize the Course
 		// Directory.
 	}
 
@@ -43,7 +43,7 @@ public class Department {
 	 * @param CourseCatlog Catalog of courses, where the key is the course number
 	 *                     (IE 3011) and the value is the course.
 	 */
-	public Department(String Name, String ShortName, Map<Integer, Course> CourseCatalog) {
+	public Department(String Name, String ShortName, Map<String, Course> CourseCatalog) {
 		this(Name, ShortName);
 		this.CourseCatalog = CourseCatalog;
 	}
@@ -74,7 +74,7 @@ public class Department {
 	 * @return A map where the integer is the Course ID, and Value is the course
 	 *         itself.
 	 */
-	public Map<Integer, Course> getCatalog() {
+	public Map<String, Course> getCatalog() {
 		return CourseCatalog;
 	}
 
