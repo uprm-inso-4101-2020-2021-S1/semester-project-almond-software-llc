@@ -39,7 +39,13 @@ public class MacademiaController {
 
 	@GetMapping("/matricula")
 	public Matricula matricula() {
-		return tester.testMatricula;
+		return tester.testMatriculaA;
+	}
+
+	@GetMapping("/addSection")
+	public Section addSection() {
+		tester.testMatriculaB.addSections(tester.testSectionA01, tester.testCourseA);
+		return tester.testSectionA01;
 	}
 
 }

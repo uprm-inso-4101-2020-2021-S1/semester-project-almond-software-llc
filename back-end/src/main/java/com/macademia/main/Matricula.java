@@ -9,17 +9,17 @@ public class Matricula {
 	private List<Section> sections;
 	private List<Course> coursesTaken;
 	private int totalCredits;
-	private String period;
+	private MatriculaPeriod period;
 
 	// -[Constructor]-----------------------------------------
-	public Matricula(String period) {
+	public Matricula(MatriculaPeriod period) {
 		this.sections = new ArrayList<Section>();
 		this.coursesTaken = new ArrayList<Course>();
 		this.totalCredits = 0;
 		this.period = period;
 	}
 
-	public Matricula(List<Section> sections, String period) {
+	public Matricula(List<Section> sections, MatriculaPeriod period) {
 		this.sections = sections;
 		this.totalCredits = 0;
 		this.period = period;
@@ -31,16 +31,19 @@ public class Matricula {
 	// in order to keep track of sections and courses taken
 	public void addSections(Section e, Course f) {
 		this.totalCredits += e.getCredits();
+		e.increasePopulation();
 		this.sections.add(e);
 		this.coursesTaken.add(f);
 	}
 
 	public void removeSections(Section e) {
 		this.totalCredits -= e.getCredits();
+		e.decreasePopulation();
 		this.sections.remove(e);
 		this.coursesTaken.remove(this.findCourse(e));
 	}
 
+	// helper function for remove section to help find course easily.
 	private Course findCourse(Section e) {
 		for (Course c : this.coursesTaken) {
 			if (e.getCourseCode().equals(c.getDept() + c.getCode()))
@@ -62,7 +65,7 @@ public class Matricula {
 		return totalCredits;
 	}
 
-	public String getPeriod() {
+	public MatriculaPeriod getPeriod() {
 		return period;
 	}
 
@@ -74,7 +77,7 @@ public class Matricula {
 		this.totalCredits = totalCredits;
 	}
 
-	public void setPeriod(String period) {
+	public void setPeriod(MatriculaPeriod period) {
 		this.period = period;
 	}
 

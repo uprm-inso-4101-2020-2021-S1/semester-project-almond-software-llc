@@ -114,7 +114,7 @@ public class Student extends User {
 		matriculas.add(0, e);
 	}
 
-	public Matricula createMatricula(String p) {
+	public Matricula createMatricula(MatriculaPeriod p) {
 		Matricula m = new Matricula(p);
 		return m;
 	}
