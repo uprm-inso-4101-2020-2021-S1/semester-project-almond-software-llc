@@ -1,0 +1,129 @@
+@startuml classDiagram
+Student <|-- User
+MatriculaPeriod "1" *-- per:contains
+Section "many" *-- Days:contains
+Student "1" -- "many" Matricula 
+Student "1" -- "many" Course
+Student "1" -- "1" Department
+Department "1" -- "many" Course
+Matricula "1" -- "many" Section
+Matricula "1" -- "many" Course
+Course "1" -- "1" Section
+Matricula "1" -- "many" MatriculaPeriod
+
+Class Student{
+    -matricula : Matricula
+    -department: Department
+    -name : String
+    -StudentNumber : String
+    -matricula : List<Matricula>
+    -priorities : List<Course>
+    String getStudentNumber()
+    String getName()
+    Department getDepartment()
+    Matricula getMatricula()
+    void addCourse(Course e)
+    void addMatricula(Matricula e)
+    Matricula createMatricula(String p)
+    boolean verifyPrereqs(Course e)
+    boolean verifyCoreqs(Course e)
+    void addPriority(Course e)
+    Course removePriority(int i)
+    void swapPriority(int i, int j)
+    String toString()
+    boolean equals(Object obj)
+}
+Class Department{
+    -CourseCatalog : Map<String, Course>
+    -Name : String
+    -ShortName : String
+    String getName()
+    String getShortName()
+    Map<Integer, Course> getCatalog()
+    void AddCourse(Course course)
+    String toString()
+    boolean equals(Object obj)
+
+}
+Class Matricula{
+    -sections: List<Section>
+    -coursesTaken :List<Course>
+    -totalCredits: int
+    -period:MatriculaPeriod
+    void addCourse(Course e)
+    void removeCourses(Course e)
+    List<Section> getSections()
+    int getTotalCredits()
+    String getPeriod()
+    void setSections(List<Section> Sections)
+    void setTotalCredits(int totalCredits)
+    void setPeriod(String period)
+    String toString()
+}
+class MatriculaPeriod{
+    -matriculaYear:int
+    -p:per
+}
+enum per{
+    SPRING 
+    SUMMER1
+    SUMMER2
+    EXT_SUMMER
+    FALL
+}
+Class Course{
+    -name:String
+    -dept:String
+    -code:String
+    -courseCode:String
+    -credits:int
+    -prereq:List<Course>
+    -sections:List<Section>
+    String getName()
+    Department getDept()
+    int getCode()
+    int getCredits()
+    List<Course> getPrereq()
+    List<Course> getCoreq()
+    List<Section> getSections()
+    void setName(String name)
+    void setDept(Department dept)
+    void setCode(int code)
+    void setCredits(int credits)
+    void setPrereq(List<Course> prereq)
+    void setCoreq(List<Course> coreq)
+    void setSections(List<Section> sections)
+    void addPrereq(Course course)
+    void addCoreq(Course course)
+    void addSection(Section sect)
+}
+Class Section{
+    -secNum:String
+    -day:String
+    -time:String
+    -professor:String
+    -building:String
+    -room:String
+    -courseCode:String
+    -capacity:int
+    -population:int
+    -credits:int
+    void setSecNum(String s)
+    void setDay(String d)
+    void setTime(String t)
+    String getSecNum()
+    String getDay()
+    String getTime()
+    Course getCourse()
+    String toString()
+}
+enum Days{
+    MTWJ
+    MWF
+    TJ
+    MTWJF
+    MTWJF
+    MTWF
+
+}
+@enduml
