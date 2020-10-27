@@ -6,9 +6,7 @@ package com.macademia.main;
  * @author Giovanni Garcia
  */
 
-enum Days {
-    MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
-}
+enum Days {MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;}
 
 public class Section {
     // Variables
@@ -42,107 +40,57 @@ public class Section {
 
     /**
      * Sets the section Number of this object
-     * 
-     * @return N/A
      */
-    public void setSecNum(String s) {
-        this.secNum = s;
-    }
+    public void setSecNum(String s) {this.secNum = s;}
 
     /**
      * Sets the day of this object
-     * 
-     * @return N/A
      */
-    public void setDay(String d) {
-        this.day = d;
-    }
+    public void setDay(String d) {this.day = d;}
 
     /**
      * Sets the time of this object
-     * 
-     * @return N/A
      */
-    public void setTime(String t) {
-        this.time = t;
-    }
+    public void setTime(String t) {this.time = t;}
 
-    public void setCourseCode(Course course) {
-        this.courseCode = course.getDept() + course.getCode();
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public void increasePopulation() {
-        this.population++;
-    }
-
-    public void decreasePopulation() {
-        this.population--;
-    }
+    public void setCourseCode(Course course) {this.courseCode = course.getDept() + course.getCode();}
+    public void setCredits(int credits) {this.credits = credits;}
+    public void setCapacity(int capacity) {this.capacity = capacity;}
+    public void increasePopulation() {this.population++;}
+    public void decreasePopulation() {this.population--;}
 
     // Getters
 
     /**
      * Gets the section number of this object
-     * 
      * @return secNum
      */
-    public String getSecNum() {
-        return this.secNum;
-    }
+    public String getSecNum() {return this.secNum;}
 
     /**
      * Gets the day of this object
-     * 
      * @return day
      */
-    public String getDay() {
-        return this.day;
-    }
+    public String getDay() {return this.day;}
 
     /**
      * Gets the time of this object
-     * 
      * @return time
      */
-    public String getTime() {
-        return this.time;
-    }
+    public String getTime() {return this.time;}
+    public String getProfessor() {return this.professor;}
+    public String getBuilding() {return this.building;}
+    public String getRoom() {return this.room;}
 
-    public String getProfessor() {
-        return this.professor;
-    }
+    /**
+     * Returns the course code IE "ICOM4501"
+     * @return
+     */
+    public String getCourseCode() {return this.courseCode;}
 
-    public String getBuilding() {
-        return this.building;
-    }
-
-    public String getRoom() {
-        return this.room;
-    }
-
-    public String getCourseCode() {
-        return this.courseCode;
-    }
-
-    public int getCredits() {
-        return this.credits;
-    }
-
-    public int getCapacity() {
-        return this.capacity;
-    }
-
-    public int getPopulation() {
-        return this.population;
-    }
+    public int getCredits() {return this.credits;}
+    public int getCapacity() {return this.capacity;}
+    public int getPopulation() {return this.population;}
 
     /**
      * Returns a displayable string for this section

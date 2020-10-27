@@ -79,6 +79,19 @@ public class MatriculaPeriod {
      */    
     @Override
     public String toString() {return PeriodToString(p) + ": " + matriculaYear;}
+
+    /**
+     * Returns true if and only if the given object is a Matricula Period object, and if the semester and year are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+		if (obj == null) {return false;}
+		if (obj instanceof MatriculaPeriod) {
+			MatriculaPeriod OtherPeriod = (MatriculaPeriod) obj;
+			return OtherPeriod.matriculaYear == matriculaYear && OtherPeriod.p==p;
+		}
+		return false;
+    }
     
 
 }

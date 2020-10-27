@@ -7,7 +7,6 @@ import java.util.List;
  * Contains information for a Course
  * @author Kurcell
  */
-
 public class Course {
 
 	// -[Fields]----------------------------------------------
@@ -44,7 +43,17 @@ public class Course {
 	// -[Getters]---------------------------------------------
 
 	public String getName() {return name;}
+	
+	/**
+	 * Gets the Department ShortName of this course
+	 * @return IE INSO
+	 */
 	public String getDept() {return dept;}
+	
+	/**
+	 * Gets the number portion of the course code
+	 * @return IE 3101
+	 */
 	public String getCode() {return code;}
 	public String getCourseCode() {return courseCode;}
 	public int getCredits() {return credits;}
