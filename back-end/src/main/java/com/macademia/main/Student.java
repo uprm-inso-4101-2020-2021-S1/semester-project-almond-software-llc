@@ -21,23 +21,9 @@ public class Student extends User {
 	private String StudentNumber;
 	private List<Matricula> matriculas;
 	private List<Course> priorities;
+	private List<Course> coursesTaken;
 
 	// -[Constructors]----------------------------------------------------------------------
-
-	/**
-	 * Turns a User into a Student by retrieving their student details from the
-	 * database.
-	 * 
-	 * @param user
-	 */
-	public Student(User user) {
-		super(user);
-
-		// TODO: Get Details from Database
-
-		// Get details from this user from the database
-		// GetDetailsFromDatabase(this.getUsername()); or something like this.
-	}
 
 	/**
 	 * Creates a student object with the following details.
