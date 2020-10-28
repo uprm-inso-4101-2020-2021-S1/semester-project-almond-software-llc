@@ -123,6 +123,8 @@ public class Student extends User {
 		}
 		return counter == e.getCoreq().size();
 	}
+	
+	public void addCourseTaken(Course e) {coursesTaken.add(e);} 
 
 	public void addPriority(Course e) {priorities.add(e);}
 
