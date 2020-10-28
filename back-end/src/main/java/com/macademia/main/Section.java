@@ -14,23 +14,22 @@ public class Section {
     private String day;
     private String time;
     private String professor;
-    private String building;
-    private String room;
+    private String location;
     private String courseCode;
     private int capacity;
     private int population;
     private int credits;
 
     // Constructor
-    public Section(String secNum, String day, String time, String professor, String building, String room, Course course, int capacity) {
+    public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
         this.professor = professor;
-        this.building = building;
-        this.room = room;
+        this.location = Location;
         courseCode = course.getDept() + course.getCode();
         this.credits = course.getCredits();
+        this.population=Population;
         this.capacity = capacity;
         this.population = 0;
         
@@ -58,6 +57,7 @@ public class Section {
     public void setCapacity(int capacity) {this.capacity = capacity;}
     public void increasePopulation() {this.population++;}
     public void decreasePopulation() {this.population--;}
+    public void setPopulation(int Population) {this.population=Population;} //This is here for the Database handler
 
     // Getters
 
@@ -79,8 +79,7 @@ public class Section {
      */
     public String getTime() {return this.time;}
     public String getProfessor() {return this.professor;}
-    public String getBuilding() {return this.building;}
-    public String getRoom() {return this.room;}
+    public String getLocation() {return this.location;}
 
     /**
      * Returns the course code IE "ICOM4501"
