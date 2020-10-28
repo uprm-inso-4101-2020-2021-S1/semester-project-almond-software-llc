@@ -80,6 +80,12 @@ public class Student extends User {
 	 */
 	public List<Course> getPriority(){return priorities;}
 
+	/**
+	 * gets Courses this student has taken
+	 * @return
+	 */
+	public List<Course> getCoursesTaken(){return coursesTaken;}
+	
 	// -[Check-Up]----------------------------------------------------------------------
 
 	/**
