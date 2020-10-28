@@ -113,6 +113,12 @@ public class DBHandler {
 		//Get all matriculas
 		for (String MatID : RS.getString("Matriculas").split(",")) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}
 		
+		//Get Priority Courses
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		
+		//Get Courses Taken
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
+		
 		RS.close(); //We need to close the connection
 		
 		return ReturnStudent;
@@ -135,10 +141,13 @@ public class DBHandler {
 		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}
+		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}}
 		
-		//TODO GET ALL COURSES TAKEN
-		//TODO GET PRIORITY COURSES
+		//Get Priority Courses
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		
+		//Get Courses Taken
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
 		
 		RS.close(); //We need to close the connection
 		
@@ -394,9 +403,12 @@ public class DBHandler {
 		
 		//TODO: SAVE STUDENT COURSES TAKEN!!!
 		
+		String CoursesTaken = "";
+		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
+		
 		//Then save the user
-		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
-		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
 	}
 	
 	/**
@@ -562,8 +574,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
-    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses) VALUES(?,?,?,?,?,?)";
+	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
+    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken) VALUES(?,?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ID); //ID
         pstmt.setString(2, Name); //Name
@@ -571,6 +583,7 @@ public class DBHandler {
         pstmt.setString(4, Department); //Department
         pstmt.setString(5, Matriculas); //Matriculas
         pstmt.setString(6, PriorityCourses); //PriorityCourses
+        pstmt.setString(7, CoursesTaken); //Courses Taken	
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -688,8 +701,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
-		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ? WHERE ID = ?;";
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
+		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
@@ -699,6 +712,7 @@ public class DBHandler {
 		pstmt.setString(4, Matriculas);
 		pstmt.setString(5, PriorityCourses);
 		pstmt.setString(7, ID);
+		pstmt.setString(8, CoursesTaken);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
