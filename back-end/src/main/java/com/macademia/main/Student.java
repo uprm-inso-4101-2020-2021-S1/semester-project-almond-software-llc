@@ -73,6 +73,12 @@ public class Student extends User {
 	 * @param Mat
 	 */
 	public Matricula getMatricula(MatriculaPeriod Mat) {return matriculas.get(Mat);}
+	
+	/**
+	 * Gets this student's priority courses
+	 * @return
+	 */
+	public List<Course> getPriority(){return priorities;}
 
 	// -[Check-Up]----------------------------------------------------------------------
 
