@@ -14,6 +14,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import com.macademia.main.Course;
 import com.macademia.main.Department;
 import com.macademia.main.Matricula;
+import com.macademia.main.MatriculaPeriod;
 import com.macademia.main.Section;
 import com.macademia.main.Student;
 import com.macademia.main.auth.User;
@@ -29,7 +30,8 @@ class DatabaseJUnit {
 	
 	//Static values that will be used for testing:
 	static User UserBeforeSave = new User("Igtampe","1234"); //Prepare a user
-	static Matricula MatriculaBeforeSave = new Matricula(new ArrayList<Section>(), 3, "FALL");
+	static MatriculaPeriod MatPeriodBeforeSave = new MatriculaPeriod(2020, "FALL");
+	static Matricula MatriculaBeforeSave = new Matricula(MatPeriodBeforeSave);
 	static Department DepartmentBeforeSave = new Department("Drama Department", "DRAM");
 	static Course ActingI = new Course("Acting I", DepartmentBeforeSave, "3001", 3);
 	static Course ActingII = new Course("Acting II", DepartmentBeforeSave, "3002", 3);
@@ -37,8 +39,8 @@ class DatabaseJUnit {
 	static Course ActingIV = new Course("Acting IV", DepartmentBeforeSave, "3004", 3);
 	static Course Magic = new Course("Acting Magic", DepartmentBeforeSave, "4004", 3);
 	static Course MagicLab = new Course("Acting Magic Lab",DepartmentBeforeSave,"4004L",1);
-	static Section SectionBeforeSave = new Section("20", "MWF", "8:30-9:30", ActingI);
-	static Student StudentBeforeSave = new Student(UserBeforeSave, "Paul", "802-16-4444", MatriculaBeforeSave, DepartmentBeforeSave);
+	static Section SectionBeforeSave = new Section("020", "MWF", "8:30 - 9:30", "Yang Lee", "STEF302", ActingII, 1,30);
+	static Student StudentBeforeSave = new Student(UserBeforeSave, "Paul", "802-16-4444", DepartmentBeforeSave);
 	
 	
 	@BeforeAll
@@ -48,13 +50,12 @@ class DatabaseJUnit {
 		
 		//make sure everything is linked here
 		MatriculaBeforeSave.getSections().add(SectionBeforeSave);
-		Magic.addPrereq(MagicLab);//TODO: Change this to a coreq later, and make it a priority course for the student.
+		Magic.addCoreq(MagicLab);
 		Magic.addPrereq(ActingIV); 
 		ActingII.addPrereq(ActingI);
 		ActingIII.addPrereq(ActingII);
 		ActingIV.addPrereq(ActingIII);
-		
-		//TODO: Make sure that everything is linked up properly after Francis's refactoring of course, section
+		StudentBeforeSave.addPriority(MagicLab);
 		
 	}
 
@@ -89,9 +90,13 @@ class DatabaseJUnit {
 		assertEquals(StudentBeforeSave.getName(), StudentAfterSave.getName());
 		assertEquals(StudentBeforeSave.getStudentNumber(), StudentAfterSave.getStudentNumber());
 		
-		//TODO: Check Priority Courses when they are added.
-		//TODO: Check list of matriculas is the same (at least IDs. Checking matriculas save is not the responsibility of this test)
+		assertEquals(StudentBeforeSave.getPriority().size(), StudentAfterSave.getPriority().size());
 		
+		for (int i = 0; i < StudentBeforeSave.getPriority().size(); i++) {
+			assertEquals(StudentBeforeSave.getPriority().get(i).getCode(), StudentBeforeSave.getPriority().get(i).getCode());
+		}
+		
+		assertEquals(StudentBeforeSave.getMatriculas().size(), StudentAfterSave.getMatriculas().size());
 		
 	}
 	
@@ -113,10 +118,6 @@ class DatabaseJUnit {
 		for (int i = 0; i < MatriculaBeforeSave.getSections().size(); i++) {
 			assertEquals(MatriculaBeforeSave.getSections().get(i).toString(), MatriculaAfterSave.getSections().get(i).toString());
 		}
-		
-		
-		//TODO: Verify Year once added
-		
 	}
 	
 	@Test
@@ -150,7 +151,7 @@ class DatabaseJUnit {
 	void CourseTester(Course CourseBeforeSaving) throws Exception{
 		Handler.SaveCourse(CourseBeforeSaving); //Save the course
 		
-		String CourseID = CourseBeforeSaving.getDept().getShortName()+CourseBeforeSaving.getCode(); //TODO: Update this to the new department shortstring accessor.
+		String CourseID = CourseBeforeSaving.getDept()+CourseBeforeSaving.getCode();
 		
 		assert(Handler.CourseExists(CourseID)); //verify the course exists
 		
@@ -158,13 +159,18 @@ class DatabaseJUnit {
 		
 		//Verify that its the same:
 		assertEquals(CourseBeforeSaving.getCode(), CourseAfterSaving.getCode());
-		assertEquals(CourseBeforeSaving.getDept().getShortName(), CourseAfterSaving.getDept().getShortName());
+		assertEquals(CourseBeforeSaving.getDept(), CourseAfterSaving.getDept());
 		assertEquals(CourseBeforeSaving.getCredits(), CourseAfterSaving.getCredits());
 		
 		assertEquals(CourseBeforeSaving.getPrereq().size(), CourseBeforeSaving.getPrereq().size());
 		for (int i = 0; i < CourseBeforeSaving.getPrereq().size(); i++) {
 			assertEquals(CourseBeforeSaving.getPrereq().get(i).getCode(), CourseAfterSaving.getPrereq().get(i).getCode());
-		}//TODO: do the same for Coreq
+		}
+		
+		for (int i = 0; i < CourseBeforeSaving.getCoreq().size(); i++) {
+			assertEquals(CourseBeforeSaving.getCoreq().get(i).getCode(), CourseAfterSaving.getCoreq().get(i).getCode());
+		}
+
 		
 		assertEquals(CourseBeforeSaving.getSections().size(), CourseAfterSaving.getSections().size());
 		for (int i = 0; i < CourseBeforeSaving.getSections().size(); i++) {
@@ -177,7 +183,7 @@ class DatabaseJUnit {
 	@Order(7)
 	void SectionsTest() throws Exception {
 		Handler.SaveSeciton(SectionBeforeSave); //Save section
-		String SectionID = SectionBeforeSave.getCourse().getDept().getShortName()+SectionBeforeSave.getCourse().getCode()+"-"+SectionBeforeSave.getSecNum();
+		String SectionID = SectionBeforeSave.getCourseCode()+"-"+SectionBeforeSave.getSecNum();
 		
 		assert(Handler.SectionExists(SectionID)); //Assert the section exists
 		
@@ -187,12 +193,11 @@ class DatabaseJUnit {
 		assertEquals(SectionBeforeSave.getDay(), SectionAfterSave.getDay());
 		assertEquals(SectionBeforeSave.getSecNum(), SectionAfterSave.getSecNum());
 		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //TODO: Switch to period once its done
-		assertEquals(SectionBeforeSave.getCourse().getCode(), SectionAfterSave.getCourse().getCode());
-		
-		//TODO: Assert Location, Prof, CurCap, and MaxCap once added
-		
-		
-		
+		assertEquals(SectionBeforeSave.getCourseCode(), SectionAfterSave.getCourseCode());
+		assertEquals(SectionBeforeSave.getLocation(), SectionAfterSave.getLocation());
+		assertEquals(SectionBeforeSave.getProfessor(), SectionAfterSave.getProfessor());
+		assertEquals(SectionBeforeSave.getPopulation(), SectionAfterSave.getPopulation());
+		assertEquals(SectionBeforeSave.getCapacity(), SectionAfterSave.getCapacity());
 		
 	}
 
