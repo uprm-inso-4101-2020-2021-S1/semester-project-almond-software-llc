@@ -43,6 +43,7 @@ public class Student extends User {
 		this.department = Department;
 		this.matriculas = new Hashtable<MatriculaPeriod,Matricula>(4);
 		this.priorities = new ArrayList<Course>();
+		this.coursesTaken=new ArrayList<Course>();
 
 	}
 
