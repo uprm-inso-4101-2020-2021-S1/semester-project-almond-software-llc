@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.app-bar {
+  width: 100% - 240px;
+  margin-left: 240px;
+  background-color: "green";
+}
+
+.image {
+  width: 60;
+  height: 60;
+}
