@@ -92,6 +92,7 @@ public class Section {
    public String getRoom() {return this.room;}
 
    public Days getDay() {return this.day;}
+   public Section getSection() {return this;}
 
    
 
