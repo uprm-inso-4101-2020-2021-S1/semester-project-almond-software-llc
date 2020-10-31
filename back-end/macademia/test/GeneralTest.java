@@ -50,13 +50,13 @@ public class GeneralTest {
 		User Person3 = new User("Person3", "This is a password that's very long wow que cool");
 		
 		//Create some matriculas:
-		ArrayList<Course> CourseList1 = new ArrayList<Course>();
-		ArrayList<Course> CourseList2 = new ArrayList<Course>();
-		ArrayList<Course> CourseList3 = new ArrayList<Course>();
+		ArrayList<Section> CourseList1 = new ArrayList<Section>();
+		ArrayList<Section> CourseList2 = new ArrayList<Section>();
+		ArrayList<Section> CourseList3 = new ArrayList<Section>();
 		
-		CourseList1.add(COM); CourseList1.add(DRAM1);
-		CourseList2.add(COM); CourseList2.add(DRAM2);
-		CourseList3.add(DRAM1);
+		CourseList1.add(COM.getSections().get(0)); CourseList1.add(DRAM1.getSections().get(0));
+		CourseList2.add(COM.getSections().get(0)); CourseList2.add(DRAM2.getSections().get(0));
+		CourseList3.add(DRAM1.getSections().get(0));
 
 		Matricula Mat1 = new Matricula(CourseList1, 6, "FALL");
 		Matricula Mat2 = new Matricula(CourseList2, 6, "FALL");
@@ -92,7 +92,7 @@ public class GeneralTest {
 	}
 	
 	public static void PrintMatriculaDetails(String Prefix, Matricula matricula) {
-		for (Course course : matricula.getCourses()) {PrintCourseDetails(Prefix ,course);}
+		for (Section Section : matricula.getSections()) {PrintSectionDetails(Prefix ,Section);}
 		System.out.println(Prefix + " =");
 	}
 	

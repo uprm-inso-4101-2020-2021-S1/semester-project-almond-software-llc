@@ -5,12 +5,12 @@ import macademia.auth.MatriculaPeriod;
 
 public class Matricula {
 	//-[Fields]----------------------------------------------
-	private List<Section> courses;
+	private List<Course> courses;
 	private int totalCredits;
 	private MatriculaPeriod period; 
 
 	//-[Constructor]-----------------------------------------
-	public Matricula(List<Section> courses, int totalCredits, MatriculaPeriod period) {
+	public Matricula(List<Course> courses, int totalCredits, MatriculaPeriod period) {
 		this.courses = courses;
 		this.totalCredits = getCredits();
 		this.period = period; 		
@@ -19,12 +19,12 @@ public class Matricula {
 	public int getCredits() {
 		int cred = 0;
 		if (this.courses.isEmpty()) return cred;
-		for (Section s : courses) {cred = cred + s.getCourse().getCredits();}
+		for (Course s : courses) {cred = cred + s.getCredits();}
 		return cred;
 	}
 	
 	//-[Getters]---------------------------------------------
-	public List<Section> getCourses() {
+	public List<Course> getCourses() {
 		return courses;
 	}
 	public int getTotalCredits() {
@@ -34,7 +34,7 @@ public class Matricula {
 		return period;
 	}
 
-	public void setCourses(List<Section> courses) {
+	public void setCourses(List<Course> courses) {
 		this.courses = courses;
 	}
 	public void setTotalCredits(int totalCredits) {
@@ -42,6 +42,9 @@ public class Matricula {
 	}
 	public void setPeriod(MatriculaPeriod period) {
 		this.period = period;
+	}
+	public void addCourse(Course c) {
+		courses.add(c);
 	}
 	
 	/**

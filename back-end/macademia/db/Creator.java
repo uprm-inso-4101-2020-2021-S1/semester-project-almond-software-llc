@@ -166,7 +166,7 @@ public class Creator {
             //Add Student
             System.out.println("Robert Robertson Robington");
             pstmt = conn.prepareStatement(Student);
-            pstmt.setString(1, "802-555-5555"); //ID
+            pstmt.setString(1, "802-55-5555"); //ID
             pstmt.setString(2, "Robert Robertson Robington"); //Name
             pstmt.setString(3, "Person3"); //TiedUser
             pstmt.setString(4, "DRAM"); //Department
