@@ -401,14 +401,16 @@ public class DBHandler {
 		String PriorityCourses=""; 
 		PriorityCourses = ListOfCoursesToString(stud.getPriority()); 
 		
-		//TODO: SAVE STUDENT COURSES TAKEN!!!
-		
 		String CoursesTaken = "";
 		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
 		
 		//Then save the user
 		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
 		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
+		
+		//Save the Matriculas
+		for (Matricula Mat : stud.getMatriculas()) {SaveMatricula(Mat);}
+		
 	}
 	
 	/**
