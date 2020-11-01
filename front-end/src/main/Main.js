@@ -587,8 +587,8 @@ export default function Main() {
 
     console.log('=====================================');
     console.log('myCourses: ' + myCourses.length + ', ' + myCourses);
-    console.log('departmentCourses: ' + departmentCourses.length + ', '  + departmentCourses);
-    console.log('myMatricula: ' + myMatricula.length + ', '  + myMatricula);
+    console.log('departmentCourses: ' + departmentCourses.length + ', ' + departmentCourses);
+    console.log('myMatricula: ' + myMatricula.length + ', ' + myMatricula);
     console.log('=====================================');
 
   }
@@ -663,9 +663,9 @@ export default function Main() {
 
                 <Grid item>
                   {myMatricula.length === 0 ? (
-                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ backgroundColor: 'green', height: '100px', width: '100px' }} />
+                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ height: '100px', width: '100px' }} />
                   ) : (
-                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ backgroundColor: 'red' }}>
+                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{}}>
                         <List>
                           {myMatricula.map((value, i) => (
                             <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
