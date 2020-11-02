@@ -44,7 +44,7 @@ public class MacademiaController {
 
 	@GetMapping("/addSection")
 	public Section addSection() {
-		tester.testMatriculaB.addSections(tester.testSectionA01, tester.testCourseA);
+		tester.testMatriculaB.addSections(tester.testSectionA01);
 		return tester.testSectionA01;
 	}
 

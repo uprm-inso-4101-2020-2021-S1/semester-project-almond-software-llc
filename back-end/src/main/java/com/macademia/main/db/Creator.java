@@ -44,8 +44,9 @@ public class Creator {
              * DEPARTMENT (Short name of dep), 
              * MATRICULAS (Comma separated list of IDs of Matriculas), 
              * PriorityCourses (Comma separated list of Course IDs (IE ICOM4101) that are priority)
+             * CoursesTaken (Comma Separated list of Courses taken)
              */
-            State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(50), Department Char(4), Matriculas VarChar(" + Integer.MAX_VALUE + "), PriorityCourses VarChar(" + Integer.MAX_VALUE + "));"); 
+            State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(50), Department Char(4), Matriculas VarChar(" + Integer.MAX_VALUE + "), PriorityCourses VarChar(" + Integer.MAX_VALUE + "), CoursesTaken VarChar("+Integer.MAX_VALUE+"));"); 
 
             System.out.println("Creating Matriculas Table.");
             /*
