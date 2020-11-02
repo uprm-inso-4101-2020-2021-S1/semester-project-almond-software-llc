@@ -1,15 +1,15 @@
 @startuml classDiagram
 Student <|-- User
-MatriculaPeriod "1" *-- per:contains
-Section "many" *-- Days:contains
-Student "1" -- "many" Matricula 
-Student "1" -- "many" Course
+MatriculaPeriod "1" ---> per:uses
+Section "1..*" ---> Days:uses
+Student "1" -- "1..*" Matricula 
+Student "1" -- "1..*" Course
 Student "1" -- "1" Department
-Department "1" -- "many" Course
-Matricula "1" -- "many" Section
-Matricula "1" -- "many" Course
+Department "1" -- "1..*" Course
+Matricula "1" -- "1..*" Section
+Matricula "1" -- "1..*" Course
 Course "1" -- "1" Section
-Matricula "1" -- "many" MatriculaPeriod
+Matricula "1" -- "1..*" MatriculaPeriod
 
 Class Student{
     -matricula : Matricula
