@@ -215,7 +215,9 @@ export default function Main() {
   let [disableNext, setDisableNext] = useState(false);
 
   let matriculaA = {
-    period: '2020', data: [
+    period: '2020',
+    totalCredits: 12,
+    data: [
       {
         section: '005',
         day: 'LWV',
@@ -280,7 +282,9 @@ export default function Main() {
   };
 
   let matriculaB = {
-    period: '2021', data: [
+    period: '2021',
+    totalCredits: 12,
+    data: [
       {
         section: '005',
         day: 'LWV',
@@ -345,7 +349,9 @@ export default function Main() {
   };
 
   let matriculaC = {
-    period: '2022', data: [
+    period: '2022',
+    totalCredits: 12,
+    data: [
       {
         section: '005',
         day: 'LWV',
@@ -606,7 +612,9 @@ export default function Main() {
     ],
   }
 
-  const forceUpdate = () => setElTicko(!elTicko);
+  const forceUpdate = () => {
+    setElTicko(!elTicko);
+  }
 
   const previousMatricula = () => {
     setDisablePrevious((matriculaIndex - 1) <= 0 ? true : false);
@@ -615,7 +623,7 @@ export default function Main() {
   }
 
   const nextMatricula = () => {
-    setDisableNext((matriculaIndex + 1) >= (myMatriculas.length-1) ? true : false);
+    setDisableNext((matriculaIndex + 1) >= (myMatriculas.length - 1) ? true : false);
     setDisablePrevious(false);
     setMatriculaIndex(matriculaIndex + 1);
   }
@@ -676,7 +684,7 @@ export default function Main() {
         if (verifyCourse(list, course)) {
           myMatriculas[matriculaIndex].data.push(course);
         }
-        setTotalCredits(totalCredits + course.credits);
+        myMatriculas[matriculaIndex].totalCredits + course.credits;
         break;
 
       default:
@@ -713,7 +721,7 @@ export default function Main() {
             myMatriculas[matriculaIndex].data.splice(i, 1);
           }
         });
-        setTotalCredits(totalCredits - course.credits);
+        myMatriculas[matriculaIndex].totalCredits - course.credits;
         break;
 
       default:
@@ -871,7 +879,7 @@ export default function Main() {
                       <Button>View Schedule</Button>
                     </Grid>
                     <Grid item>
-                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {totalCredits}</Typography>
+                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -890,6 +898,7 @@ export default function Main() {
         </div>
 
       </main>
+
     </div>
   );
 }

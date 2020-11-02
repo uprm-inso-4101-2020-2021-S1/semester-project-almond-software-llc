@@ -92,6 +92,7 @@ public class Creator {
         } catch (SQLException e) {System.out.println(e.getMessage());}  
     }
     
+    @Deprecated
     /**
      * Adds dummy data to a pre-existing Macademia Database
      * @param fileName
