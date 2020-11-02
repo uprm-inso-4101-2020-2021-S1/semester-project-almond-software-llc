@@ -451,6 +451,9 @@ public class DBHandler {
 		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName());}
 		else {InsertIntoDepartments(dep.getShortName(), dep.getName());}
 		
+		//Save changes to memory
+		DepartmentMap.put(dep.getShortName(), dep);
+		
 		//Save the course
 		for (Course course : dep.getCatalog().values()) {SaveCourse(course);}
 	}
@@ -473,10 +476,13 @@ public class DBHandler {
 		
 		//Prepare coreqs
 		String Coreqs = ListOfCoursesToString(course.getCoreq());
-		
 				
+		//Save the course
 		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
+		
+		//Save changes to memory
+		DepartmentMap.get(course.getDept()).getCatalog().put(course.getCode(), course);
 		
 		//Save each section
 		for (Section sect : course.getSections()) {SaveSeciton(sect);}
@@ -489,9 +495,10 @@ public class DBHandler {
 	 */
 	public void SaveSeciton(Section sect) throws SQLException {
 		
-		//Verify Course exists
-		if(!CourseExists(sect.getCourseCode())) {throw new IllegalArgumentException("Course is not in the database! Register it *BEFORE* adding this course");}
+		Course HeadCourse = getCourse(sect.getCourseCode());
 		
+		//Verify Course exists
+		if(HeadCourse==null) {throw new IllegalArgumentException("Course is not in the database! Register it *BEFORE* adding this course");}
 		
 		String SectionID = sect.getCourseCode() + "-" + sect.getSecNum(); 
 		boolean L = sect.getCourseCode().endsWith("L");
@@ -502,8 +509,14 @@ public class DBHandler {
 		int CurCap = sect.getPopulation();
 		int MaxCap = sect.getCapacity();
 		
+		//Save Section to disk		
 		if(SectionExists(SectionID)) {UpdateSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}
 		else {InsertIntoSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}		
+		
+		//Save section to memory
+		for (int i = 0; i < HeadCourse.getSections().size(); i++) {if(HeadCourse.getSections().get(i).getSecNum()==sect.getSecNum()) {HeadCourse.getSections().set(i, sect);}}
+		
+		//man we should really change that for a map
 		
 	}
 	
