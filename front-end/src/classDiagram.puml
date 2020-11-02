@@ -1,6 +1,4 @@
 @startuml classDiagram
-MatriculaPeriod "1" -[dashed]-> "uses" per
-Section "1..*" -[dashed]-> "uses" Days
 Student "1" -- "1..*" Matricula 
 Student "1" -- "1..*" Course
 Student "1" -- "1" Department
@@ -8,7 +6,7 @@ Department "1" -- "1..*" Course
 Matricula "1" -- "1..*" Section
 Matricula "1" -- "1..*" Course
 Course "1" -- "1" Section
-Matricula "1" -- "1..*" MatriculaPeriod
+Section "1" -- "1" Period
 
 class User{
     -{static}String: UserName
@@ -39,7 +37,7 @@ Class Student extends User{
     void swapPriority(int i, int j)
 }
 Class Department {
-    -CourseCatalog : Map<String, Course>
+    -CourseCatalog : Map<Integer, Course>
     -{static}Name : String
     -{static}ShortName : String
     String getName()
@@ -49,10 +47,9 @@ Class Department {
 
 }
 Class Matricula{
-    -sections: List<Section>
-    -coursesTaken :List<Course>
+    -Sections: List<Section>
     -totalCredits: int
-    -period:MatriculaPeriod
+    -Period:period
     void addCourse(Course e)
     void removeCourses(Course e)
     List<Section> getSections()
@@ -60,25 +57,14 @@ Class Matricula{
     String getPeriod()
     
 }
-class MatriculaPeriod{
-    -matriculaYear:int
-    -p:per
-}
-enum per{
-    SPRING 
-    SUMMER1
-    SUMMER2
-    EXT_SUMMER
-    FALL
-}
 Class Course{
     -name:String
-    -dept:String
-    -code:String
-    -courseCode:String
+    -dept:Department
+    -code:int
     -credits:int
     -prereq:List<Course>
-    -{static}sections:List<Section>
+    -coreq:List<Course>
+    -sections:List<Section>
     String getName()
     Department getDept()
     int getCode()
@@ -101,13 +87,10 @@ Class Section{
     -secNum:String
     -day:String
     -time:String
-    -professor:String
-    -building:String
-    -room:String
-    -courseCode:String
-    -capacity:int
-    -population:int
-    -credits:int
+    -course:Course
+    -period:Period
+    void setPeriod(Period period)
+    Period getPeriod()
     void setSecNum(String s)
     void setDay(String d)
     void setTime(String t)
@@ -115,15 +98,16 @@ Class Section{
     String getDay()
     String getTime()
     Course getCourse()
-    String toString()
+    boolean Conflict(Section sec)
+    Period timetoPeriod(String time)
 }
-enum Days{
-    MTWJ
-    MWF
-    TJ
-    MTWJF
-    MTWJF
-    MTWF
-
+Class Period{
+    -start:int
+    -end:int
+    int getStart()
+    int getEnd()
+    void setStart(int start)
+    void setEnd(int end)
+    boolean Conflict(Period sec)
 }
 @enduml
