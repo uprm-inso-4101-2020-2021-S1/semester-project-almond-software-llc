@@ -3,7 +3,10 @@ package com.macademia.main;
 import com.macademia.main.auth.User;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that holds a student, which contains: - Matricula Object - Name -
@@ -15,29 +18,14 @@ public class Student extends User {
 
 	// -[Variables]----------------------------------------------------------------------
 
-	private Matricula matricula;
 	private Department department;
 	private String Name;
 	private String StudentNumber;
-	private List<Matricula> matriculas;
+	private Map<MatriculaPeriod, Matricula> matriculas;
 	private List<Course> priorities;
+	private List<Course> coursesTaken;
 
 	// -[Constructors]----------------------------------------------------------------------
-
-	/**
-	 * Turns a User into a Student by retrieving their student details from the
-	 * database.
-	 * 
-	 * @param user
-	 */
-	public Student(User user) {
-		super(user);
-
-		// TODO: Get Details from Database
-
-		// Get details from this user from the database
-		// GetDetailsFromDatabase(this.getUsername()); or something like this.
-	}
 
 	/**
 	 * Creates a student object with the following details.
@@ -45,19 +33,17 @@ public class Student extends User {
 	 * @param user          User object
 	 * @param Name          Name of the student
 	 * @param StudentNumber Student number of the student
-	 * @param matricula     Matricula of this student
 	 * @param Department    Department of this student
 	 */
-	public Student(User user, String Name, String StudentNumber, Matricula matricula, Department Department) {
+	public Student(User user, String Name, String StudentNumber, Department Department) {
 		super(user);
 
 		this.Name = Name;
 		this.StudentNumber = StudentNumber;
 		this.department = Department;
-		this.matricula = matricula;
-		this.matriculas = new ArrayList<Matricula>();
-		this.matriculas.add(0, this.matricula);
+		this.matriculas = new Hashtable<MatriculaPeriod,Matricula>(4);
 		this.priorities = new ArrayList<Course>();
+		this.coursesTaken=new ArrayList<Course>();
 
 	}
 
@@ -65,54 +51,63 @@ public class Student extends User {
 
 	/**
 	 * Gets this student's Student Number (ID)
-	 * 
-	 * @return
 	 */
-	public String getStudentNumber() {
-		return StudentNumber;
-	}
+	public String getStudentNumber() {return StudentNumber;}
 
 	/**
 	 * Gets this student's Name (Not Username)
-	 * 
-	 * @return
 	 */
-	public String getName() {
-		return Name;
-	}
+	public String getName() {return Name;}
 
 	/**
 	 * Gets this student's department.
-	 * 
-	 * @return
 	 */
-	public Department getDepartment() {
-		return department;
-	}
+	public Department getDepartment() {return department;}
 
 	/**
-	 * Gets this student's Matricula
-	 * 
+	 * Gets this student's Matriculas
+	 */
+	public Collection<Matricula> getMatriculas() {return matriculas.values();}
+	
+	/**
+	 * Gets this student's matricula for a specified matricula period
+	 * @param Mat
+	 */
+	public Matricula getMatricula(MatriculaPeriod Mat) {return matriculas.get(Mat);}
+	
+	/**
+	 * Gets this student's priority courses
 	 * @return
 	 */
-	public Matricula getMatricula() {
-		return matricula;
-	}
+	public List<Course> getPriority(){return priorities;}
 
+	/**
+	 * gets Courses this student has taken
+	 * @return
+	 */
+	public List<Course> getCoursesTaken(){return coursesTaken;}
+	
 	// -[Check-Up]----------------------------------------------------------------------
 
-	public void addSections(Section e, Course f) throws IOException {
+	/**
+	 * Adds a section to the matricula of the specified period
+	 * @param e Section you want to add
+	 * @param f Course of the section you wish to add.
+	 * @param m Matricula Period of the matricula you wish to add this section to.
+	 * @throws IllegalArgumentException if the course prerequesites aren't met, or if the Section doesn't match with the course
+	 */
+	public void addSections(Section e, Course f, MatriculaPeriod m) throws IOException {
+		
+		//TODO: VERIFY IF THESE WILL ACTUALLY BE EQUAL
+		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		
 		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
-			this.matricula.addSections(e, f);
-		} else {
-			throw new IOException("Course pre-requisites not met.");
-		}
+			matriculas.get(m).addSections(e);;
+			coursesTaken.add(f); 
+		} else {throw new IllegalArgumentException("Course pre-requisites not met.");}
 	}
 
-	public void addMatricula(Matricula e) {
-		this.matricula = e;
-		matriculas.add(0, e);
-	}
+	public void addMatricula(Matricula e) {matriculas.put(e.getPeriod(), e);}
 
 	public Matricula createMatricula(MatriculaPeriod p) {
 		Matricula m = new Matricula(p);
@@ -121,35 +116,26 @@ public class Student extends User {
 
 	public boolean verifyPrereqs(Course e) {
 		int counter = 0;
-		for (int i = 1; i < matriculas.size(); i++) {
-			for (int j = 0; j < e.getPrereq().size(); j++) {
-				if (matriculas.get(i).getCoursesTaken().contains(e.getPrereq().get(j))) {
-					counter++;
-				}
-			}
+		
+		for (int j = 0; j < e.getPrereq().size(); j++) {
+				if (coursesTaken.contains(e.getPrereq().get(j))) {counter++;}
 		}
 		return counter == e.getPrereq().size();
 	}
 
 	public boolean verifyCoreqs(Course e) {
 		int counter = 0;
-		for (int i = 0; i < matriculas.size(); i++) {
-			for (int j = 0; j < e.getCoreq().size(); j++) {
-				if (matriculas.get(i).getCoursesTaken().contains(e.getCoreq().get(j))) {
-					counter++;
-				}
-			}
+		for (int j = 0; j < e.getCoreq().size(); j++) {
+			if (coursesTaken.contains(e.getCoreq().get(j))) {counter++;}
 		}
 		return counter == e.getCoreq().size();
 	}
+	
+	public void addCourseTaken(Course e) {coursesTaken.add(e);} 
 
-	public void addPriority(Course e) {
-		priorities.add(e);
-	}
+	public void addPriority(Course e) {priorities.add(e);}
 
-	public Course removePriority(int i) {
-		return priorities.remove(i);
-	}
+	public Course removePriority(int i) {return priorities.remove(i);}
 
 	public void swapPriority(int i, int j) {
 		Course temp = priorities.get(i);
