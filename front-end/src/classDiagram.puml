@@ -10,7 +10,15 @@ Matricula "1" -- "1..*" Course
 Course "1" -- "1" Section
 Matricula "1" -- "1..*" MatriculaPeriod
 
-Class Student implements User{
+class User{
+    -{static}String: UserName
+    -{static}String: Password
+    String getUserName()
+    String getPassword()
+    boolean checkPassword(String Password)
+
+}
+Class Student extends User{
     -matricula : Matricula
     -department: Department
     -name : String
@@ -32,8 +40,8 @@ Class Student implements User{
 }
 Class Department {
     -CourseCatalog : Map<String, Course>
-    -Name : String
-    -ShortName : String
+    -{static}Name : String
+    -{static}ShortName : String
     String getName()
     String getShortName()
     Map<Integer, Course> getCatalog()
@@ -70,7 +78,7 @@ Class Course{
     -courseCode:String
     -credits:int
     -prereq:List<Course>
-    -sections:List<Section>
+    -{static}sections:List<Section>
     String getName()
     Department getDept()
     int getCode()
