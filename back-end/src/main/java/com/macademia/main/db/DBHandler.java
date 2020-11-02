@@ -85,6 +85,7 @@ public class DBHandler {
 	 * @throws SQLException 
 	 */
 	public User getUser(String Username) throws SQLException {
+		
 		ResultSet RS= selectUser(Username);
 		if(!RS.next()) {RS.close(); return null;}
 		
@@ -92,6 +93,7 @@ public class DBHandler {
 		String Password = RS.getString("Password");
 		RS.close();
 		return new User(username,Password);
+
 	}
 	
 	/**
