@@ -1,7 +1,6 @@
 @startuml classDiagram
-Student <|-- User
-MatriculaPeriod "1" ---> per:uses
-Section "1..*" ---> Days:uses
+MatriculaPeriod "1" -[dashed]-> "uses" per
+Section "1..*" -[dashed]-> "uses" Days
 Student "1" -- "1..*" Matricula 
 Student "1" -- "1..*" Course
 Student "1" -- "1" Department
@@ -11,7 +10,7 @@ Matricula "1" -- "1..*" Course
 Course "1" -- "1" Section
 Matricula "1" -- "1..*" MatriculaPeriod
 
-Class Student{
+Class Student implements User{
     -matricula : Matricula
     -department: Department
     -name : String
@@ -31,7 +30,7 @@ Class Student{
     Course removePriority(int i)
     void swapPriority(int i, int j)
 }
-Class Department{
+Class Department {
     -CourseCatalog : Map<String, Course>
     -Name : String
     -ShortName : String
