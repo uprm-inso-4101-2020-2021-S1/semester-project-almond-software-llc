@@ -30,8 +30,6 @@ Class Student{
     void addPriority(Course e)
     Course removePriority(int i)
     void swapPriority(int i, int j)
-    String toString()
-    boolean equals(Object obj)
 }
 Class Department{
     -CourseCatalog : Map<String, Course>
@@ -41,8 +39,6 @@ Class Department{
     String getShortName()
     Map<Integer, Course> getCatalog()
     void AddCourse(Course course)
-    String toString()
-    boolean equals(Object obj)
 
 }
 Class Matricula{
@@ -55,10 +51,7 @@ Class Matricula{
     List<Section> getSections()
     int getTotalCredits()
     String getPeriod()
-    void setSections(List<Section> Sections)
-    void setTotalCredits(int totalCredits)
-    void setPeriod(String period)
-    String toString()
+    
 }
 class MatriculaPeriod{
     -matriculaYear:int
