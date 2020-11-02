@@ -849,10 +849,8 @@ public class DBHandler {
 	 * @throws SQLException 
 	 */
 	private String ListOfMatriculasToString(Collection<Matricula> collection) throws SQLException {
-		String Mats = ""; //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
-		for (Matricula mat : collection) {
-			Mats+= "," + SaveMatricula(mat);
-		}
+		String Mats = "";
+		for (Matricula mat : collection) {Mats+= "," + SaveMatricula(mat);}
 		if(Mats.length()>0) {Mats=Mats.substring(1);} //Handles the first comma
 		return Mats;
 	}
