@@ -6,12 +6,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './main/Main.js';
-
+import Login from "./main/UserAuthentication/login";
+import Register from './main/UserAuthentication/register';
+import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Main />
-  </React.StrictMode>,
+  <Router>
+    <App/>
+  </Router>,
   document.getElementById('root')
 );
 

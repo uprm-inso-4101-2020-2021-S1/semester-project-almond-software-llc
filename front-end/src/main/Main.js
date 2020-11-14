@@ -66,13 +66,28 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     // backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
   },
   title: {
     flexGrow: 1,
   },
   drawerContainer: {
-    overflow: 'auto',
+    overflow: "auto",
+  },
+  loginButton: {
+    fontFamily: "Roboto",
+    fontWeight: 700,
+    marginRight: "3rem",
+    "&:hover": {
+      background: "darkgreen",
+    },
+  },
+  registerButton: {
+    fontFamily: "Roboto",
+    fontWeight: 700,
+    "&:hover": {
+      background: "darkgreen",
+    },
   },
 }));
 
@@ -766,34 +781,53 @@ export default function Main() {
 
   return (
     <div className={classes.root}>
-
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <img src={Macademia} className={classes.image} />
-          <Typography variant='h6' className={classes.title}>Macademia</Typography>
+          <Typography variant="h6" className={classes.title}>
+            Macademia
+          </Typography>
+
+          <Button color="inherit" className={classes.loginButton}>Login</Button>
+          <Button color="inherit" className={classes.registerButton}>Register</Button>
         </Toolbar>
       </AppBar>
 
-      <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
-
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{ paper: classes.drawerPaper }}
+      >
         <Toolbar />
 
         <div className={classes.drawerContainer}>
-
           <Divider />
 
-          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 0)}>
+          <div
+            onDragOver={(e) => {
+              onDragOver(e);
+            }}
+            onDrop={(e) => onDrop(e, 0)}
+          >
             <List>
-              <Typography className={classes.drawerTypography}>My Courses</Typography>
+              <Typography className={classes.drawerTypography}>
+                My Courses
+              </Typography>
               {myCourses.map((value, i) => (
-                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
+                <ListItem
+                  draggable
+                  button
+                  key={i}
+                  onDragStart={(e) => onDragStart(e, value)}
+                >
                   <CourseCard
                     courseCode={value.courseCode}
                     section={value.section}
                     courseName={value.courseName}
                     professor={value.professor}
                     credits={value.credits}
-                    color={value.color} />
+                    color={value.color}
+                  />
                 </ListItem>
               ))}
             </List>
@@ -801,74 +835,117 @@ export default function Main() {
 
           <Divider />
 
-          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 1)}>
+          <div
+            onDragOver={(e) => {
+              onDragOver(e);
+            }}
+            onDrop={(e) => onDrop(e, 1)}
+          >
             <List>
-              <Typography className={classes.drawerTypography}>Department of INSO</Typography>
+              <Typography className={classes.drawerTypography}>
+                Department of INSO
+              </Typography>
               {departmentCourses.map((value, i) => (
-                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
+                <ListItem
+                  draggable
+                  button
+                  key={i}
+                  onDragStart={(e) => onDragStart(e, value)}
+                >
                   <CourseCard
                     courseCode={value.courseCode}
                     section={value.section}
                     courseName={value.courseName}
                     professor={value.professor}
                     credits={value.credits}
-                    color={value.color} />
+                    color={value.color}
+                  />
                 </ListItem>
               ))}
             </List>
           </div>
-
         </div>
-
       </Drawer>
 
-      <main className={classes.content} style={{ height: '100vh' }}>
-
+      <main className={classes.content} style={{ height: "100vh" }}>
         <Toolbar />
 
         <div className={classes.centerContent}>
-
-          <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
-            <IconButton disabled={disablePrevious} onClick={() => previousMatricula()}>
-              <NavigateBeforeIcon style={{ height: '50px', width: '50px' }} />
+          <div
+            style={{ display: "flex", alignItems: "center", padding: "50px" }}
+          >
+            <IconButton
+              disabled={disablePrevious}
+              onClick={() => previousMatricula()}
+            >
+              <NavigateBeforeIcon style={{ height: "50px", width: "50px" }} />
             </IconButton>
           </div>
 
-          <Card elevation={3} style={{ width: '70%' }}>
+          <Card elevation={3} style={{ width: "70%" }}>
             <CardContent>
-
-              <Grid item style={{ textAlign: 'center' }}>
-                <Typography style={{ fontSize: '30px' }}>{myMatriculas[matriculaIndex].period}</Typography>
+              <Grid item style={{ textAlign: "center" }}>
+                <Typography style={{ fontSize: "30px" }}>
+                  {myMatriculas[matriculaIndex].period}
+                </Typography>
               </Grid>
 
               <Divider />
 
-              <Grid container diretion='column' justify='space-around' alignItems='center'>
-
+              <Grid
+                container
+                diretion="column"
+                justify="space-around"
+                alignItems="center"
+              >
                 <Grid item>
                   {myMatriculas[matriculaIndex].data.length === 0 ? (
-                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ height: '100px', width: '100px' }} />
+                    <div
+                      onDragOver={(e) => {
+                        onDragOver(e);
+                      }}
+                      onDrop={(e) => onDrop(e, 2)}
+                      style={{ height: "100px", width: "100px" }}
+                    />
                   ) : (
-                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{}}>
-                        <List>
-                          {myMatriculas[matriculaIndex].data.map((value, i) => (
-                            <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                              <CourseCard
-                                courseCode={value.courseCode}
-                                section={value.section}
-                                courseName={value.courseName}
-                                professor={value.professor}
-                                credits={value.credits}
-                                color={value.color} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </div>
-                    )}
+                    <div
+                      onDragOver={(e) => {
+                        onDragOver(e);
+                      }}
+                      onDrop={(e) => onDrop(e, 2)}
+                      style={{}}
+                    >
+                      <List>
+                        {myMatriculas[matriculaIndex].data.map((value, i) => (
+                          <ListItem
+                            draggable
+                            button
+                            key={i}
+                            onDragStart={(e) => onDragStart(e, value)}
+                          >
+                            <CourseCard
+                              courseCode={value.courseCode}
+                              section={value.section}
+                              courseName={value.courseName}
+                              professor={value.professor}
+                              credits={value.credits}
+                              color={value.color}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </div>
+                  )}
                 </Grid>
 
                 <Grid item>
-                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="space-around"
+                    alignItems="center"
+                    spacing={3}
+                  >
                     <Grid item>
                       <Button>Add Section</Button>
                     </Grid>
@@ -879,26 +956,26 @@ export default function Main() {
                       <Button>View Schedule</Button>
                     </Grid>
                     <Grid item>
-                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
+                      <Typography style={{ color: "#7f7f7f" }}>
+                        Total Credits:{" "}
+                        {myMatriculas[matriculaIndex].totalCredits}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
-
               </Grid>
-
             </CardContent>
           </Card>
 
-          <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
+          <div
+            style={{ display: "flex", alignItems: "center", padding: "50px" }}
+          >
             <IconButton disabled={disableNext} onClick={() => nextMatricula()}>
-              <NavigateNextIcon style={{ height: '50px', width: '50px' }} />
+              <NavigateNextIcon style={{ height: "50px", width: "50px" }} />
             </IconButton>
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 }
