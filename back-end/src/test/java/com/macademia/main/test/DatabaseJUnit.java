@@ -62,7 +62,7 @@ class DatabaseJUnit {
 	}
 
 	@Test
-	@Order(1)
+	@Order(6)
 	void UserTest() throws Exception {
 		Handler.SaveUser(UserBeforeSave); //Save the user
 		assert(Handler.UserExists(UserBeforeSave.getUsername())); //Verify that the user now exists in the database
@@ -75,7 +75,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(7)
 	void StudentsTest() throws Exception {
 		Handler.SaveStudent(StudentBeforeSave); //Save the student
 		assert(Handler.StudentExists(StudentBeforeSave.getStudentNumber())); //Assert the student exists in the database.
@@ -119,7 +119,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
-	@Order(3)
+	@Order(1)
 	void DepartmentsTest()  throws Exception {
 		Handler.SaveDepartment(DepartmentBeforeSave); //Save the department
 		
@@ -135,15 +135,15 @@ class DatabaseJUnit {
 
 
 	@Test
-	@Order(4)
+	@Order(2)
 	void NoPrereqCourseTest()  throws Exception {CourseTester(ActingI);}
 	
 	@Test
-	@Order(5)
+	@Order(3)
 	void PrereqCourseTest()  throws Exception {CourseTester(Magic);}
 	
 	@Test
-	@Order(6)
+	@Order(4)
 	void LabCourseTest()  throws Exception {CourseTester(MagicLab);}
 	
 	void CourseTester(Course CourseBeforeSaving) throws Exception{
@@ -178,7 +178,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
-	@Order(7)
+	@Order(5)
 	void SectionsTest() throws Exception {
 		Handler.SaveSeciton(SectionBeforeSave); //Save section
 		String SectionID = SectionBeforeSave.getCourseCode()+"-"+SectionBeforeSave.getSecNum();
