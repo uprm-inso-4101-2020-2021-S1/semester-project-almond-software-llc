@@ -544,6 +544,79 @@ public class DBHandler {
 		
 	}
 	
+	//-[publicly facing deletes]-----------------------------------------------------------------------------
+	
+	/**
+	 * Deletes the user straight from the database
+	 * @param user
+	 * @throws SQLException
+	 */
+	public void deleteUser(User user) throws SQLException {deleteUser(user.getUsername());}
+	
+	/**
+	 * Deletes a student, its tied user, and all matriculas associated to it.
+	 * @param stud
+	 * @throws SQLException
+	 */
+	public void deleteStudent(Student stud) throws SQLException {
+		//Delete the student
+		deleteStudent(stud.getStudentNumber());
+		
+		//Delete the tieduser
+		deleteUser(stud);
+		
+		//Delete Matriculas
+		for (Matricula mat : stud.getMatriculas()) {deleteMatricula(mat);}
+	}
+	
+	/**
+	 * Deletes a matricula from the database *IF* it's ID is *not* -1
+	 * @param mat
+	 * @throws SQLException
+	 */
+	public void deleteMatricula(Matricula mat) throws SQLException {
+		if(mat.getID()==-1) {return;}
+		deleteMatricula(mat.getID());
+	}
+	
+	/**
+	 * Removes the department from the department map, deletes it from the database, and deletes all courses in its course catalog.
+	 * @param dep
+	 * @throws SQLException
+	 */
+	public void deleteDepartment(Department dep) throws SQLException {
+		if(DepartmentMap.containsKey(dep.getShortName())) {DepartmentMap.remove(dep.getShortName());} //if it's in the map, remove it from the map.
+		deleteDepartment(dep.getShortName()); //delete the department
+		
+		//now, delete every class underneath it.
+		for (Course course : dep.getCatalog().values()) {deleteCourse(course);}
+		
+		//And that's it... at least until we add matriculas as course programs... but I don't think that's happening.
+	}
+	
+	/**
+	 * Deletes a course, and all of its sections from the database.
+	 * @param course
+	 * @throws SQLException
+	 */
+	public void deleteCourse(Course course) throws SQLException {
+		deleteCourse(course.getCourseCode()); //delete the course
+		
+		//Now delete every section
+		for (Section section : course.getSections()) {deleteSection(section);}
+		
+	}
+	
+	/**
+	 * Deletes a section from the database.
+	 * @param sect
+	 * @throws SQLException
+	 */
+	public void deleteSection(Section sect) throws SQLException {
+		//delete the section straight from the database.
+		deleteSection(sect.getCourseCode() + "-" + sect.getSecNum());
+	}
+	
 	//-[privately facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -586,6 +659,32 @@ public class DBHandler {
 	private ResultSet selectAllSections() throws SQLException {return GetEverythingFrom("Sections");}
 	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhereLike("Sections", "ID", Course + "%");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
+	
+	//-[privately facing DELETEs]-----------------------------------------------------------------------------
+	
+	/** Handles deleting a value from a table, where the column matches the value
+	 * @return DELETE FROM (TABLE) WHERE (COLUMN) = '(VALUE)';
+	 * @throws SQLException 
+	 */
+	private int deleteFromWhere(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeUpdate("DELETE FROM " + Table + " WHERE " + Column + " = '" + Value + "';");}
+
+	/**
+	 * Handles getting a result from a given table, where the column is *like* the value
+	 * @return DELETE FROM (TABLE) WHERE (COLUM) LIKE '(VALUE)'
+	 * @throws SQLException
+	 */
+	private int deleteFromWhereLike(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeUpdate("DELETE FROM " + Table + " WHERE " + Column + " LIKE '" + Value + "';");}
+	
+	//All of these methods can be made public if needed... though for some it *probably* shouldn't
+	private int deleteUser(String Username) throws SQLException                {return deleteFromWhere("Users","Username",Username);}
+	private int deleteStudent(String StudentID) throws SQLException            {return deleteFromWhere("Students","ID",StudentID);}
+	private int deleteMatricula(int ID) throws SQLException                    {return deleteFromWhere("Matriculas","ID",ID+"");}
+	private int deleteDepartment(String ShortName) throws SQLException         {return deleteFromWhere("Departments", "ID", ShortName);}
+	private int deleteCourses(String Department) throws SQLException           {return deleteFromWhereLike("Courses", "ID", Department + "%");}
+	private int deleteCourse(String ID) throws SQLException                    {return deleteFromWhere("Courses", "ID", ID.substring(0,8));}
+	private int deleteSections(String Course) throws SQLException              {return deleteFromWhereLike("Sections", "ID", Course + "%");}
+	private int deleteSection(String ID) throws SQLException                   {return deleteFromWhere("Sections", "ID", ID);}
+	
 	
 	//-[privately facing INSERTs]-----------------------------------------------------------------------------
 	
