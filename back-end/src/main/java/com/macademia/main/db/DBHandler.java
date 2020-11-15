@@ -62,9 +62,16 @@ public class DBHandler {
 		LoadEverything();
 		
 		//Remove these lines of code to have the DBHandler *not* load Deps, Courses, and Sections upon instantiation.
-		
 	}
-
+	
+	/*
+	 * Closes the DBHandler and clears everything.
+	 */
+	public void close() throws SQLException {
+		SQLConn.close(); //Close the SQL Connection.
+		DepartmentMap.clear(); //Clear the Department map
+	}
+	
 	//-[Publicly facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -92,6 +99,21 @@ public class DBHandler {
 		String Password = RS.getString("Password");
 		RS.close();
 		return new User(username,Password);
+	}
+	
+	/**
+	 * Gets a list of all students in the system using the exact same method as getDepartments()
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Student> getStudents() throws SQLException{
+		ResultSet RS = selectStudents();
+		ArrayList<Student> Students = new ArrayList<Student>();
+		
+		//I know we access the database like twice to get this data but this allows the handler to kick in. Otherwise this'd be a mess.
+		while(RS.next()) {Students.add(getStudent(RS.getString("ID")));} 
+		RS.close();
+		return Students;		
 	}
 	
 	/**
@@ -546,6 +568,7 @@ public class DBHandler {
 	
 	private ResultSet selectUser(String Username) throws SQLException {return GetFromWhere("Users","Username",Username);}
 	
+	private ResultSet selectStudents() throws SQLException {return GetEverythingFrom("Students");}
 	private ResultSet selectStudentFromUsername(String Username) throws SQLException {return GetFromWhere("Students","TiedUser",Username);}
 	private ResultSet selectStudentFromID(String StudentID) throws SQLException {return GetFromWhere("Students","ID",StudentID);}
 	
@@ -846,6 +869,11 @@ public class DBHandler {
 		return ListAsString;
 	}
 	
+	/**
+	 * Utility to turn a list of sections toa comma separated list of section IDs
+	 * @param Sections
+	 * @return
+	 */
 	public static String ListOfSectionsToString(List<Section> Sections) {
 		String ListAsString= "";
 		for (Section section : Sections) {
