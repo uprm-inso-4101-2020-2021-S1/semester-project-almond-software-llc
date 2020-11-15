@@ -194,6 +194,8 @@ public class DBHandler {
 			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
 			}}		
 		
+		String Turn = RS.getString("Turn"); //TODO: actually link this with the user.
+		
 		RS.close(); //We need to close the connection
 		
 		return ReturnStudent;
@@ -213,6 +215,7 @@ public class DBHandler {
 		String[] Sections = RS.getString("Sections").split(",");
 		String Period = RS.getString("Period");
 		int Year = RS.getInt("Year");
+		boolean Readonly = RS.getBoolean("ReadOnly"); //TODO: Actually do the ReadOnly
 		
 		RS.close();
 		
@@ -464,9 +467,11 @@ public class DBHandler {
 		String CoursesTaken = "";
 		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
 		
+		//TODO: Save Turn data
+		
 		//Then save the user
-		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
-		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
 		
 		//Save the Matriculas
 		for (Matricula Mat : stud.getMatriculas()) {SaveMatricula(Mat);}
@@ -495,10 +500,12 @@ public class DBHandler {
 			
 			Mat.setID(NewID); //We now have a new unique ID. Save it with that ID
 			
-			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year);
+			//TODO: Implement READONLY flag
+			
+			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year, false);
 		} else {
 			//This is an edited matricula. We need to update it			
-			UpdateMatriculas(Mat.getID(), Sections, Period, Year);
+			UpdateMatriculas(Mat.getID(), Sections, Period, Year, false);
 		}
 		
 		return Mat.getID();
@@ -751,8 +758,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken) VALUES(?,?,?,?,?,?,?)";
+	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken, String Turn) throws SQLException {
+    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken, Turn) VALUES(?,?,?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ID); //ID
         pstmt.setString(2, Name); //Name
@@ -760,7 +767,8 @@ public class DBHandler {
         pstmt.setString(4, Department); //Department
         pstmt.setString(5, Matriculas); //Matriculas
         pstmt.setString(6, PriorityCourses); //PriorityCourses
-        pstmt.setString(7, CoursesTaken); //Courses Taken	
+        pstmt.setString(7, CoursesTaken); //Courses Taken
+        pstmt.setString(8, Turn); //Turn data	
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -773,13 +781,14 @@ public class DBHandler {
 	 * @param Year Year of this Matricula
 	 * @throws SQLException
 	 */
-	private void InsertIntoMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
-		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year) VALUES(?,?,?,?)";
+	private void InsertIntoMatriculas(int ID, String Sections, String Period, int Year, boolean ReadOnly) throws SQLException {
+		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year, ReadOnly) VALUES(?,?,?,?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setInt(1, ID);//ID
         pstmt.setString(2, Sections);//SECTIONS
         pstmt.setString(3, Period);//PERIOD
         pstmt.setInt(4,Year);//YEAR
+        pstmt.setBoolean(5, ReadOnly); //READONLY
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -878,8 +887,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ? WHERE ID = ?;";
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken, String Turn) throws SQLException {
+		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ?, Turn = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
@@ -888,8 +897,9 @@ public class DBHandler {
 		pstmt.setString(3, Department);
 		pstmt.setString(4, Matriculas);
 		pstmt.setString(5, PriorityCourses);
-		pstmt.setString(7, ID);
-		pstmt.setString(8, CoursesTaken);
+		pstmt.setString(7, CoursesTaken);
+		pstmt.setString(8, Turn);
+		pstmt.setString(9, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -903,20 +913,20 @@ public class DBHandler {
 	 * @param Year Year of this Matricula
 	 * @throws SQLException
 	 */
-	private void UpdateMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
-		String SQLString = "UPDATE Matriculas SET Sections = ?, Period = ?, Year= ? WHERE ID = ?;";
+	private void UpdateMatriculas(int ID, String Sections, String Period, int Year, boolean ReadOnly) throws SQLException {
+		String SQLString = "UPDATE Matriculas SET Sections = ?, Period = ?, Year = ?, ReadOnly = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
 		pstmt.setString(1, Sections);
 		pstmt.setString(2, Period);
 		pstmt.setInt(3, Year);
-		pstmt.setInt(4, ID);
+		pstmt.setBoolean(4, ReadOnly);
+		pstmt.setInt(5, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
 	}
-	
 	
 	/**
 	 * UPDATES a record in Departments. Searches by ShortName
