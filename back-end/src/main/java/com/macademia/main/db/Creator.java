@@ -45,8 +45,9 @@ public class Creator {
              * MATRICULAS (Comma separated list of IDs of Matriculas), 
              * PriorityCourses (Comma separated list of Course IDs (IE ICOM4101) that are priority)
              * CoursesTaken (Comma Separated list of Courses taken)
+             * TURN (parsable string for a turn)
              */
-            State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(50), Department Char(4), Matriculas VarChar(" + Integer.MAX_VALUE + "), PriorityCourses VarChar(" + Integer.MAX_VALUE + "), CoursesTaken VarChar("+Integer.MAX_VALUE+"));"); 
+            State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(50), Department Char(4), Matriculas VarChar(" + Integer.MAX_VALUE + "), PriorityCourses VarChar(" + Integer.MAX_VALUE + "), CoursesTaken VarChar("+Integer.MAX_VALUE+"), Turn VarChar(" + Integer.MAX_VALUE + "));"); 
 
             System.out.println("Creating Matriculas Table.");
             /*
@@ -54,8 +55,9 @@ public class Creator {
              * SECTIONS (Comma separated list of course sections (IE ICOM4101-20))
              * PERIOD (FALL, SPRING, SUMMER1,SUMMER2, EXTENDED_SUMMER)
              * YEAR (2020)
+             * READONLY
              */
-            State.execute("CREATE TABLE IF NOT EXISTS Matriculas (ID int, Sections VarChar(" + Integer.MAX_VALUE + "),Period VarChar(20), Year int);");
+            State.execute("CREATE TABLE IF NOT EXISTS Matriculas (ID int, Sections VarChar(" + Integer.MAX_VALUE + "),Period VarChar(20), Year int, ReadOnly bool);");
 
             System.out.println("Creating Departments table.");            
             /*
