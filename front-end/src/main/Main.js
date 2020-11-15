@@ -697,14 +697,14 @@ export default function Main() {
 
       case 2:
         if (verifyCourse(list, course)) {
-          myMatriculas[matriculaIndex].data.push(course);
+          return myMatriculas[matriculaIndex].data.push(course);
         }
-        myMatriculas[matriculaIndex].totalCredits + course.credits;
-        break;
+        return myMatriculas[matriculaIndex].totalCredits + course.credits;
+        //break;
 
-      default:
-        console.log("INVALID");
-        break;
+      // default:
+      //   console.log("INVALID");
+      //   break;
 
     }
 
@@ -733,15 +733,15 @@ export default function Main() {
       case 2:
         myMatriculas[matriculaIndex].data.forEach((value, i) => {
           if (value.courseCode === course.courseCode) {
-            myMatriculas[matriculaIndex].data.splice(i, 1);
+            return myMatriculas[matriculaIndex].data.splice(i, 1);
           }
         });
-        myMatriculas[matriculaIndex].totalCredits - course.credits;
-        break;
+        return myMatriculas[matriculaIndex].totalCredits - course.credits;
+        //break;
 
-      default:
-        console.log("INVALID");
-        break;
+      // default:
+      //   console.log("INVALID");
+      //   break;
 
     }
 
@@ -761,7 +761,7 @@ export default function Main() {
     let course = tempCourse;
     let e_list = tempCourse.list;
 
-    if (list != course.list) {
+    if (list !== course.list) {
 
       addCourse(list, course);
 

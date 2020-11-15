@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
+import Macademia from "./macademia.png";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -20,6 +16,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  image: {
+    width: 60,
+    height: 60,
+    backgroundColor: "green",
+    borderRadius: "50%",
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -30,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    backgroundColor: "green",
+    "&:hover": {
+      backgroundColor:"darkgreen",
+    },
   },
   loginButton: {
     textDecoration: "none",
@@ -37,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Roboto",
     "&:hover": {
       color: "white",
-      textDecoration:"none",
+      textDecoration: "none",
     },
   },
 }));
@@ -51,9 +57,7 @@ export default function SignIn() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <img src={Macademia} className={classes.image} />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
@@ -87,7 +91,9 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            <Link href="/home" className={classes.loginButton}>Login</Link>
+            <Link href="/home" className={classes.loginButton}>
+              Login
+            </Link>
           </Button>
           <Grid container>
             <Grid item xs></Grid>
