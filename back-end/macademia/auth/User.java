@@ -41,6 +41,12 @@ public class User{
     public String getUsername(){return Username;}
 
     /**
+     * Gets the Password of this object
+     * @return The Password of this object
+     */
+    public String getPassword(){return Password;}
+    
+    /**
      * Checks whether the password matches
      * @return True if the password matches, false otherwise.
      */

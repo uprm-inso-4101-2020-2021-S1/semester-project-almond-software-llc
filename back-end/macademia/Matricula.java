@@ -7,22 +7,13 @@ public class Matricula {
 	private List<Section> Sections;
 	private int totalCredits; 
 	private String period; 
+	private int ID=-1;
 
 	//-[Constructor]-----------------------------------------
 	public Matricula(List<Section> Sections, int totalCredits, String period) {
 		this.Sections = Sections;
 		this.totalCredits = totalCredits;
 		this.period = period; 		
-	}
-
-	//-[Add-Remove]]---------------------------------------------
-	public void addCourse(Course e){
-		courses.add(e);
-		totalCredits+=e.getCredits();
-	}
-
-	public void removeCourses(Course e){
-		courses.remove(e);
 	}
 	
 	//-[Getters]---------------------------------------------
@@ -45,6 +36,9 @@ public class Matricula {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	
+	public int getID() {return ID;}
+	public void setID(int ID) {this.ID=ID;}
 	
 	/**
 	 * Returns a displayable string for this Matricula

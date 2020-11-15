@@ -19,13 +19,13 @@ public class GeneralTest {
 		Department Drama = new Department("The Department of Drama","DRAM");
 		
 		//Create some courses
-		Course COM = new Course("Intro to Comedy", FunLand, 3101, 3); //creating a course with a department links it back to the department.
-		Course CL1 = new Course("Clowning I", FunLand, 3401, 3);
-		Course CL2 = new Course("Clowning II", FunLand, 3402, 3);
-		Course DRK = new Course("Dark Comedy",FunLand,5102,4);
+		Course COM = new Course("Intro to Comedy", FunLand, "3101", 3); //creating a course with a department links it back to the department.
+		Course CL1 = new Course("Clowning I", FunLand, "3401", 3);
+		Course CL2 = new Course("Clowning II", FunLand, "3402", 3);
+		Course DRK = new Course("Dark Comedy",FunLand,"5102",4);
 				
-		Course DRAM1 = new Course("Acting 1",Drama,3001,3);
-		Course DRAM2 = new Course("Acting 2",Drama,3002,3);
+		Course DRAM1 = new Course("Acting 1",Drama,"3001",3);
+		Course DRAM2 = new Course("Acting 2",Drama,"3002",3);
 		
 		Course[] AllClasses = {COM,CL1,CL2,DRK,DRAM1,DRAM2};
 		
