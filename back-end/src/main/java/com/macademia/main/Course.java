@@ -55,6 +55,11 @@ public class Course {
 	 * @return IE 3101
 	 */
 	public String getCode() {return code;}
+	
+	/**
+	 * Gets the Course Code of this course.
+	 * @return IE ININ4101
+	 */
 	public String getCourseCode() {return courseCode;}
 	public int getCredits() {return credits;}
 	public List<Course> getPrereq() {return prereq;}
