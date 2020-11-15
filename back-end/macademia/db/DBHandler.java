@@ -1,24 +1,23 @@
-package com.macademia.main.db;
+package macademia.db;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.macademia.main.Course;
-import com.macademia.main.Department;
-import com.macademia.main.Matricula;
-import com.macademia.main.MatriculaPeriod;
-import com.macademia.main.Section;
-import com.macademia.main.Student;
-import com.macademia.main.auth.User;
+import macademia.Course;
+import macademia.Department;
+import macademia.Matricula;
+import macademia.Section;
+import macademia.Student;
+import macademia.auth.User;
 
 /**
  * Handles loading and saving anything from and to the database
@@ -62,16 +61,9 @@ public class DBHandler {
 		LoadEverything();
 		
 		//Remove these lines of code to have the DBHandler *not* load Deps, Courses, and Sections upon instantiation.
+		
 	}
-	
-	/*
-	 * Closes the DBHandler and clears everything.
-	 */
-	public void close() throws SQLException {
-		SQLConn.close(); //Close the SQL Connection.
-		DepartmentMap.clear(); //Clear the Department map
-	}
-	
+
 	//-[Publicly facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -92,7 +84,6 @@ public class DBHandler {
 	 * @throws SQLException 
 	 */
 	public User getUser(String Username) throws SQLException {
-		
 		ResultSet RS= selectUser(Username);
 		if(!RS.next()) {RS.close(); return null;}
 		
@@ -100,22 +91,6 @@ public class DBHandler {
 		String Password = RS.getString("Password");
 		RS.close();
 		return new User(username,Password);
-
-	}
-	
-	/**
-	 * Gets a list of all students in the system using the exact same method as getDepartments()
-	 * @return
-	 * @throws SQLException 
-	 */
-	public List<Student> getStudents() throws SQLException{
-		ResultSet RS = selectStudents();
-		ArrayList<Student> Students = new ArrayList<Student>();
-		
-		//I know we access the database like twice to get this data but this allows the handler to kick in. Otherwise this'd be a mess.
-		while(RS.next()) {Students.add(getStudent(RS.getString("ID")));} 
-		RS.close();
-		return Students;		
 	}
 	
 	/**
@@ -131,21 +106,13 @@ public class DBHandler {
 		String Name = RS.getString("Name");
 		String ID = RS.getString("ID");
 
+		//TODO: Change this to an array of Matriculas once this happens.
+		Matricula Mat = getMatricula(Integer.parseInt(RS.getString("Matriculas").split(",")[0]));
+		
 		Department Dep = getDepartment(RS.getString("Department"));
-		Student ReturnStudent = new Student(user, Name, ID, Dep);
-		
-		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}
-		
-		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
-		
-		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
-		
+
 		RS.close(); //We need to close the connection
-		
-		return ReturnStudent;
+		return new Student(user, Name, ID, Mat, Dep);
 	}
 	
 	/**
@@ -161,21 +128,14 @@ public class DBHandler {
 		User TiedUser=getUser(RS.getString("TiedUser"));
 		String Name = RS.getString("Name");
 		String ID = RS.getString("ID");
+
+		//TODO: Change this to an array of Matriculas once this happens.
+		Matricula Mat = getMatricula(Integer.parseInt(RS.getString("Matriculas").split(",")[0]));
+		
 		Department Dep = getDepartment(RS.getString("Department"));
-		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
-		
-		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}}
-		
-		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
-		
-		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
-		
+
 		RS.close(); //We need to close the connection
-		
-		return ReturnStudent;
+		return new Student(TiedUser, Name, ID, Mat, Dep);
 	}
 
 	/**
@@ -200,7 +160,7 @@ public class DBHandler {
 		//get an arraylist of all the sections:
 		for (String Section : Sections) {if(Section.length()>0) {SectionsList.add(getSection(Section));}}
 		
-		Matricula mat =new Matricula(SectionsList, new MatriculaPeriod(Year, Period)); 
+		Matricula mat =new Matricula(SectionsList, 0, Period); 
 		mat.setID(IDFromDatabase);
 		
 		return mat;
@@ -315,8 +275,8 @@ public class DBHandler {
 		
 		//Load CoRequesites
 		for (String coreq : Coreq) {
-			if(coreq.length()!=0) {TheCourse.addCoreq(getCourse(coreq));}
-		}
+			if(coreq.length()!=0) {TheCourse.addPrereq(getCourse(coreq));}
+		} //TODO: Switch to addCoreq once it is created.
 		
 		return TheCourse;
 	}
@@ -342,7 +302,7 @@ public class DBHandler {
 	 * @throws SQLException 
 	 */
 	public List<Section> getSections(Course course) throws SQLException {
-		ResultSet RS = selectSections(course.getDept() + course.getCode());
+		ResultSet RS = selectSections(course.getDept().getShortName() + course.getCode());
 		ArrayList<Section> Sections = new ArrayList<Section>();
 		while(RS.next()) {Sections.add(getSection(RS.getString("ID")));} 
 		RS.close();
@@ -368,8 +328,11 @@ public class DBHandler {
 		//If we're here then the section doesn't exist. Time to find it in the database.
 		ResultSet RS = selectSection(SectionID);
 		if(!RS.next()) {RS.close(); return null;}
+
+		//TODO: Once course gets the L flag
+		//if(RS.getBoolean("L")!=course.isLab()) {RS.next();}
 		
-		//TODO: Convert this to period
+		//TODO: Make a parser for the enum for Days
 		String day = RS.getString("Days");
 		String time = RS.getString("Time");
 		
@@ -378,7 +341,7 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 		
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); //Creating a section automatically links it to a course.
+		return new Section(sectionSplit[1], day, time, course); //Creating a section automatically links it to a course.
 	}
 	
 	//-[Check Exists]-----------------------------------------------------------------------------
@@ -420,21 +383,15 @@ public class DBHandler {
 		}
 		
 		String Matriculas = ""; 
-		Matriculas = ListOfMatriculasToString(stud.getMatriculas());
+		//Matricuals = ListOfMatriculasToString(stud.getMatriculas()) //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
+		Matriculas = SaveMatricula(stud.getMatricula())+""; //TODO: THIS IS A TEMPORARY LINE. REMOVE THIS ONCE THE PREVIOUS TODO IS COMPLETE
 		
 		String PriorityCourses=""; 
-		PriorityCourses = ListOfCoursesToString(stud.getPriority()); 
-		
-		String CoursesTaken = "";
-		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
+		//PriorityCourses = ListOfCoursesToString(stud.getPriorityCourses()) //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF PRIORITY COURSES
 		
 		//Then save the user
-		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
-		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
-		
-		//Save the Matriculas
-		for (Matricula Mat : stud.getMatriculas()) {SaveMatricula(Mat);}
-		
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses);}
 	}
 	
 	/**
@@ -445,8 +402,8 @@ public class DBHandler {
 	public int SaveMatricula(Matricula Mat) throws SQLException {
 		String Sections=ListOfSectionsToString(Mat.getSections());
 		
-		int Year = Mat.getPeriod().getMatyear(); 
-		String Period = Mat.getPeriod().getSemesterAsString(); 
+		int Year = 2020; //TODO: Replace this with Mat.GetPeriod().GetYear;
+		String Period = Mat.getPeriod(); //TODO: Replace this with a switch case to turn the Enum to a String
 				
 		
 		if(Mat.getID()==-1) {
@@ -475,9 +432,6 @@ public class DBHandler {
 		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName());}
 		else {InsertIntoDepartments(dep.getShortName(), dep.getName());}
 		
-		//Save changes to memory
-		DepartmentMap.put(dep.getShortName(), dep);
-		
 		//Save the course
 		for (Course course : dep.getCatalog().values()) {SaveCourse(course);}
 	}
@@ -489,24 +443,23 @@ public class DBHandler {
 	public void SaveCourse(Course course) throws SQLException {
 		
 		//Verify department exists
-		if(!DepartmentExists(course.getDept())) {throw new IllegalArgumentException("Department is not in the database! Register it *BEFORE* adding this course");}
+		//TODO: Use the new shortname accessor when it is done
+		if(!DepartmentExists(course.getDept().getShortName())) {throw new IllegalArgumentException("Department is not in the database! Register it *BEFORE* adding this course");}
 		
 		//Save the course
-		String CourseID = course.getDept()+course.getCode(); 
+		String CourseID = course.getDept().getShortName()+course.getCode(); //TODO: Change to new shortname var 
 		boolean L = CourseID.endsWith("L");
 		
 		//Prepare Prereqs
 		String Prereqs = ListOfCoursesToString(course.getPrereq());
 		
 		//Prepare coreqs
-		String Coreqs = ListOfCoursesToString(course.getCoreq());
+		String Coreqs = ""; //TODO: Remove this line once the comment below is uncommented
+		//String Coreqs = ListOfCoursesToString(course.getPrereq()); //TODO: Switch to course.GetCoreq()
+		
 				
-		//Save the course
 		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
 		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);}
-		
-		//Save changes to memory
-		DepartmentMap.get(course.getDept()).getCatalog().put(course.getCode(), course);
 		
 		//Save each section
 		for (Section sect : course.getSections()) {SaveSeciton(sect);}
@@ -519,28 +472,21 @@ public class DBHandler {
 	 */
 	public void SaveSeciton(Section sect) throws SQLException {
 		
-		Course HeadCourse = getCourse(sect.getCourseCode());
-		
 		//Verify Course exists
-		if(HeadCourse==null) {throw new IllegalArgumentException("Course is not in the database! Register it *BEFORE* adding this course");}
+		if(!CourseExists(sect.getCourse().getDept().getShortName() + sect.getCourse().getCode())) {throw new IllegalArgumentException("Course is not in the database! Register it *BEFORE* adding this course");}
 		
-		String SectionID = sect.getCourseCode() + "-" + sect.getSecNum(); 
-		boolean L = sect.getCourseCode().endsWith("L");
+		
+		String SectionID = sect.getCourse().getDept().getShortName() + sect.getCourse().getCode() + "-" + sect.getSecNum(); //TODO: Change to CourseID Var
+		boolean L = sect.getCourse().getCode().endsWith("L"); //TODO: Change to CourseID Var
 		
 		String Time=sect.getTime(); //TODO: Switch to Period for formatting
-		String Location=sect.getLocation();
-		String Prof = sect.getProfessor();
-		int CurCap = sect.getPopulation();
-		int MaxCap = sect.getCapacity();
+		String Location="Loc"; //TODO: Switch to Sect.GetLocation()
+		String Prof = "Prof"; //TODO: Switch to Sect.GetProf()
+		int CurCap = 0; //TODO: Switch to Sect.GetCurCap()
+		int MaxCap = 30; //TODO: Switch to Sect.GetMaxCap()
 		
-		//Save Section to disk		
 		if(SectionExists(SectionID)) {UpdateSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}
 		else {InsertIntoSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}		
-		
-		//Save section to memory
-		for (int i = 0; i < HeadCourse.getSections().size(); i++) {if(HeadCourse.getSections().get(i).getSecNum()==sect.getSecNum()) {HeadCourse.getSections().set(i, sect);}}
-		
-		//man we should really change that for a map
 		
 	}
 	
@@ -570,7 +516,6 @@ public class DBHandler {
 	
 	private ResultSet selectUser(String Username) throws SQLException {return GetFromWhere("Users","Username",Username);}
 	
-	private ResultSet selectStudents() throws SQLException {return GetEverythingFrom("Students");}
 	private ResultSet selectStudentFromUsername(String Username) throws SQLException {return GetFromWhere("Students","TiedUser",Username);}
 	private ResultSet selectStudentFromID(String StudentID) throws SQLException {return GetFromWhere("Students","ID",StudentID);}
 	
@@ -614,8 +559,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken) VALUES(?,?,?,?,?,?,?)";
+	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
+    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses) VALUES(?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ID); //ID
         pstmt.setString(2, Name); //Name
@@ -623,7 +568,6 @@ public class DBHandler {
         pstmt.setString(4, Department); //Department
         pstmt.setString(5, Matriculas); //Matriculas
         pstmt.setString(6, PriorityCourses); //PriorityCourses
-        pstmt.setString(7, CoursesTaken); //Courses Taken	
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -741,8 +685,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ? WHERE ID = ?;";
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses) throws SQLException {
+		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
@@ -752,7 +696,6 @@ public class DBHandler {
 		pstmt.setString(4, Matriculas);
 		pstmt.setString(5, PriorityCourses);
 		pstmt.setString(7, ID);
-		pstmt.setString(8, CoursesTaken);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -865,21 +808,16 @@ public class DBHandler {
 	public static String ListOfCoursesToString(List<Course> Courses) {
 		String ListAsString= "";
 		for (Course course : Courses) {
-			ListAsString+= "," + course.getDept() + course.getCode(); 
+			ListAsString+= "," + course.getDept().getShortName() + course.getCode(); //TODO: Chagne to new shortname var
 		}
 		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
 		return ListAsString;
 	}
 	
-	/**
-	 * Utility to turn a list of sections toa comma separated list of section IDs
-	 * @param Sections
-	 * @return
-	 */
 	public static String ListOfSectionsToString(List<Section> Sections) {
 		String ListAsString= "";
 		for (Section section : Sections) {
-			ListAsString+= "," + section.getCourseCode() + "-" + section.getSecNum();
+			ListAsString+= "," + section.getCourse().getDept().getShortName() + section.getCourse().getCode() + "-" + section.getSecNum(); //TODO: Chagne to new shortname var
 		}
 		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
 		return ListAsString;
@@ -887,13 +825,15 @@ public class DBHandler {
 	
 	/**
 	 * Utility to turn a list of matriculas into a saved list of comma separated Matricula IDs
-	 * @param collection
+	 * @param Matriculas
 	 * @return
 	 * @throws SQLException 
 	 */
-	private String ListOfMatriculasToString(Collection<Matricula> collection) throws SQLException {
-		String Mats = "";
-		for (Matricula mat : collection) {Mats+= "," + SaveMatricula(mat);}
+	private String ListOfMatriculasToString(List<Matricula> Matriculas) throws SQLException {
+		String Mats = ""; //TODO UNCOMMENT THIS ONCE STUDENTS HAVE A LIST OF MATRICULAS
+		for (Matricula mat : Matriculas) {
+			Mats+= "," + SaveMatricula(mat);
+		}
 		if(Mats.length()>0) {Mats=Mats.substring(1);} //Handles the first comma
 		return Mats;
 	}
