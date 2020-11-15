@@ -2,6 +2,7 @@ package com.macademia.main.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import com.macademia.main.Course;
 import com.macademia.main.Department;
@@ -447,7 +449,9 @@ public class DBHandler {
 		
 		int Year = Mat.getPeriod().getMatyear(); 
 		String Period = Mat.getPeriod().getSemesterAsString(); 
-				
+		
+		//Verify we can actually edit this matricula
+		if(SemestersBetweenToday(Mat.getPeriod())>=2) {throw new IllegalArgumentException("This Matricula is too old to save");}
 		
 		if(Mat.getID()==-1) {
 			//This is a new matricula. We need to add it
@@ -982,6 +986,63 @@ public class DBHandler {
 		}
 		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
 		return ListAsString;
+	}
+
+	/**
+	 * Calculates the semesters between what the current semester is, and the provided semester
+	 * @param period
+	 * @return
+	 * Returns a positive number if there has been more than 0 semesters since the provided period. <br>
+	 * Returns 0 if the semester is the current one *or* if the semester is in the future.
+	 */
+	public static int SemestersBetweenToday(MatriculaPeriod period) {
+		LocalDate date = java.time.LocalDate.now();
+		if(period.getMatyear()>date.getYear()) {return 0;} //it's negative. We don't need to calculate it.
+		
+
+		int PastSemester=0;
+		
+		switch (period.getSemester()) {
+		case SPRING:
+			PastSemester=1;
+			break;
+		case SUMMER1:
+		case SUMMER2:
+		case EXT_SUMMER:
+			PastSemester=2;
+			break;
+		case FALL:
+			PastSemester=3;
+			break;
+		}
+		
+		int CurrentSemester=0;
+		
+		switch (date.getMonth().getValue()) {
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			CurrentSemester=1;
+			break;
+		case 6:
+		case 7:
+			CurrentSemester=2;
+			break;
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+			CurrentSemester=3;
+			break;
+		}
+		
+		//Now, time to count.
+		return ((date.getYear()*3)+CurrentSemester)-((period.getMatyear()*3)+PastSemester); //Years between times 3 because three semester per year.
+		//-1  because if not this would assume 3 between a matricula for winter one year and spring the next.
+		
 	}
 	
 	/**
