@@ -2,7 +2,6 @@ package com.macademia.main.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,13 +136,23 @@ public class DBHandler {
 		Student ReturnStudent = new Student(user, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}
+		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {
+			
+			Matricula mat = getMatricula(Integer.parseInt(MatID));
+			if(mat!=null) {ReturnStudent.addMatricula(mat);} //Make sure we actually found the matricula.
+			}}
 		
 		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {
+			Course pcourse = getCourse(PriorityCourse);
+			if(pcourse!=null) {ReturnStudent.addPriority(pcourse);} //make sure we actually found the course.
+			}}
 		
 		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {
+			Course tcourse = getCourse(CourseTaken);
+			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
+			}}		
 		
 		RS.close(); //We need to close the connection
 		
@@ -167,13 +176,23 @@ public class DBHandler {
 		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}}
+		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {
+			
+			Matricula mat = getMatricula(Integer.parseInt(MatID));
+			if(mat!=null) {ReturnStudent.addMatricula(mat);} //Make sure we actually found the matricula.
+			}}
 		
 		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {
+			Course pcourse = getCourse(PriorityCourse);
+			if(pcourse!=null) {ReturnStudent.addPriority(pcourse);} //make sure we actually found the course.
+			}}
 		
 		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {
+			Course tcourse = getCourse(CourseTaken);
+			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
+			}}		
 		
 		RS.close(); //We need to close the connection
 		
@@ -197,12 +216,23 @@ public class DBHandler {
 		
 		RS.close();
 		
+		MatriculaPeriod matPeriod=new MatriculaPeriod(Year, Period);
+		
+		if(SemestersBetweenToday(matPeriod)>0) {
+			//This matricula is old. Its time to delete it and return null.
+			deleteMatricula(ID);
+			return null;
+		}
+		
 		ArrayList<Section> SectionsList = new ArrayList<Section>(Sections.length);
 		
 		//get an arraylist of all the sections:
-		for (String Section : Sections) {if(Section.length()>0) {SectionsList.add(getSection(Section));}}
+		for (String Section : Sections) {if(Section.length()>0) {
+			Section sect =getSection(Section);
+			if(sect!=null) {SectionsList.add(sect);} //make sure we actually find sections
+			}}
 		
-		Matricula mat =new Matricula(SectionsList, new MatriculaPeriod(Year, Period)); 
+		Matricula mat =new Matricula(SectionsList, matPeriod);
 		mat.setID(IDFromDatabase);
 		
 		return mat;
@@ -274,9 +304,7 @@ public class DBHandler {
 	public List<Course> getCourses(Department department) throws SQLException {
 		ResultSet RS = selectCourses(department.getShortName());
 		ArrayList<Course> Courses = new ArrayList<Course>();
-		while(RS.next()) {
-			Courses.add(getCourse(RS.getString("ID")));
-		} 
+		while(RS.next()) {Courses.add(getCourse(RS.getString("ID")));} 
 		RS.close();
 		return Courses;
 	}
@@ -312,12 +340,18 @@ public class DBHandler {
 		
 		//Load Prerequesites
 		for (String prereq : Prereq) {
-			if(prereq.length()!=0) {TheCourse.addPrereq(getCourse(prereq));} //If because empty prereqs still returns "" 
+			if(prereq.length()!=0) {
+				Course preq = getCourse(prereq);
+				if(preq!=null) {TheCourse.addPrereq(preq);} //make sure we found the prereq
+			} //If because empty prereqs still returns "" 
 		}
 		
 		//Load CoRequesites
 		for (String coreq : Coreq) {
-			if(coreq.length()!=0) {TheCourse.addCoreq(getCourse(coreq));}
+			if(coreq.length()!=0) {
+				Course creq = getCourse(coreq);
+				if(creq!=null) {TheCourse.addPrereq(creq);} //make sure we found the coreq
+			} //If because empty prereqs still returns "" 
 		}
 		
 		return TheCourse;
@@ -451,7 +485,7 @@ public class DBHandler {
 		String Period = Mat.getPeriod().getSemesterAsString(); 
 		
 		//Verify we can actually edit this matricula
-		if(SemestersBetweenToday(Mat.getPeriod())>=2) {throw new IllegalArgumentException("This Matricula is too old to save");}
+		if(SemestersBetweenToday(Mat.getPeriod())>0) {throw new IllegalArgumentException("This Matricula is too old to save");}
 		
 		if(Mat.getID()==-1) {
 			//This is a new matricula. We need to add it
@@ -993,11 +1027,11 @@ public class DBHandler {
 	 * @param period
 	 * @return
 	 * Returns a positive number if there has been more than 0 semesters since the provided period. <br>
-	 * Returns 0 if the semester is the current one *or* if the semester is in the future.
+	 * Returns a negative number if the semester is in the future.
+	 * Returns 0 if the semester is the  current one.
 	 */
 	public static int SemestersBetweenToday(MatriculaPeriod period) {
 		LocalDate date = java.time.LocalDate.now();
-		if(period.getMatyear()>date.getYear()) {return 0;} //it's negative. We don't need to calculate it.
 		
 
 		int PastSemester=0;
