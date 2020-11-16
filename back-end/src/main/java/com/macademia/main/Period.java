@@ -22,6 +22,7 @@ public class Period {
     public Period(int start, int end) {
         this.start = start;
         this.end = end;
+        if(end<start) {throw new IllegalArgumentException("Period cannot start after it ends, or end before it starts");}
     }
 
     /**
