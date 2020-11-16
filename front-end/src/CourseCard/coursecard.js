@@ -82,23 +82,31 @@ export default function CourseCard(props) {
                     <IconButton onClick={handleClickOpen}>
                         <ErrorOutlineIcon style={{ width: '15px', height: '15px' }}></ErrorOutlineIcon>
                     </IconButton>
+                    <Typography style={{ fontSize: 13, color: '#7f7f7f', position: 'relative', top: '33px', left: '5px' }}>
+                        {props.population}/{props.capacity}
+                    </Typography>
                     <Dialog style={{ padding: '10px' }} onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                             {props.courseName}
                         </DialogTitle>
                         <DialogContent dividers style={{ width: '600px', height: '300px' }}>
                             <Grid container justify="space-evenly">
-                                <Grid container direction="row" justify="space-evenly" alignItems="flex-end">
+
+                                <Grid container direction="column" justify="space-evenly" alignItems="center">
                                     <Grid item>
                                         <Typography style={{ float: 'left' }}>Available on: {props.availability} semester</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography style={{ float: 'left' }}>Capacity: {props.population}/{props.capacity}</Typography>
+                                        <Typography style={{ float: 'left' }}>Pre-requisites: N/A </Typography>
                                     </Grid>
+                                    <Grid item>
+                                        <Typography style={{ float: 'left' }}>Co-requisites: N/A </Typography>
+                                    </Grid>
+
                                 </Grid>
                                 <Grid container justify="flex-start">
                                     <Grid item>
-                                        <Typography style={{float: 'left', padding: '10px'}}>Description: {props.description}</Typography>
+                                        <Typography style={{ float: 'left', padding: '10px' }}>Description: {props.description}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
