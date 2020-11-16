@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../coursecard/CourseCard.js";
+import CourseCard from "../CourseCard/coursecard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
+import ScheduleCard from "../Schedule/schedule.js";
 
 const drawerWidth = 240;
 
@@ -97,6 +98,8 @@ export default function Main() {
       credits: 3,
       color: 'purple',
       list: 0,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
     {
       section: '002',
@@ -112,6 +115,8 @@ export default function Main() {
       credits: 3,
       color: 'purple',
       list: 0,
+      availability: 'First and Second',
+      description: 'I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration. I will face my fear. I will permit it to pass over me and through me. And when it has gone past I will turn the inner eye to see its path. Where the fear has gone there will be nothing. Only I will remain.'
     },
     {
       section: '003',
@@ -127,6 +132,8 @@ export default function Main() {
       credits: 3,
       color: 'purple',
       list: 0,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
     {
       section: '004',
@@ -142,6 +149,8 @@ export default function Main() {
       credits: 3,
       color: 'purple',
       list: 0,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
   ]);
 
@@ -160,6 +169,8 @@ export default function Main() {
       credits: 3,
       color: 'green',
       list: 1,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
     {
       section: '006',
@@ -175,6 +186,8 @@ export default function Main() {
       credits: 3,
       color: 'green',
       list: 1,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
     {
       section: '007',
@@ -190,6 +203,8 @@ export default function Main() {
       credits: 3,
       color: 'green',
       list: 1,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
     {
       section: '008',
@@ -205,6 +220,8 @@ export default function Main() {
       credits: 3,
       color: 'green',
       list: 1,
+      availability: 'First and Second',
+      description: 'This is a test description.'
     },
   ]);
 
@@ -232,6 +249,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '006',
@@ -247,6 +266,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '007',
@@ -262,6 +283,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '008',
@@ -277,6 +300,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ]
   };
@@ -299,6 +324,8 @@ export default function Main() {
         credits: 3,
         color: 'red',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '006',
@@ -314,6 +341,8 @@ export default function Main() {
         credits: 3,
         color: 'red',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '007',
@@ -329,6 +358,8 @@ export default function Main() {
         credits: 3,
         color: 'red',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '008',
@@ -344,6 +375,8 @@ export default function Main() {
         credits: 3,
         color: 'red',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ]
   };
@@ -366,6 +399,8 @@ export default function Main() {
         credits: 3,
         color: 'yellow',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '006',
@@ -381,6 +416,8 @@ export default function Main() {
         credits: 3,
         color: 'yellow',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '007',
@@ -396,6 +433,8 @@ export default function Main() {
         credits: 3,
         color: 'yellow',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '008',
@@ -411,6 +450,8 @@ export default function Main() {
         credits: 3,
         color: 'yellow',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ]
   };
@@ -439,6 +480,8 @@ export default function Main() {
         credits: 3,
         color: 'purple',
         list: 0,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '002',
@@ -454,6 +497,8 @@ export default function Main() {
         credits: 3,
         color: 'purple',
         list: 0,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '003',
@@ -469,6 +514,8 @@ export default function Main() {
         credits: 3,
         color: 'purple',
         list: 0,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '004',
@@ -484,6 +531,8 @@ export default function Main() {
         credits: 3,
         color: 'purple',
         list: 0,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ],
     departmentCourses: [
@@ -501,6 +550,8 @@ export default function Main() {
         credits: 3,
         color: 'green',
         list: 1,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '006',
@@ -516,6 +567,8 @@ export default function Main() {
         credits: 3,
         color: 'green',
         list: 1,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '007',
@@ -531,6 +584,8 @@ export default function Main() {
         credits: 3,
         color: 'green',
         list: 1,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '008',
@@ -546,6 +601,8 @@ export default function Main() {
         credits: 3,
         color: 'green',
         list: 1,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ],
     myMatricula: [
@@ -563,6 +620,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '006',
@@ -578,6 +637,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '007',
@@ -593,6 +654,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
       {
         section: '008',
@@ -608,6 +671,8 @@ export default function Main() {
         credits: 3,
         color: 'blue',
         list: 2,
+        availability: 'First and Second',
+        description: 'This is a test description.'
       },
     ],
   }
@@ -793,7 +858,12 @@ export default function Main() {
                     courseName={value.courseName}
                     professor={value.professor}
                     credits={value.credits}
-                    color={value.color} />
+                    color={value.color}
+                    capacity={value.capacity}
+                    population={value.population}
+                    availability={value.availability}
+                    description={value.description}
+                    time={value.time} />
                 </ListItem>
               ))}
             </List>
@@ -812,7 +882,12 @@ export default function Main() {
                     courseName={value.courseName}
                     professor={value.professor}
                     credits={value.credits}
-                    color={value.color} />
+                    color={value.color}
+                    capacity={value.capacity}
+                    population={value.population}
+                    availability={value.availability}
+                    description={value.description}
+                    time={value.time} />
                 </ListItem>
               ))}
             </List>
@@ -859,33 +934,31 @@ export default function Main() {
                                 courseName={value.courseName}
                                 professor={value.professor}
                                 credits={value.credits}
-                                color={value.color} />
+                                color={value.color}
+                                capacity={value.capacity}
+                                population={value.population}
+                                availability={value.availability}
+                                description={value.description}
+                                time={value.time} />
                             </ListItem>
                           ))}
                         </List>
                       </div>
                     )}
                 </Grid>
-
                 <Grid item>
-                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
+                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3} >
                     <Grid item>
-                      <Button>Add Section</Button>
-                    </Grid>
-                    <Grid item>
-                      <Button>Remove Section</Button>
-                    </Grid>
-                    <Grid item>
-                      <Button>View Schedule</Button>
+
+                      <ScheduleCard />
+
                     </Grid>
                     <Grid item>
                       <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
-
               </Grid>
-
             </CardContent>
           </Card>
 
