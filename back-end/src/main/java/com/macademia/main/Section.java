@@ -21,7 +21,6 @@ public class Section {
     private int population;
     private int credits;
 
-    // Constructor
     public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
@@ -43,24 +42,50 @@ public class Section {
     public void setPeriod(Period period) {this.period = period;}
     public Period getPeriod() {return period;}
 
+    /* I have no idea what any of this is and if it works so let's simplify the heck out of this.
+  	String[] per= time.split("-");
+      char temp = per[0].charAt(per[0].indexOf('M')-1);
+      String[] re=per[0].split(":");
+      per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
+      int start=Integer.parseInt(per[0]);
+      if(temp=='P')start+=1200;
+      temp = per[1].charAt(per[1].indexOf('M')-1);
+      re=per[1].split(":");
+      per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
+      int end=Integer.parseInt(per[1]);
+      if(temp=='P')end+=1200;
+      return new Period(start,end);
+  */
+    
+    
     /**
      * Turns a time into a period
      * @param time
      * @return
      */
-    private Period timetoPeriod(String time) {
-        String[] per= time.split("-");
-        char temp = per[0].charAt(per[0].indexOf('M')-1);
-        String[] re=per[0].split(":");
-        per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-        int start=Integer.parseInt(per[0]);
-        if(temp=='P')start+=1200;
-        temp = per[1].charAt(per[1].indexOf('M')-1);
-        re=per[1].split(":");
-        per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-        int end=Integer.parseInt(per[1]);
-        if(temp=='P')end+=1200;
-        return new Period(start,end);
+    public static Period timetoPeriod(String time) {
+    	time=time.replace(" ", ""); //Remove any potential spaces
+    	String[] TwoTimes = time.split("-"); //split
+    	if(TwoTimes.length!=2) {throw new IllegalArgumentException("Time not formatted properly");} //Make sure there are two times.
+    	return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
+    }
+      
+    private static int TimeToInt(String Time) {
+    	boolean PM=false; //Flag to save if the time ended with PM
+    	if(Time.endsWith("AM")) {Time=Time.replace("AM","");} //Remove AM if it is present.
+    	else if(Time.endsWith("PM")) {Time=Time.replace("PM", ""); PM=true;} //Remove PM if it is present, and mark the PM flag.
+    	
+    	//Now remove the :
+    	Time=Time.replace(":", "");
+    	
+    	//Now we should have a number.
+    	int TimeAsInt;
+    	try {TimeAsInt=Integer.parseInt(Time);} 
+    	catch (NumberFormatException e) {throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");}
+    	
+    	//Lastly, if PM is true, add 1200
+    	if(PM) {TimeAsInt+=1200;}
+    	return TimeAsInt;
     }
 
     
@@ -76,8 +101,12 @@ public class Section {
 
     /**
      * Sets the time of this object
+     * @param Time
      */
-    public void setTime(String t) {this.time = t;}
+    public void setTime(String t) {
+    	this.time = t;
+    	this.period=timetoPeriod(t);
+	}
 
     public void setCourseCode(Course course) {this.courseCode = course.getDept() + course.getCode();}
     public void setCredits(int credits) {this.credits = credits;}
