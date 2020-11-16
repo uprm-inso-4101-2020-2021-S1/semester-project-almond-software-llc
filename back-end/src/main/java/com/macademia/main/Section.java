@@ -13,6 +13,7 @@ public class Section {
     private String secNum;
     private String day;
     private String time;
+    private Period period;
     private String professor;
     private String location;
     private String courseCode;
@@ -25,6 +26,7 @@ public class Section {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
+        this.period=timetoPeriod(time);
         this.professor = professor;
         this.location = Location;
         courseCode = course.getDept() + course.getCode();
@@ -37,6 +39,31 @@ public class Section {
         course.addSection(this);
     }
 
+    
+    public void setPeriod(Period period) {this.period = period;}
+    public Period getPeriod() {return period;}
+
+    /**
+     * Turns a time into a period
+     * @param time
+     * @return
+     */
+    private Period timetoPeriod(String time) {
+        String[] per= time.split("-");
+        char temp = per[0].charAt(per[0].indexOf('M')-1);
+        String[] re=per[0].split(":");
+        per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
+        int start=Integer.parseInt(per[0]);
+        if(temp=='P')start+=1200;
+        temp = per[1].charAt(per[1].indexOf('M')-1);
+        re=per[1].split(":");
+        per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
+        int end=Integer.parseInt(per[1]);
+        if(temp=='P')end+=1200;
+        return new Period(start,end);
+    }
+
+    
     /**
      * Sets the section Number of this object
      */
@@ -102,4 +129,18 @@ public class Section {
         return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
     }
 
+    /**
+     *Check if there is conflict in the sections in the matricula
+     *@author Josue
+     *@param sec Section to check if conflicts
+     *@return if this section and the given section conflict
+     */
+   public boolean Conflict(Section sec){
+       for (int i = 0; i < sec.day.length(); i++)
+           for(int j = 0; j < this.day.length(); j++)
+               if(this.day.charAt(j)==sec.day.charAt(i))
+                   return this.period.Conflict(sec.period);
+       return false;
+   }
+    
 }

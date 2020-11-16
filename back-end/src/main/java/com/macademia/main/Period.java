@@ -1,4 +1,4 @@
-package macademia;
+package com.macademia.main;
 
 public class Period {
     private int start;
