@@ -408,7 +408,6 @@ public class DBHandler {
 		ResultSet RS = selectSection(SectionID);
 		if(!RS.next()) {RS.close(); return null;}
 		
-		//TODO: Convert this to period
 		String day = RS.getString("Days");
 		String time = RS.getString("Time");
 		
@@ -572,7 +571,7 @@ public class DBHandler {
 		String SectionID = sect.getCourseCode() + "-" + sect.getSecNum(); 
 		boolean L = sect.getCourseCode().endsWith("L");
 		
-		String Time=sect.getTime(); //TODO: Switch to Period for formatting
+		String Time=sect.getTime();
 		String Location=sect.getLocation();
 		String Prof = sect.getProfessor();
 		int CurCap = sect.getPopulation();
