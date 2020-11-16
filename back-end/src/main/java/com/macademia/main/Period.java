@@ -44,7 +44,12 @@ public class Period {
      */
     public String toMilitaryTimeString() {return intToMilitaryTime(start) + "-" + intToMilitaryTime(end);}
 
-    private String intToStandardTime(int Time) {
+    /**
+     * Turns a Period Stored Time to Standard Time
+     * @param Time
+     * @return
+     */
+    public static String intToStandardTime(int Time) {
     	boolean PM=false;
     	if(Time>=1200) {PM=true;}
     	if(Time>=1300) {Time-=1200;}
@@ -56,7 +61,12 @@ public class Period {
     	
     }
     
-    private String intToMilitaryTime(int Time) {
+    /**
+     * Turns a period stored time to Military Time
+     * @param Time
+     * @return
+     */
+    public static String intToMilitaryTime(int Time) {
     	String TimeString = Time + "";
     	if(Time<1000) {return TimeString.substring(0,1) + ":" + TimeString.substring(1);}
     	else          {return TimeString.substring(0,2) + ":" + TimeString.substring(2);}
