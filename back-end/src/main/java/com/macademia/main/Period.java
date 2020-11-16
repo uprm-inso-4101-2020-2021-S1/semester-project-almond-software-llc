@@ -42,7 +42,7 @@ public class Period {
      * Turns this period into a Military Time String
      * @return IE 15:00 - 15:30
      */
-    public String toMilitaryTimeString() {return intToStandardTime(start) + "-" + intToStandardTime(end);}
+    public String toMilitaryTimeString() {return intToMilitaryTime(start) + "-" + intToMilitaryTime(end);}
 
     private String intToStandardTime(int Time) {
     	boolean PM=false;
