@@ -39,7 +39,11 @@ public class Section {
     }
 
     
-    public void setPeriod(Period period) {this.period = period;}
+    public void setPeriod(Period period) {
+    	this.period = period;
+    	//also update time
+    	this.time=period.toMilitaryTimeString();
+	}
     public Period getPeriod() {return period;}
 
     /* I have no idea what any of this is and if it works so let's simplify the heck out of this.
