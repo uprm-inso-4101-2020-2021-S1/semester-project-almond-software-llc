@@ -22,6 +22,7 @@ public class Section {
     private int capacity;
     private int population;
     private int credits;
+    private Course course;
 
     // Constructor
     public Section(String secNum, String day, String time, String professor, String building, String room, Course course, int capacity) {
@@ -35,11 +36,21 @@ public class Section {
         this.credits = course.getCredits();
         this.capacity = capacity;
         this.population = 0;
+        this.course = course;
         
         // Link this Section's Course to this section
         course.addSection(this);
     }
 
+    public boolean isFull() {
+        if (this.population == this.capacity) return true;
+        return false;
+    }
+
+
+    public void setCourse(Course c) {
+        this.course = c;
+    }
     /**
      * Sets the section Number of this object
      * 
@@ -89,6 +100,9 @@ public class Section {
 
     // Getters
 
+    public Course getCourse() {
+        return this.course;
+    }
     /**
      * Gets the section number of this object
      * 

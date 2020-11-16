@@ -15,13 +15,21 @@ public class Matricula {
 	public Matricula(MatriculaPeriod period) {
 		this.sections = new ArrayList<Section>();
 		this.coursesTaken = new ArrayList<Course>();
-		this.totalCredits = 0;
+		this.totalCredits = setCredits();
 		this.period = period;
+	}
+
+	public int setCredits() {
+		int cred = 0;
+		for (Section s : this.sections) {
+			cred = cred + s.getCredits();
+		}
+		return cred;
 	}
 
 	public Matricula(List<Section> sections, MatriculaPeriod period) {
 		this.sections = sections;
-		this.totalCredits = 0;
+		this.totalCredits = setCredits();
 		this.period = period;
 	}
 
@@ -34,6 +42,7 @@ public class Matricula {
 		e.increasePopulation();
 		this.sections.add(e);
 		this.coursesTaken.add(f);
+		this.totalCredits = setCredits();
 	}
 
 	public void removeSections(Section e) {
@@ -41,6 +50,7 @@ public class Matricula {
 		e.decreasePopulation();
 		this.sections.remove(e);
 		this.coursesTaken.remove(this.findCourse(e));
+		this.totalCredits = setCredits();
 	}
 
 	// helper function for remove section to help find course easily.
@@ -58,7 +68,11 @@ public class Matricula {
 	}
 
 	public List<Course> getCoursesTaken() {
-		return coursesTaken;
+		List<Course> cors = new ArrayList<Course>() ;
+		for (Section s : this.getSections()) {
+			cors.add(s.getCourse());
+		}
+		return cors;
 	}
 
 	public int getTotalCredits() {
