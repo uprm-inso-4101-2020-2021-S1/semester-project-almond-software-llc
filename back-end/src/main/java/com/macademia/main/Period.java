@@ -64,10 +64,7 @@ public class Period {
     /**
      * Returns toStandardTimeString()
      */
-    public String toString() {
-    	// TODO Auto-generated method stub
-    	return super.toString();
-    }
+    public String toString() {return toStandardTimeString();}
     
 	/**
 	 * Checks if an object is equal to this period
