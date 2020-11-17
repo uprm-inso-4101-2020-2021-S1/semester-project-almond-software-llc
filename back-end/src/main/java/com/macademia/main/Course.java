@@ -15,6 +15,7 @@ public class Course {
 	private String dept;
 	private String code;
 	private String courseCode;
+	private String Color;
 	private int credits;
 	private List<Course> prereq;
 	private List<Course> coreq;
@@ -38,6 +39,9 @@ public class Course {
 
 		// Link this course's department to this course
 		dept.AddCourse(this);
+		
+		//Pass down color from Department
+		this.Color=dept.GetColor();
 	}
 
 	// -[Getters]---------------------------------------------
@@ -65,6 +69,7 @@ public class Course {
 	public List<Course> getPrereq() {return prereq;}
 	public List<Course> getCoreq() {return prereq;}
 	public List<Section> getSections() {return sections;}
+	public String getColor() {return Color;}
 
 	// -[Setters]---------------------------------------------
 
@@ -77,6 +82,12 @@ public class Course {
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
 
+	/**
+	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.
+	 * @param Color
+	 */
+	public void setColor(String Color) {this.Color=Color;}
+	
 	// -[Methods]--------------------------------------------
 
 	public void addPrereq(Course course) {this.prereq.add(course);}
