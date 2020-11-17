@@ -64,7 +64,7 @@ public class Creator {
              * ID (INSO), 
              * Name (Department of Software Engineering)
              */
-            State.execute("CREATE TABLE IF NOT EXISTS Departments (ID Char(4), Name VarChar(75));");
+            State.execute("CREATE TABLE IF NOT EXISTS Departments (ID Char(4), Name VarChar(75), Color VarChar(75));");
             
             System.out.println("Creating Courses Table.");
             /*
