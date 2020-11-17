@@ -28,4 +28,5 @@ public class Period {
     public boolean Conflict(Period sec){
         return !(this.end <sec.start||this.start>sec.end);
     }
+    public boolean inPeriod(int time){ return ((this.end >time)&&(this.start<time)); }
 }

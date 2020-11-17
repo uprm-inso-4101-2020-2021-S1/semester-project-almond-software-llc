@@ -18,6 +18,7 @@ public class Student extends User {
 	private Department department;
 	private String Name;
 	private String StudentNumber;
+	private Turn turn;
 	
 	//-[Constructors]----------------------------------------------------------------------
 	
@@ -42,14 +43,14 @@ public class Student extends User {
 	 * @param matricula Matricula of this student
 	 * @param Department Department of this student
 	 */
-	public Student(User user, String Name, String StudentNumber, Matricula matricula, Department Department) {
+	public Student(User user, String Name, String StudentNumber, Matricula matricula, Department Department,Turn turn) {
 		super(user);
 		
 		this.Name=Name;
 		this.StudentNumber=StudentNumber;
 		this.department=Department;
 		this.matricula=matricula;
-		
+		this.turn=turn;
 	}
 	
 	//-[Getters]----------------------------------------------------------------------
