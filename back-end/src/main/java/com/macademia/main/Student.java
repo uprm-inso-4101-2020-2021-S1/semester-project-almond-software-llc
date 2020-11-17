@@ -98,10 +98,18 @@ public class Student extends User {
 	 */
 	public void addSections(Section e, Course f, MatriculaPeriod m) throws IOException {
 		
+		//Make sure the course and section are the same
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		
+		//Make sure the section isn't full
+		if(e.isFull()) {throw new IllegalArgumentException("Section is full!");}
+		
+		//TODO: Make sure the section doesn't conflict with anything already in that matricula
+		
+		
+		//lastly, Verify prereqs and coreqs.
 		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
-			matriculas.get(m).addSections(e);;
+			matriculas.get(m).addSection(e,f);;
 			coursesTaken.add(f); 
 		} else {throw new IllegalArgumentException("Course pre-requisites not met.");}
 	}
@@ -171,67 +179,53 @@ public class Student extends User {
 		return false;
 	}
 
-	//Makes a giant list with all the courses ever taken
-	public List<Course> getAllCoursesTaken() {
-		List<Course> listOcourses = new ArrayList<Course>();
-		for (Matricula m : this.matriculas) {
-			for (Course c : m.getCoursesTaken()) {
-				listOcourses.add(c);
-			}
-		}
-		return listOcourses;
-	}
-
-	public void turn() {
+	
+	public void turn(MatriculaPeriod per) {
 		int count = 0;
-		List<Course> allCourses = getAllCoursesTaken();
-		for (Course c : this.matricula.getCoursesTaken()) {
+		List<Course> allCourses = coursesTaken;
+		
+		//Check for prereqs
+		for (Course c : this.matriculas.get(per).getCourses()) {
 			for (Course prq : c.getPrereq()) {
 				if (allCourses.contains(prq)) continue;
 				else {
 					count++;
-					this.matricula.getCoursesTaken().remove(c);
+					this.matriculas.get(per).removeCourse(c);
 					break;
 				}
 			}
 		}
-		for (Course c : this.matricula.getCoursesTaken()) {
+		
+		//Check for Coreqs
+		for (Course c : this.matriculas.get(per).getCourses()) {
 			for (Course corq : c.getCoreq()) {
-				if (allCourses.contains(corq) || this.matricula.getCoursesTaken().contains(corq)) continue;
+				if (allCourses.contains(corq) || this.matriculas.get(per).getCourses().contains(corq)) continue;
 				else {
 					count++;
-					this.matricula.getCoursesTaken().remove(c);
+					this.matriculas.get(per).removeCourse(c);
 					break;
 				}
 			}
-		}
-
-		//Updates the section list by removing the sections with the courses removed on the CoursesTaken List
-		for (Section s : this.matricula.getSections()) {
-			if (this.matricula.getCoursesTaken().contains(s.getCourse())) continue;
-			else this.matricula.getSections().remove(s);
 		}
 
 		//Removes it from matricula if its full
-		for (Section s : this.matricula.getSections()) {
+		for (Section s : this.matriculas.get(per).getSections()) {
 			if (s.isFull()) {
-				this.matricula.removeSections(s);
+				this.matriculas.get(per).removeSection(s);
 				count++;
 			}
 		}
 
 		//Removes the last added class that conflicts with an earlier class of the same time.
-		for (int i = 0; i < this.matricula.getSections().size(); i++) {
-			for (int j = i + 1; j < this.matricula.getSections().size(); j++) {
-				if (this.matricula.getSections().get(i).getTime() == this.matricula.getSections().get(j).getTime()) {
+		for (int i = 0; i < this.matriculas.get(per).getSections().size(); i++) {
+			for (int j = i + 1; j < this.matriculas.get(per).getSections().size(); j++) {
+				if (this.matriculas.get(per).getSections().get(i).Conflict(this.matriculas.get(per).getSections().get(j))) {
 					if (i > j) {
-						this.matricula.removeSections(this.matricula.getSections().get(i));
-						this.matricula.getCoursesTaken().remove(this.matricula.getSections().get(i).getCourse());
+						this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(i));
 						count++;
 					}
 					if (j > i) {
-						this.matricula.removeSections(this.matricula.getSections().get(j));
-						this.matricula.getCoursesTaken().remove(this.matricula.getSections().get(i).getCourse());
+						this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(j));
 						count++;
 					}
 				}
@@ -240,8 +234,10 @@ public class Student extends User {
 				}
 			}
 		}
+		
+		//Now comes the autoadjust
 		while (count > 0 || !this.priorities.isEmpty()) {
-			this.matricula.getCoursesTaken().add(this.priorities.remove(0));
+			//this.matricula.getCoursesTaken().add(this.priorities.remove(0));
 			count--;
 		}
 
