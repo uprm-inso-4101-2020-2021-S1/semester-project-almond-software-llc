@@ -10,10 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import {MuiPickersUtilsProvider,KeyboardDatePicker,} from "@material-ui/pickers";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -74,28 +71,26 @@ export default function SignUp() {
     },
   );
 
-  //let [setRe] = useState({});
+  //const { props } = useState();
 
-  const handleSubmit = (e) =>{
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+    //const {{ props: firstName }, { props:lastName }}
   }
 
   const handleChange = (e) => {
-    setProps({
-      [e.target.firstName]: e.target.value
-    });
-    
+    if (e.target.name === 'firstName') {
+      setProps({
+        [e.target.firstName]: e.target.value,
+      });
+    }
+    else if (e.target.name === 'lastName') {
+      setProps({
+        [e.target.lastName]:e.target.value
+      })
+    }
   }
-
-  // const onChange = (e) => {
-  //   const re = /^[A-Za-z]+$/;
-  //   if (e.target.value === '' || re.test(e.target.value)) {
-  //     setRe({
-  //       value: e.target.value
-  //     });
-  //   }
-  // }
-  //this.handleSubmit = this.handleSubmit.bind(this);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -110,16 +105,14 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
                 name="firstName"
                 variant="outlined"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
-                autoFocus
                 value={props.firstName}
-                //onChange={onChange}
+                onChange={handleChange}
               />
             </Grid>
 
@@ -131,8 +124,8 @@ export default function SignUp() {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
-                autoComplete="lname"
                 value={props.lastName}
+                onChange={handleChange}
               />
             </Grid>
 
@@ -145,6 +138,8 @@ export default function SignUp() {
                 label="SSN"
                 id="password"
                 value={props.ssn}
+                type="password"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -152,11 +147,12 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="Pin Number"
+                name="pin"
                 label="Pin Number"
                 type="password"
                 id="pin-number"
                 value={props.pin}
+                onChange={handleChange}
               />
             </Grid>
 
@@ -165,10 +161,11 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="student-number"
+                name="studentNumber"
                 label="Student Number"
                 id="student-number"
                 value={props.studentNumber}
+                onChange={handleChange}
               />
             </Grid>
 
