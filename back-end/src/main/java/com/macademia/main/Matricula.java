@@ -46,7 +46,25 @@ public class Matricula {
 		this.sections.remove(e);
 		this.courses.remove(f);
 	}
-
+	
+	public void removeCourse(Course f) {
+		if(!courses.contains(f)) {return;}
+		//find the section that we have that matches the course code
+		Section sectToRemove=null;
+		for (Section section : sections) {
+			if(section.getCourseCode()==f.getCourseCode()) {sectToRemove=section; break;} //found it
+		}
+		
+		if(sectToRemove==null) {
+			//We didn't find it, but remove the course anyway. It should be removed in that case.
+			courses.remove(f);
+			return;
+		}
+		
+		//Remove the section and course together.
+		removeSections(sectToRemove, f);
+		
+	}
 
 	// -[Getters]---------------------------------------------
 	public List<Section> getSections() {return sections;}
