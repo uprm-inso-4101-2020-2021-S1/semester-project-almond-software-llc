@@ -162,7 +162,10 @@ public class Section {
     public int getCredits() {return this.credits;}
     public int getCapacity() {return this.capacity;}
     public int getPopulation() {return this.population;}
-
+    
+    public String getColor() {return this.Color;}
+    public String getCourseName() {return this.courseName;}
+    
     /**
      * Returns a displayable string for this section
      * 
