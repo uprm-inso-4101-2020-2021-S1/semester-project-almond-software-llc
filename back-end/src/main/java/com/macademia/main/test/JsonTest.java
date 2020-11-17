@@ -9,7 +9,7 @@ enum per {
 public class JsonTest {
 
     public MatriculaPeriod testPeriod = new MatriculaPeriod(2020, "SPRING");
-    public Department testDepartment = new Department("The Department of Testing", "TEST");
+    public Department testDepartment = new Department("The Department of Testing", "TEST","Green");
     public Matricula testMatriculaA = new Matricula(testPeriod);
     public Matricula testMatriculaB = new Matricula(testPeriod);
 

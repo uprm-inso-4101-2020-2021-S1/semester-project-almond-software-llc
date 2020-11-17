@@ -30,7 +30,7 @@ class DatabaseJUnit {
 	static User UserBeforeSave = new User("Igtampe","1234"); //Prepare a user
 	static MatriculaPeriod MatPeriodBeforeSave = new MatriculaPeriod(2020, "FALL");
 	static Matricula MatriculaBeforeSave = new Matricula(MatPeriodBeforeSave);
-	static Department DepartmentBeforeSave = new Department("Drama Department", "DRAM");
+	static Department DepartmentBeforeSave = new Department("Drama Department", "DRAM","Red");
 	static Course ActingI = new Course("Acting I", DepartmentBeforeSave, "3001", 3);
 	static Course ActingII = new Course("Acting II", DepartmentBeforeSave, "3002", 3);
 	static Course ActingIII = new Course("Acting III", DepartmentBeforeSave, "3003", 3);

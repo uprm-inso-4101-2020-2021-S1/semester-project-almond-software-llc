@@ -274,11 +274,11 @@ public class DBHandler {
 		//Get Name/ShortName
 		String ShortName = RS.getString("ID");
 		String Name = RS.getString("Name");
-		String Color = RS.getString("Color"); //TODO: Use this.
+		String Color = RS.getString("Color"); 
 		
 		RS.close();
 		
-		Department Dep = new Department(Name,ShortName);
+		Department Dep = new Department(Name,ShortName,Color);
 		DepartmentMap.put(Dep.getShortName(), Dep);
 		return Dep;
 	}
@@ -517,8 +517,8 @@ public class DBHandler {
 	 */
 	public void SaveDepartment(Department dep) throws SQLException{
 		//Save the department itself
-		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName(),"");}
- 		else {InsertIntoDepartments(dep.getShortName(), dep.getName(),"");} //TODO: Set Color
+		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName(),dep.GetColor());}
+ 		else {InsertIntoDepartments(dep.getShortName(), dep.getName(),dep.GetColor());}
 		
 		//Save changes to memory
 		DepartmentMap.put(dep.getShortName(), dep);
@@ -712,22 +712,13 @@ public class DBHandler {
 	 * @throws SQLException 
 	 */
 	private int deleteFromWhere(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeUpdate("DELETE FROM " + Table + " WHERE " + Column + " = '" + Value + "';");}
-
-	/**
-	 * Handles getting a result from a given table, where the column is *like* the value
-	 * @return DELETE FROM (TABLE) WHERE (COLUM) LIKE '(VALUE)'
-	 * @throws SQLException
-	 */
-	private int deleteFromWhereLike(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeUpdate("DELETE FROM " + Table + " WHERE " + Column + " LIKE '" + Value + "';");}
 	
 	//All of these methods can be made public if needed... though for some it *probably* shouldn't
 	private int deleteUser(String Username) throws SQLException                {return deleteFromWhere("Users","Username",Username);}
 	private int deleteStudent(String StudentID) throws SQLException            {return deleteFromWhere("Students","ID",StudentID);}
 	private int deleteMatricula(int ID) throws SQLException                    {return deleteFromWhere("Matriculas","ID",ID+"");}
 	private int deleteDepartment(String ShortName) throws SQLException         {return deleteFromWhere("Departments", "ID", ShortName);}
-	private int deleteCourses(String Department) throws SQLException           {return deleteFromWhereLike("Courses", "ID", Department + "%");}
 	private int deleteCourse(String ID) throws SQLException                    {return deleteFromWhere("Courses", "ID", ID.substring(0,8));}
-	private int deleteSections(String Course) throws SQLException              {return deleteFromWhereLike("Sections", "ID", Course + "%");}
 	private int deleteSection(String ID) throws SQLException                   {return deleteFromWhere("Sections", "ID", ID);}
 	
 	

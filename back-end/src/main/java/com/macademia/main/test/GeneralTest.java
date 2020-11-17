@@ -16,8 +16,8 @@ public class GeneralTest {
 	public static void main(String[] args) {
 	
 		//Lets create a few department
-		Department FunLand = new Department("The Department of Comedy", "FUNY");
-		Department Drama = new Department("The Department of Drama","DRAM");
+		Department FunLand = new Department("The Department of Comedy", "FUNY","Yellow");
+		Department Drama = new Department("The Department of Drama","DRAM","Black");
 		
 		//Create some courses
 		Course COM = new Course("Intro to Comedy", FunLand, "3101", 3); //creating a course with a department links it back to the department.
