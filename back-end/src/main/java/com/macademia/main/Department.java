@@ -79,10 +79,13 @@ public class Department {
 	public String GetColor() {return Color;}
 	
 	/**
-	 * Sets the color of this department
+	 * Sets the color of this department, and for all courses within it.
 	 * @param Color
 	 */
-	public void SetColor(String Color) {this.Color=Color;}
+	public void SetColor(String Color) {
+		this.Color=Color; //update color.
+		for (String key : CourseCatalog.keySet()) {CourseCatalog.get(key).setColor(Color);} //Update color in each course
+	}
 
 	// -[Functions]----------------------------------------------------------------------
 
