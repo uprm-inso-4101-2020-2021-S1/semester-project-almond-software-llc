@@ -152,6 +152,15 @@ public class JsonTest {
             e.printStackTrace();
         }
 
+        
+        testMatriculaA.addSection(testSectionA01,testCourseA);
+        testMatriculaA.addSection(testSectionB02,testCourseB);
+        testMatriculaA.addSection(testSectionC03,testCourseC);
+        testMatriculaA.addSection(testSectionD04,testCourseD);
+    }
+    
+    public static void main(String[] args) {
+    	new JsonTest().toString();
     }
 
 }

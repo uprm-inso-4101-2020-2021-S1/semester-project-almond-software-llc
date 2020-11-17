@@ -63,6 +63,7 @@ public class MacademiaController {
 	}
 
 	@GetMapping("/addSection")
+
 	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "courseIndex") int courseIndex,

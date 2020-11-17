@@ -7,6 +7,7 @@ public class Matricula {
 
 	// -[Fields]----------------------------------------------
 	private List<Section> sections;
+	private List<Course> courses;
 	private int totalCredits;
 	private MatriculaPeriod period;
 	private int ID = -1;
@@ -14,6 +15,7 @@ public class Matricula {
 	// -[Constructor]-----------------------------------------
 	public Matricula(MatriculaPeriod period) {
 		this.sections = new ArrayList<Section>();
+		this.courses = new ArrayList<Course>();
 		this.totalCredits = 0;
 		this.period = period;
 	}
@@ -28,26 +30,69 @@ public class Matricula {
 
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
-	public void addSections(Section e) {
+	public void addSection(Section e, Course f) {
+		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		this.totalCredits += e.getCredits();
-		e.increasePopulation();
 		this.sections.add(e);		
+		this.courses.add(f);
 	}
 
-	public void removeSections(Section e) {
+	public void removeSection(Section e, Course f) {
+		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
-		e.decreasePopulation();
 		this.sections.remove(e);
+		this.courses.remove(f);
 	}
-
+	
+	public void removeSection(Section e) {
+		if(!sections.contains(e)) {return;}
+		
+		//Find the course to remove
+		Course f=null;
+		for (Course course : courses) {
+			if(course.getCourseCode()==e.getCourseCode()) {f=course; break;} //found it
+		}
+		
+		if(f==null) {
+			//remove it anyways
+			this.sections.remove(e);
+			return;
+		}
+		
+		//Do the propper removal procedure
+		removeSection(e, f);
+		
+	}
+	
+	public void removeCourse(Course f) {
+		if(!courses.contains(f)) {return;}
+		//find the section that we have that matches the course code
+		Section e=null;
+		for (Section section : sections) {
+			if(section.getCourseCode()==f.getCourseCode()) {e=section; break;} //found it
+		}
+		
+		if(e==null) {
+			//We didn't find it, but remove the course anyway. It should be removed in that case.
+			courses.remove(f);
+			return;
+		}
+		
+		//Remove the section and course together.
+		removeSection(e, f);
+		
+	}
 
 	// -[Getters]---------------------------------------------
 	public List<Section> getSections() {return sections;}
+	public List<Course> getCourses() {return courses;}
 	public int getTotalCredits() {return totalCredits;}
 	public MatriculaPeriod getPeriod() {return period;}
 	public int getID() {return ID;}
 
 	public void setSections(List<Section> sections) {this.sections = sections;}
+	public void setCourse(List<Course> courses) {this.courses=courses;}
 	public void setTotalCredits(int totalCredits) {this.totalCredits = totalCredits;}
 	public void setPeriod(MatriculaPeriod period) {this.period = period;}
 	public void setID(int ID) {this.ID=ID;}
