@@ -31,18 +31,18 @@ public class Matricula {
 	public boolean getReadOnly() { return ReadOnly; }
 
 	public void setSections(List<Section> Sections) {
-		this.Sections = Sections;
+		if(!this.ReadOnly)this.Sections = Sections;
 	}
 	public void setTotalCredits(int totalCredits) {
-		this.totalCredits = totalCredits;
+		if(!this.ReadOnly)this.totalCredits = totalCredits;
 	}
 	public void setPeriod(String period) {
-		this.period = period;
+		if(!this.ReadOnly)this.period = period;
 	}
-	public void setReadOnly(boolean ReadOnly) {  this.ReadOnly=ReadOnly; }
+	public void setReadOnly(boolean ReadOnly) {  if(!this.ReadOnly)this.ReadOnly=ReadOnly; }
 	
 	public int getID() {return ID;}
-	public void setID(int ID) {this.ID=ID;}
+	public void setID(int ID) {if(!this.ReadOnly)this.ID=ID;}
 	
 	/**
 	 * Returns a displayable string for this Matricula

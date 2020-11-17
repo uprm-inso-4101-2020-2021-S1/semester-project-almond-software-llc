@@ -9,4 +9,12 @@ public class Turn {
         this.dayturn=new Date(year-1900,month,day);
         this.period=new Period(begin,end);
     }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public Date getDayturn() {
+        return dayturn;
+    }
 }

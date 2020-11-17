@@ -2,6 +2,8 @@ package macademia;
 
 import macademia.auth.User;
 
+import java.util.Date;
+
 /**
  * Class that holds a student, which contains:
  *  - Matricula Object
@@ -100,5 +102,12 @@ public class Student extends User {
 		}
 		return false;
 	}
-	
+
+	public void Turntime(Date day, int time){
+		if(!this.turn.getDayturn().before(day)&&!this.turn.getDayturn().after(day))
+			if(this.turn.getPeriod().inPeriod(time)){
+				this.matricula.setReadOnly(true);
+			}
+		this.matricula.setReadOnly(false);
+	}
 }
