@@ -7,6 +7,7 @@ public class Matricula {
 
 	// -[Fields]----------------------------------------------
 	private List<Section> sections;
+	private List<Course> courses;
 	private int totalCredits;
 	private MatriculaPeriod period;
 	private int ID = -1;
@@ -14,13 +15,14 @@ public class Matricula {
 	// -[Constructor]-----------------------------------------
 	public Matricula(MatriculaPeriod period) {
 		this.sections = new ArrayList<Section>();
+		this.courses = new ArrayList<Course>();
 		this.totalCredits = 0;
 		this.period = period;
 	}
 
 	public Matricula(List<Section> sections, MatriculaPeriod period) {
 		this.sections = sections;
-		this.totalCredits = 0
+		this.totalCredits = 0;
 		this.period = period;
 	}
 
@@ -28,13 +30,13 @@ public class Matricula {
 
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
-	public void addSections(Section e) {
+	public void addSections(Section e, Course f) {
 		this.totalCredits += e.getCredits();
 		e.increasePopulation();
 		this.sections.add(e);		
 	}
 
-	public void removeSections(Section e) {
+	public void removeSections(Section e, Course f) {
 		this.totalCredits -= e.getCredits();
 		e.decreasePopulation();
 		this.sections.remove(e);
@@ -43,11 +45,13 @@ public class Matricula {
 
 	// -[Getters]---------------------------------------------
 	public List<Section> getSections() {return sections;}
+	public List<Course> getCourses() {return courses;}
 	public int getTotalCredits() {return totalCredits;}
 	public MatriculaPeriod getPeriod() {return period;}
 	public int getID() {return ID;}
 
 	public void setSections(List<Section> sections) {this.sections = sections;}
+	public void setCourse(List<Course> courses) {this.courses=courses;}
 	public void setTotalCredits(int totalCredits) {this.totalCredits = totalCredits;}
 	public void setPeriod(MatriculaPeriod period) {this.period = period;}
 	public void setID(int ID) {this.ID=ID;}
