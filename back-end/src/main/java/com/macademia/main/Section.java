@@ -6,7 +6,9 @@ package com.macademia.main;
  * @author Giovanni Garcia
  */
 
-enum Days {MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;}
+enum Days {
+    MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
+}
 
 public class Section {
     // Variables
@@ -22,18 +24,19 @@ public class Section {
     private int capacity;
     private int population;
     private int credits;
-    
+
     public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
-        this.period=timetoPeriod(time);
+        this.period = timetoPeriod(time);
         this.professor = professor;
         this.location = Location;
-        this.population=Population;
+        this.population = Population;
         this.capacity = capacity;
         this.population = 0;
-        
+        this.courseName = course.getName();
+
         // Link this Section's Course to this section
         course.addSection(this);
 
@@ -69,19 +72,21 @@ public class Section {
       return new Period(start,end);
   */
     
-    
     /**
      * Turns a time into a period
+     * 
      * @param time
      * @return
      */
     public static Period timetoPeriod(String time) {
-    	time=time.replace(" ", ""); //Remove any potential spaces
-    	String[] TwoTimes = time.split("-"); //split
-    	if(TwoTimes.length!=2) {throw new IllegalArgumentException("Time not formatted properly");} //Make sure there are two times.
-    	return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
+        time = time.replace(" ", ""); // Remove any potential spaces
+        String[] TwoTimes = time.split("-"); // split
+        if (TwoTimes.length != 2) {
+            throw new IllegalArgumentException("Time not formatted properly");
+        } // Make sure there are two times.
+        return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
     }
-      
+
     private static int TimeToInt(String Time) {
     	boolean PM=false; //Flag to save if the time ended with PM
     	Time=Time.toUpperCase(); //Flag to handle lowercase AMs and PMs
@@ -104,73 +109,121 @@ public class Section {
     /**
      * Sets the section Number of this object
      */
-    public void setSecNum(String s) {this.secNum = s;}
+    public void setSecNum(String s) {
+        this.secNum = s;
+    }
 
     /**
      * Sets the day of this object
      */
-    public void setDay(String d) {this.day = d;}
+    public void setDay(String d) {
+        this.day = d;
+    }
 
     /**
      * Sets the time of this object
+     * 
      * @param Time
      */
     public void setTime(String t) {
-    	this.time = t;
-    	this.period=timetoPeriod(t);
-	}
+        this.time = t;
+        this.period = timetoPeriod(t);
+    }
 
     /**
      * Updates all course information in this section with the provided course.
+     * 
      * @param course
      */
     public void UpdateCourseInfo(Course course) {
-    	this.courseCode = course.getDept() + course.getCode();
-        this.courseName=course.getName();
-        this.Color=course.getColor();
-        this.credits=course.getCredits();
-	}
-    
-    public void setCapacity(int capacity) {this.capacity = capacity;}
-    public void increasePopulation() {this.population++;}
-    public void decreasePopulation() {this.population--;}
-    public void setPopulation(int Population) {this.population=Population;} //This is here for the Database handler
+        this.courseCode = course.getDept() + course.getCode();
+        this.courseName = course.getName();
+        this.Color = course.getColor();
+        this.credits = course.getCredits();
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void increasePopulation() {
+        this.population++;
+    }
+
+    public void decreasePopulation() {
+        this.population--;
+    }
+
+    public void setPopulation(int Population) {
+        this.population = Population;
+    } // This is here for the Database handler
 
     // Getters
 
     /**
      * Gets the section number of this object
+     * 
      * @return secNum
      */
-    public String getSecNum() {return this.secNum;}
+    public String getSecNum() {
+        return this.secNum;
+    }
 
     /**
      * Gets the day of this object
+     * 
      * @return day
      */
-    public String getDay() {return this.day;}
+    public String getDay() {
+        return this.day;
+    }
 
     /**
      * Gets the time of this object
+     * 
      * @return time
      */
-    public String getTime() {return this.time;}
-    public String getProfessor() {return this.professor;}
-    public String getLocation() {return this.location;}
+    public String getTime() {
+        return this.time;
+    }
+
+    public String getProfessor() {
+        return this.professor;
+    }
+
+    public String getLocation() {
+        return this.location;
+    }
 
     /**
      * Returns the course code IE "ICOM4501"
+     * 
      * @return
      */
-    public String getCourseCode() {return this.courseCode;}
+    public String getCourseCode() {
+        return this.courseCode;
+    }
 
-    public int getCredits() {return this.credits;}
-    public int getCapacity() {return this.capacity;}
-    public int getPopulation() {return this.population;}
-    
-    public String getColor() {return this.Color;}
-    public String getCourseName() {return this.courseName;}
-    
+    public int getCredits() {
+        return this.credits;
+    }
+
+    public int getCapacity() {
+        return this.capacity;
+    }
+
+    public int getPopulation() {
+        return this.population;
+    }
+
+    public String getColor() {
+        return this.Color;
+    }
+
+    public String getCourseName() {
+        return this.courseName;
+    }
+
     /**
      * Returns a displayable string for this section
      * 
@@ -183,17 +236,18 @@ public class Section {
     }
 
     /**
-     *Check if there is conflict in the sections in the matricula
-     *@author Josue
-     *@param sec Section to check if conflicts
-     *@return if this section and the given section conflict
+     * Check if there is conflict in the sections in the matricula
+     * 
+     * @author Josue
+     * @param sec Section to check if conflicts
+     * @return if this section and the given section conflict
      */
-   public boolean Conflict(Section sec){
-       for (int i = 0; i < sec.day.length(); i++)
-           for(int j = 0; j < this.day.length(); j++)
-               if(this.day.charAt(j)==sec.day.charAt(i))
-                   return this.period.Conflict(sec.period);
-       return false;
-   }
-    
+    public boolean Conflict(Section sec) {
+        for (int i = 0; i < sec.day.length(); i++)
+            for (int j = 0; j < this.day.length(); j++)
+                if (this.day.charAt(j) == sec.day.charAt(i))
+                    return this.period.Conflict(sec.period);
+        return false;
+    }
+
 }
