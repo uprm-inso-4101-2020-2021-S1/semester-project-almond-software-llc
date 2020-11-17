@@ -356,7 +356,7 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 		
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); //Creating a section automatically links it to a course.
+		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap, "green"); //Creating a section automatically links it to a course.
 	}
 	
 	//-[Check Exists]-----------------------------------------------------------------------------

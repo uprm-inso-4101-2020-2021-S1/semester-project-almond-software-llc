@@ -37,7 +37,7 @@ class DatabaseJUnit {
 	static Course ActingIV = new Course("Acting IV", DepartmentBeforeSave, "3004", 3);
 	static Course Magic = new Course("Acting Magic", DepartmentBeforeSave, "4004", 3);
 	static Course MagicLab = new Course("Acting Magic Lab",DepartmentBeforeSave,"4004L",1);
-	static Section SectionBeforeSave = new Section("020", "MWF", "8:30 - 9:30", "Yang Lee", "STEF302", ActingII, 1,30);
+	static Section SectionBeforeSave = new Section("020", "MWF", "8:30 - 9:30", "Yang Lee", "STEF302", ActingII, 1,30, "green");
 	static Student StudentBeforeSave = new Student(UserBeforeSave, "Paul", "802-16-4444", DepartmentBeforeSave);
 	
 	

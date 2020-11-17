@@ -40,9 +40,9 @@ public class GeneralTest {
 		//Lets create some sections for these courses
 		Random rand = new Random();
 		for (Course course : AllClasses) {
-			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", "Dr. Test", "S001", course, 1,50); //Creating a section linked to a course automatically links it back to the course.
-			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", "Dr. Test", "S002", course, 1,50);
-			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", "Dr. Test", "S003", course, 1,50);
+			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", "Dr. Test", "S001", course, 1,50, "green"); //Creating a section linked to a course automatically links it back to the course.
+			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", "Dr. Test", "S002", course, 1,50, "green");
+			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", "Dr. Test", "S003", course, 1,50, "green");
 		}
 		
 		//Create a user.

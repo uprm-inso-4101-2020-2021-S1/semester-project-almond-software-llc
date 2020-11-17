@@ -1,7 +1,13 @@
 package com.macademia.restservice;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.macademia.main.*;
 import com.macademia.main.test.JsonTest;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MacademiaController {
 
@@ -18,8 +25,9 @@ public class MacademiaController {
 	private JsonTest tester = new JsonTest();
 
 	@GetMapping("/macademia")
-	public Macademia macademia(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new Macademia(counter.incrementAndGet(), String.format(template, name));
+	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
+			@RequestParam(value = "lastName", defaultValue = "NULL2") String lastName) {
+		return firstName + " " + lastName;
 	}
 
 	@GetMapping("/course")
@@ -37,15 +45,60 @@ public class MacademiaController {
 		return tester.testDepartment;
 	}
 
-	@GetMapping("/matricula")
-	public Matricula matricula() {
-		return tester.testMatriculaA;
+	@GetMapping("/departmentSections")
+	public List<Section> departmentSections() {
+		return tester.testDepartment.getSections();
+	}
+
+	@GetMapping("/myMatriculas")
+	public List<Matricula> matricula() {
+		return this.getMatriculas();
+	}
+
+	@GetMapping("/myList")
+	public List<Section> myList() {
+		return tester.testList;
 	}
 
 	@GetMapping("/addSection")
-	public Section addSection() {
-		tester.testMatriculaB.addSections(tester.testSectionA01);
-		return tester.testSectionA01;
+	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+			@RequestParam(value = "targetListIndex") int targetListIndex,
+			@RequestParam(value = "courseIndex") int courseIndex,
+			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+		Section temp = listSwitch(sourceListIndex, matriculaIndex).get(courseIndex);
+		if (targetListIndex < 2)
+			listSwitch(targetListIndex, matriculaIndex).add(temp);
+		else
+			this.getMatriculas().get(matriculaIndex).addSections(temp);
+	}
+
+	@GetMapping("/removeSection")
+	public void removeSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+			@RequestParam(value = "courseIndex") int courseIndex,
+			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+		if (sourceListIndex < 2)
+			listSwitch(sourceListIndex, matriculaIndex).remove(courseIndex);
+		else
+			this.getMatriculas().get(matriculaIndex)
+					.removeSections(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
+	}
+
+	private List<Section> listSwitch(int targetListIndex, int matriculaIndex) {
+		switch (targetListIndex) {
+			case 0:
+				return tester.testList;
+			case 1:
+				return tester.testDepartment.getSections();
+			default:
+				return null;
+		}
+	}
+
+	private List<Matricula> getMatriculas() {
+		List<Matricula> result = new ArrayList<Matricula>();
+		result.add(0, tester.testMatriculaB);
+		result.add(0, tester.testMatriculaA);
+		return result;
 	}
 
 }
