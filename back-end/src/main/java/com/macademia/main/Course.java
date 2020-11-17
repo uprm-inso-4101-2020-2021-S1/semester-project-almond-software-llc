@@ -73,12 +73,12 @@ public class Course {
 
 	// -[Setters]---------------------------------------------
 
-	public void setName(String name) {this.name = name;}
-	public void setDept(Department dept) {this.dept = dept.getShortName();}
-	public void setDept(String dept) {this.dept=dept;}
-	public void setCode(String code) {this.code = code;}
-	public void setCourseCode(String courseCode) {this.courseCode = courseCode;}
-	public void setCredits(int credits) {this.credits = credits;}
+	public void setName(String name) {this.name = name; UpdateSections();}
+	public void setDept(Department dept) {this.dept = dept.getShortName(); UpdateSections();}
+	public void setDept(String dept) {this.dept=dept; UpdateSections();}
+	public void setCode(String code) {this.code = code; UpdateSections();}
+	public void setCourseCode(String courseCode) {this.courseCode = courseCode; UpdateSections();}
+	public void setCredits(int credits) {this.credits = credits; UpdateSections();}
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
 
@@ -86,7 +86,7 @@ public class Course {
 	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.
 	 * @param Color
 	 */
-	public void setColor(String Color) {this.Color=Color;}
+	public void setColor(String Color) {this.Color=Color; UpdateSections();}
 	
 	// -[Methods]--------------------------------------------
 
@@ -94,6 +94,11 @@ public class Course {
 	public void addCoreq(Course course) {this.coreq.add(course);}
 	public void addSection(Section sect) {this.sections.add(sect);}
 
+	/**
+	 * Updates info in each section of this course
+	 */
+	private void UpdateSections() {for (Section section : sections) {section.UpdateCourseInfo(this);}}
+	
 	/**
 	 * Returns a displayable string for this course
 	 * 
