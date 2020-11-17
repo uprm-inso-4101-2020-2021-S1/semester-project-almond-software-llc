@@ -22,7 +22,7 @@ public class Section {
     private int capacity;
     private int population;
     private int credits;
-
+    
     public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
@@ -36,18 +36,23 @@ public class Section {
         
         // Link this Section's Course to this section
         course.addSection(this);
-        
+
         //Grab the color and course name from the course
         UpdateCourseInfo(course);
     }
 
-    
+    public boolean isFull() {
+        if (this.population == this.capacity) return true;
+        return false;
+    }
+  
     public void setPeriod(Period period) {
     	this.period = period;
     	//also update time
     	this.time=period.toMilitaryTimeString();
 	}
-    public Period getPeriod() {return period;}
+   
+  public Period getPeriod() {return period;}
 
     /* I have no idea what any of this is and if it works so let's simplify the heck out of this.
   	String[] per= time.split("-");
@@ -95,7 +100,6 @@ public class Section {
     	return TimeAsInt;
     }
 
-    
     /**
      * Sets the section Number of this object
      */

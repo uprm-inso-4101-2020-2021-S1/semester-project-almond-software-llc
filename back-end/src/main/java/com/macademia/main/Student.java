@@ -171,4 +171,85 @@ public class Student extends User {
 		return false;
 	}
 
+	//Makes a giant list with all the courses ever taken
+	public List<Course> getAllCoursesTaken() {
+		List<Course> listOcourses = new ArrayList<Course>();
+		for (Matricula m : this.matriculas) {
+			for (Course c : m.getCoursesTaken()) {
+				listOcourses.add(c);
+			}
+		}
+		return listOcourses;
+	}
+
+	public void turn() {
+		int count = 0;
+		List<Course> allCourses = getAllCoursesTaken();
+		for (Course c : this.matricula.getCoursesTaken()) {
+			for (Course prq : c.getPrereq()) {
+				if (allCourses.contains(prq)) continue;
+				else {
+					count++;
+					this.matricula.getCoursesTaken().remove(c);
+					break;
+				}
+			}
+		}
+		for (Course c : this.matricula.getCoursesTaken()) {
+			for (Course corq : c.getCoreq()) {
+				if (allCourses.contains(corq) || this.matricula.getCoursesTaken().contains(corq)) continue;
+				else {
+					count++;
+					this.matricula.getCoursesTaken().remove(c);
+					break;
+				}
+			}
+		}
+
+		//Updates the section list by removing the sections with the courses removed on the CoursesTaken List
+		for (Section s : this.matricula.getSections()) {
+			if (this.matricula.getCoursesTaken().contains(s.getCourse())) continue;
+			else this.matricula.getSections().remove(s);
+		}
+
+		//Removes it from matricula if its full
+		for (Section s : this.matricula.getSections()) {
+			if (s.isFull()) {
+				this.matricula.removeSections(s);
+				count++;
+			}
+		}
+
+		//Removes the last added class that conflicts with an earlier class of the same time.
+		for (int i = 0; i < this.matricula.getSections().size(); i++) {
+			for (int j = i + 1; j < this.matricula.getSections().size(); j++) {
+				if (this.matricula.getSections().get(i).getTime() == this.matricula.getSections().get(j).getTime()) {
+					if (i > j) {
+						this.matricula.removeSections(this.matricula.getSections().get(i));
+						this.matricula.getCoursesTaken().remove(this.matricula.getSections().get(i).getCourse());
+						count++;
+					}
+					if (j > i) {
+						this.matricula.removeSections(this.matricula.getSections().get(j));
+						this.matricula.getCoursesTaken().remove(this.matricula.getSections().get(i).getCourse());
+						count++;
+					}
+				}
+				else {
+					continue;
+				}
+			}
+		}
+		while (count > 0 || !this.priorities.isEmpty()) {
+			this.matricula.getCoursesTaken().add(this.priorities.remove(0));
+			count--;
+		}
+
+		
+
+
+
+
+	}
+
 }

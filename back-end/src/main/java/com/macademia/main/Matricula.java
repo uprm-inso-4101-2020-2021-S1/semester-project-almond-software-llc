@@ -20,7 +20,7 @@ public class Matricula {
 
 	public Matricula(List<Section> sections, MatriculaPeriod period) {
 		this.sections = sections;
-		this.totalCredits = 0;
+		this.totalCredits = 0
 		this.period = period;
 	}
 
