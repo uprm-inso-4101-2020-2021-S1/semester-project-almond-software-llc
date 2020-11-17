@@ -17,6 +17,8 @@ public class Section {
     private String professor;
     private String location;
     private String courseCode;
+    private String courseName;
+    private String Color;
     private int capacity;
     private int population;
     private int credits;
@@ -28,14 +30,15 @@ public class Section {
         this.period=timetoPeriod(time);
         this.professor = professor;
         this.location = Location;
-        courseCode = course.getDept() + course.getCode();
-        this.credits = course.getCredits();
         this.population=Population;
         this.capacity = capacity;
         this.population = 0;
         
         // Link this Section's Course to this section
         course.addSection(this);
+        
+        //Grab the color and course name from the course
+        UpdateCourseInfo(course);
     }
 
     
@@ -112,8 +115,17 @@ public class Section {
     	this.period=timetoPeriod(t);
 	}
 
-    public void setCourseCode(Course course) {this.courseCode = course.getDept() + course.getCode();}
-    public void setCredits(int credits) {this.credits = credits;}
+    /**
+     * Updates all course information in this section with the provided course.
+     * @param course
+     */
+    public void UpdateCourseInfo(Course course) {
+    	this.courseCode = course.getDept() + course.getCode();
+        this.courseName=course.getName();
+        this.Color=course.getColor();
+        this.credits=course.getCredits();
+	}
+    
     public void setCapacity(int capacity) {this.capacity = capacity;}
     public void increasePopulation() {this.population++;}
     public void decreasePopulation() {this.population--;}
