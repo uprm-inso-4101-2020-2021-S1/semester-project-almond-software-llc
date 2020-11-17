@@ -107,15 +107,15 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
 
-        testMatriculaB.addSections(testSectionA01);
-        testMatriculaB.addSections(testSectionB02);
-        testMatriculaB.addSections(testSectionC03);
-        testMatriculaB.addSections(testSectionD04);
+        testMatriculaB.addSection(testSectionA01, testCourseA);
+        testMatriculaB.addSection(testSectionB02, testCourseB);
+        testMatriculaB.addSection(testSectionC03, testCourseC);
+        testMatriculaB.addSection(testSectionD04, testCourseD);
 
-        testMatriculaC.addSections(testSectionD01);
-        testMatriculaC.addSections(testSectionC02);
-        testMatriculaC.addSections(testSectionB03);
-        testMatriculaC.addSections(testSectionA04);
+        testMatriculaC.addSection(testSectionD01, testCourseE);
+        testMatriculaC.addSection(testSectionC02, testCourseF);
+        testMatriculaC.addSection(testSectionB03, testCourseG);
+        testMatriculaC.addSection(testSectionA04, testCourseH);
 
         testList.add(testSectionA04);
         testList.add(testSectionB03);
