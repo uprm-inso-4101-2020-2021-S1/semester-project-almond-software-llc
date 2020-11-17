@@ -84,6 +84,7 @@ public class Section {
       
     private static int TimeToInt(String Time) {
     	boolean PM=false; //Flag to save if the time ended with PM
+    	Time=Time.toUpperCase(); //Flag to handle lowercase AMs and PMs
     	if(Time.endsWith("AM")) {Time=Time.replace("AM","");} //Remove AM if it is present.
     	else if(Time.endsWith("PM")) {Time=Time.replace("PM", ""); PM=true;} //Remove PM if it is present, and mark the PM flag.
     	
@@ -96,7 +97,7 @@ public class Section {
     	catch (NumberFormatException e) {throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");}
     	
     	//Lastly, if PM is true, add 1200
-    	if(PM) {TimeAsInt+=1200;}
+    	if(PM && TimeAsInt>=1300) {TimeAsInt+=1200;}
     	return TimeAsInt;
     }
 
