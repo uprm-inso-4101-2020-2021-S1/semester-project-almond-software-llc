@@ -30,7 +30,7 @@ public class Matricula {
 
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
-	public void addSections(Section e, Course f) {
+	public void addSection(Section e, Course f) {
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		this.totalCredits += e.getCredits();
 		e.increasePopulation();
@@ -38,7 +38,7 @@ public class Matricula {
 		this.courses.add(f);
 	}
 
-	public void removeSections(Section e, Course f) {
+	public void removeSection(Section e, Course f) {
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
@@ -47,22 +47,43 @@ public class Matricula {
 		this.courses.remove(f);
 	}
 	
+	public void removeSection(Section e) {
+		if(!sections.contains(e)) {return;}
+		
+		//Find the course to remove
+		Course f=null;
+		for (Course course : courses) {
+			if(course.getCourseCode()==e.getCourseCode()) {f=course; break;} //found it
+		}
+		
+		if(f==null) {
+			//remove it anyways
+			e.decreasePopulation();
+			this.sections.remove(e);
+			return;
+		}
+		
+		//Do the propper removal procedure
+		removeSection(e, f);
+		
+	}
+	
 	public void removeCourse(Course f) {
 		if(!courses.contains(f)) {return;}
 		//find the section that we have that matches the course code
-		Section sectToRemove=null;
+		Section e=null;
 		for (Section section : sections) {
-			if(section.getCourseCode()==f.getCourseCode()) {sectToRemove=section; break;} //found it
+			if(section.getCourseCode()==f.getCourseCode()) {e=section; break;} //found it
 		}
 		
-		if(sectToRemove==null) {
+		if(e==null) {
 			//We didn't find it, but remove the course anyway. It should be removed in that case.
 			courses.remove(f);
 			return;
 		}
 		
 		//Remove the section and course together.
-		removeSections(sectToRemove, f);
+		removeSection(e, f);
 		
 	}
 
