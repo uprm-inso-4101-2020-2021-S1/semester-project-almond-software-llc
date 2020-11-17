@@ -8,12 +8,14 @@ public class Matricula {
 	private int totalCredits; 
 	private String period; 
 	private int ID=-1;
+	private boolean ReadOnly;
 
 	//-[Constructor]-----------------------------------------
 	public Matricula(List<Section> Sections, int totalCredits, String period) {
 		this.Sections = Sections;
 		this.totalCredits = totalCredits;
-		this.period = period; 		
+		this.period = period;
+		this.ReadOnly=false;
 	}
 	
 	//-[Getters]---------------------------------------------
@@ -26,6 +28,7 @@ public class Matricula {
 	public String getPeriod() {
 		return period;
 	}
+	public boolean getReadOnly() { return ReadOnly; }
 
 	public void setSections(List<Section> Sections) {
 		this.Sections = Sections;
@@ -36,6 +39,7 @@ public class Matricula {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	public void setReadOnly(boolean ReadOnly) {  this.ReadOnly=ReadOnly; }
 	
 	public int getID() {return ID;}
 	public void setID(int ID) {this.ID=ID;}

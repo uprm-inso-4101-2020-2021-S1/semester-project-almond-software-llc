@@ -1,5 +1,8 @@
 package macademia.auth;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Holds a User in Macademia
  * @author Igtampe
@@ -18,11 +21,31 @@ public class User{
      * @param Username
      * @param Password
      */
-    public User(String Username, String Password){
+    public User(String Username, String Password) throws NoSuchAlgorithmException {
         this.Username=Username;
-        this.Password=Password;
+        this.Password=Hash(Password);
     }
-    
+	private static String Hash(String data) throws NoSuchAlgorithmException {
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		digest.reset();
+		byte[] hash = digest.digest(data.getBytes());
+		return bytesToStringHex(hash);
+	}
+
+	private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+	private static String bytesToStringHex(byte[] bytes) {
+
+		char[] hexChars = new char[bytes.length*2];
+		for (int i = 0; i < bytes.length; i++) {
+			int j = bytes[i] & 0xFF;
+			hexChars[i*2] = hexArray[j>>>4];
+			hexChars[i*2+1] = hexArray[j & 0x0F];
+
+		}
+		return new String(hexChars);
+	}
+
     /**
      * Creates a user using the given User
      * @param user
