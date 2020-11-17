@@ -65,5 +65,9 @@ public class JsonTest {
         testMatriculaA.addSection(testSectionC03,testCourseC);
         testMatriculaA.addSection(testSectionD04,testCourseD);
     }
+    
+    public static void main(String[] args) {
+    	new JsonTest().toString();
+    }
 
 }
