@@ -7,29 +7,20 @@ public class Matricula {
 
 	// -[Fields]----------------------------------------------
 	private List<Section> sections;
-	private List<Course> coursesTaken;
 	private int totalCredits;
 	private MatriculaPeriod period;
+	private int ID = -1;
 
 	// -[Constructor]-----------------------------------------
 	public Matricula(MatriculaPeriod period) {
 		this.sections = new ArrayList<Section>();
-		this.coursesTaken = new ArrayList<Course>();
-		this.totalCredits = setCredits();
+		this.totalCredits = 0;
 		this.period = period;
-	}
-
-	public int setCredits() {
-		int cred = 0;
-		for (Section s : this.sections) {
-			cred = cred + s.getCredits();
-		}
-		return cred;
 	}
 
 	public Matricula(List<Section> sections, MatriculaPeriod period) {
 		this.sections = sections;
-		this.totalCredits = setCredits();
+		this.totalCredits = 0
 		this.period = period;
 	}
 
@@ -37,72 +28,61 @@ public class Matricula {
 
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
-	public void addSections(Section e, Course f) {
+	public void addSections(Section e) {
 		this.totalCredits += e.getCredits();
 		e.increasePopulation();
-		this.sections.add(e);
-		this.coursesTaken.add(f);
-		this.totalCredits = setCredits();
+		this.sections.add(e);		
 	}
 
 	public void removeSections(Section e) {
 		this.totalCredits -= e.getCredits();
 		e.decreasePopulation();
 		this.sections.remove(e);
-		this.coursesTaken.remove(this.findCourse(e));
-		this.totalCredits = setCredits();
 	}
 
-	// helper function for remove section to help find course easily.
-	private Course findCourse(Section e) {
-		for (Course c : this.coursesTaken) {
-			if (e.getCourseCode().equals(c.getDept() + c.getCode()))
-				return c;
-		}
-		return null;
-	}
 
 	// -[Getters]---------------------------------------------
-	public List<Section> getSections() {
-		return sections;
-	}
+	public List<Section> getSections() {return sections;}
+	public int getTotalCredits() {return totalCredits;}
+	public MatriculaPeriod getPeriod() {return period;}
+	public int getID() {return ID;}
 
-	public List<Course> getCoursesTaken() {
-		List<Course> cors = new ArrayList<Course>() ;
-		for (Section s : this.getSections()) {
-			cors.add(s.getCourse());
+	public void setSections(List<Section> sections) {this.sections = sections;}
+	public void setTotalCredits(int totalCredits) {this.totalCredits = totalCredits;}
+	public void setPeriod(MatriculaPeriod period) {this.period = period;}
+	public void setID(int ID) {this.ID=ID;}
+
+	/**
+	 * Returns a list of 6 lists of sections. Each list corresponds to a specified day, and contains sections that occur on those days.
+	 * @return
+	 */
+	public List<List<Section>> getSectionsByDay(){
+		List<List<Section>> Week = new ArrayList<List<Section>>();
+		for (int Day = 0; Day < 7; Day++) {Week.add(new ArrayList<Section>());} //Make sure each de-esta cosa has an arraylist.
+		
+		//now go through each section.
+		for (Section section : sections) {
+			for (char DayLetter : section.getDay().toCharArray()) { //Now go through each letter in their days
+				Week.get(LetterToDay(DayLetter)).add(section); //And add them to one of the 6 de-estas cosas using letter to day.
+			}
 		}
-		return cors;
+		
+		return Week;
 	}
-
-	public int getTotalCredits() {
-		return totalCredits;
-	}
-
-	public MatriculaPeriod getPeriod() {
-		return period;
-	}
-
-	public void setSections(List<Section> sections) {
-		this.sections = sections;
-	}
-
-	public void setTotalCredits(int totalCredits) {
-		this.totalCredits = totalCredits;
-	}
-
-	public void setPeriod(MatriculaPeriod period) {
-		this.period = period;
-	}
-
+	
+	/**
+	 * Turns a letter (LMWJVSD) to a day number (0-7)
+	 * @param Letter
+	 * @return "LMWJVSD".indexOf(Letter)
+	 */
+	private static int LetterToDay(char Letter) {return "LMWJVSD".indexOf(Letter);}
+	
 	/**
 	 * Returns a displayable string for this Matricula
 	 * 
 	 * @return CourseNumber Course(s) (Credits Credit(s)) during Period (IE "2
 	 *         Course(s) totaling 6 Credit(s) during FALL")
 	 */
-	public String toString() {
-		return sections.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();
-	}
+	public String toString() {return sections.size() + " Course(s) totaling " + getTotalCredits() + " Credit(s) during " + getPeriod();}
 
 }

@@ -13,6 +13,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import IconButton from '@material-ui/core/IconButton';
 
 const drawerWidth = 240;
 
@@ -29,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    zIndex: theme.zIndex.drawer + 1,
+    // width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
     backgroundColor: "green",
   },
@@ -62,6 +66,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     // backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
+    backgroundColor: '#f2f2f2',
+  },
+  title: {
+    flexGrow: 1,
+  },
+  drawerContainer: {
+    overflow: 'auto',
   },
 }));
 
@@ -197,68 +208,214 @@ export default function Main() {
     },
   ]);
 
-  let [myMatricula, setMyMatricula] = useState([
-    {
-      section: '005',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '401',
-      courseName: 'Test Course 5',
-      courseCode: 'TEST6005',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'blue',
-      list: 2,
-    },
-    {
-      section: '006',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '402',
-      courseName: 'Test Course 6',
-      courseCode: 'TEST6006',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'blue',
-      list: 2,
-    },
-    {
-      section: '007',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '403',
-      courseName: 'Test Course 7',
-      courseCode: 'TEST6007',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'blue',
-      list: 2,
-    },
-    {
-      section: '008',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '408',
-      courseName: 'Test Course 8',
-      courseCode: 'TEST6008',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'blue',
-      list: 2,
-    },
-  ])
+  let [matriculaIndex, setMatriculaIndex] = useState(0);
+
+  let [disablePrevious, setDisablePrevious] = useState(true);
+
+  let [disableNext, setDisableNext] = useState(false);
+
+  let matriculaA = {
+    period: '2020',
+    totalCredits: 12,
+    data: [
+      {
+        section: '005',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '401',
+        courseName: 'Test Course 5',
+        courseCode: 'TEST1005',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'blue',
+        list: 2,
+      },
+      {
+        section: '006',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '402',
+        courseName: 'Test Course 6',
+        courseCode: 'TEST1006',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'blue',
+        list: 2,
+      },
+      {
+        section: '007',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '403',
+        courseName: 'Test Course 7',
+        courseCode: 'TEST1007',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'blue',
+        list: 2,
+      },
+      {
+        section: '008',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '408',
+        courseName: 'Test Course 8',
+        courseCode: 'TEST1008',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'blue',
+        list: 2,
+      },
+    ]
+  };
+
+  let matriculaB = {
+    period: '2021',
+    totalCredits: 12,
+    data: [
+      {
+        section: '005',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '401',
+        courseName: 'Test Course 5',
+        courseCode: 'TEST2005',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'red',
+        list: 2,
+      },
+      {
+        section: '006',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '402',
+        courseName: 'Test Course 6',
+        courseCode: 'TEST2006',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'red',
+        list: 2,
+      },
+      {
+        section: '007',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '403',
+        courseName: 'Test Course 7',
+        courseCode: 'TEST2007',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'red',
+        list: 2,
+      },
+      {
+        section: '008',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '408',
+        courseName: 'Test Course 8',
+        courseCode: 'TEST2008',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'red',
+        list: 2,
+      },
+    ]
+  };
+
+  let matriculaC = {
+    period: '2022',
+    totalCredits: 12,
+    data: [
+      {
+        section: '005',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '401',
+        courseName: 'Test Course 5',
+        courseCode: 'TEST3005',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'yellow',
+        list: 2,
+      },
+      {
+        section: '006',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '402',
+        courseName: 'Test Course 6',
+        courseCode: 'TEST3006',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'yellow',
+        list: 2,
+      },
+      {
+        section: '007',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '403',
+        courseName: 'Test Course 7',
+        courseCode: 'TEST3007',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'yellow',
+        list: 2,
+      },
+      {
+        section: '008',
+        day: 'LWV',
+        time: '12:00pm',
+        professor: 'Dr. Test',
+        building: 'T',
+        room: '408',
+        courseName: 'Test Course 8',
+        courseCode: 'TEST3008',
+        capacity: 15,
+        population: 0,
+        credits: 3,
+        color: 'yellow',
+        list: 2,
+      },
+    ]
+  };
+
+  let [myMatriculas, setMyMatriculas] = useState([matriculaA, matriculaB, matriculaC]);
 
   let [totalCredits, setTotalCredits] = useState(12);
 
@@ -455,7 +612,21 @@ export default function Main() {
     ],
   }
 
-  const forceUpdate = () => setElTicko(!elTicko);
+  const forceUpdate = () => {
+    setElTicko(!elTicko);
+  }
+
+  const previousMatricula = () => {
+    setDisablePrevious((matriculaIndex - 1) <= 0 ? true : false);
+    setDisableNext(false);
+    setMatriculaIndex(matriculaIndex - 1);
+  }
+
+  const nextMatricula = () => {
+    setDisableNext((matriculaIndex + 1) >= (myMatriculas.length - 1) ? true : false);
+    setDisablePrevious(false);
+    setMatriculaIndex(matriculaIndex + 1);
+  }
 
   const verifyCourse = (list, course) => {
 
@@ -478,7 +649,7 @@ export default function Main() {
         return true;
 
       case 2:
-        myMatricula.forEach(value => {
+        myMatriculas[matriculaIndex].data.forEach(value => {
           if (value.courseCode === course.courseCode) {
             return false;
           }
@@ -511,9 +682,9 @@ export default function Main() {
 
       case 2:
         if (verifyCourse(list, course)) {
-          myMatricula.push(course);
+          myMatriculas[matriculaIndex].data.push(course);
         }
-        setTotalCredits(totalCredits + course.credits);
+        myMatriculas[matriculaIndex].totalCredits + course.credits;
         break;
 
       default:
@@ -545,12 +716,12 @@ export default function Main() {
         break;
 
       case 2:
-        myMatricula.forEach((value, i) => {
+        myMatriculas[matriculaIndex].data.forEach((value, i) => {
           if (value.courseCode === course.courseCode) {
-            myMatricula.splice(i, 1);
+            myMatriculas[matriculaIndex].data.splice(i, 1);
           }
         });
-        setTotalCredits(totalCredits - course.credits);
+        myMatriculas[matriculaIndex].totalCredits - course.credits;
         break;
 
       default:
@@ -587,8 +758,8 @@ export default function Main() {
 
     console.log('=====================================');
     console.log('myCourses: ' + myCourses.length + ', ' + myCourses);
-    console.log('departmentCourses: ' + departmentCourses.length + ', '  + departmentCourses);
-    console.log('myMatricula: ' + myMatricula.length + ', '  + myMatricula);
+    console.log('departmentCourses: ' + departmentCourses.length + ', ' + departmentCourses);
+    console.log('myMatricula: ' + myMatriculas[matriculaIndex].data.length + ', ' + myMatriculas[matriculaIndex].data);
     console.log('=====================================');
 
   }
@@ -599,62 +770,75 @@ export default function Main() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <img src={Macademia} className={classes.image} />
-          <div className={classes.grow} />
+          <Typography variant='h6' className={classes.title}>Macademia</Typography>
         </Toolbar>
       </AppBar>
 
-      <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }} anchor="left">
-        <div className={classes.toolbar} />
+      <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
 
-        <Divider />
+        <Toolbar />
 
-        <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 0)}>
-          <List>
-            <Typography className={classes.drawerTypography}>My Courses</Typography>
-            {myCourses.map((value, i) => (
-              <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                <CourseCard
-                  courseCode={value.courseCode}
-                  section={value.section}
-                  courseName={value.courseName}
-                  professor={value.professor}
-                  credits={value.credits}
-                  color={value.color} />
-              </ListItem>
-            ))}
-          </List>
-        </div>
+        <div className={classes.drawerContainer}>
 
-        <Divider />
+          <Divider />
 
-        <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 1)}>
-          <List>
-            <Typography className={classes.drawerTypography}>Department of INSO</Typography>
-            {departmentCourses.map((value, i) => (
-              <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                <CourseCard
-                  courseCode={value.courseCode}
-                  section={value.section}
-                  courseName={value.courseName}
-                  professor={value.professor}
-                  credits={value.credits}
-                  color={value.color} />
-              </ListItem>
-            ))}
-          </List>
+          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 0)}>
+            <List>
+              <Typography className={classes.drawerTypography}>My Courses</Typography>
+              {myCourses.map((value, i) => (
+                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
+                  <CourseCard
+                    courseCode={value.courseCode}
+                    section={value.section}
+                    courseName={value.courseName}
+                    professor={value.professor}
+                    credits={value.credits}
+                    color={value.color} />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+
+          <Divider />
+
+          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 1)}>
+            <List>
+              <Typography className={classes.drawerTypography}>Department of INSO</Typography>
+              {departmentCourses.map((value, i) => (
+                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
+                  <CourseCard
+                    courseCode={value.courseCode}
+                    section={value.section}
+                    courseName={value.courseName}
+                    professor={value.professor}
+                    credits={value.credits}
+                    color={value.color} />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+
         </div>
 
       </Drawer>
 
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+      <main className={classes.content} style={{ height: '100vh' }}>
+
+        <Toolbar />
+
         <div className={classes.centerContent}>
+
+          <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
+            <IconButton disabled={disablePrevious} onClick={() => previousMatricula()}>
+              <NavigateBeforeIcon style={{ height: '50px', width: '50px' }} />
+            </IconButton>
+          </div>
 
           <Card elevation={3} style={{ width: '70%' }}>
             <CardContent>
 
               <Grid item style={{ textAlign: 'center' }}>
-                <Typography style={{ fontSize: '30px' }}>2020</Typography>
+                <Typography style={{ fontSize: '30px' }}>{myMatriculas[matriculaIndex].period}</Typography>
               </Grid>
 
               <Divider />
@@ -662,12 +846,12 @@ export default function Main() {
               <Grid container diretion='column' justify='space-around' alignItems='center'>
 
                 <Grid item>
-                  {myMatricula.length === 0 ? (
-                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ backgroundColor: 'green', height: '100px', width: '100px' }} />
+                  {myMatriculas[matriculaIndex].data.length === 0 ? (
+                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ height: '100px', width: '100px' }} />
                   ) : (
-                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ backgroundColor: 'red' }}>
+                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{}}>
                         <List>
-                          {myMatricula.map((value, i) => (
+                          {myMatriculas[matriculaIndex].data.map((value, i) => (
                             <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
                               <CourseCard
                                 courseCode={value.courseCode}
@@ -695,7 +879,7 @@ export default function Main() {
                       <Button>View Schedule</Button>
                     </Grid>
                     <Grid item>
-                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {totalCredits}</Typography>
+                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -705,8 +889,16 @@ export default function Main() {
             </CardContent>
           </Card>
 
+          <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
+            <IconButton disabled={disableNext} onClick={() => nextMatricula()}>
+              <NavigateNextIcon style={{ height: '50px', width: '50px' }} />
+            </IconButton>
+          </div>
+
         </div>
+
       </main>
+
     </div>
   );
 }

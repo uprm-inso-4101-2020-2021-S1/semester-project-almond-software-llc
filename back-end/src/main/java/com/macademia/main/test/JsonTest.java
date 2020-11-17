@@ -9,7 +9,7 @@ enum per {
 public class JsonTest {
 
     public MatriculaPeriod testPeriod = new MatriculaPeriod(2020, "SPRING");
-    public Department testDepartment = new Department("The Department of Testing", "TEST");
+    public Department testDepartment = new Department("The Department of Testing", "TEST","Green");
     public Matricula testMatriculaA = new Matricula(testPeriod);
     public Matricula testMatriculaB = new Matricula(testPeriod);
 
@@ -28,25 +28,25 @@ public class JsonTest {
     public Course testCourseC = new Course("Test Course C", testDepartment, "2000", 3);
     public Course testCourseD = new Course("Test Course D", testDepartment, "1000", 4);
 
-    public Section testSectionA01 = new Section("01", "LWV", "12:00pm", "Dr. Juan N. Onlee", "S", "424", testCourseA, 50);
-    public Section testSectionA02 = new Section("02", "LWV", "12:30pm", "Dr. Juan N. Onlee", "S", "423", testCourseA, 50);
-    public Section testSectionA03 = new Section("03", "LWV", "1:00pm", "Dr. Juan N. Onlee", "S", "422", testCourseA, 50);
-    public Section testSectionA04 = new Section("04", "LWV", "1:30pm", "Dr. Juan N. Onlee", "S", "421", testCourseA, 50);
+    public Section testSectionA01 = new Section("01", "LWV", "12:00pm", "Dr. Juan N. Onlee", "S424", testCourseA, 1, 50);
+    public Section testSectionA02 = new Section("02", "LWV", "12:30pm", "Dr. Juan N. Onlee", "S423", testCourseA, 1, 50);
+    public Section testSectionA03 = new Section("03", "LWV", "1:00pm", "Dr. Juan N. Onlee", "S422", testCourseA, 1, 50);
+    public Section testSectionA04 = new Section("04", "LWV", "1:30pm", "Dr. Juan N. Onlee", "S421", testCourseA, 1, 50);
 
-    public Section testSectionB01 = new Section("01", "MJ", "12:00pm", "Dr. Too Mai", "SH", "321", testCourseB, 50);
-    public Section testSectionB02 = new Section("02", "MJ", "12:30pm", "Dr. Too Mai", "SH", "322", testCourseB, 50);
-    public Section testSectionB03 = new Section("03", "MJ", "1:00pm", "Dr. Too Mai", "SH", "323", testCourseB, 50);
-    public Section testSectionB04 = new Section("04", "MJ", "1:30pm", "Dr. Too Mai", "SH", "324", testCourseB, 50);
+    public Section testSectionB01 = new Section("01", "MJ", "12:00pm", "Dr. Too Mai", "SH321", testCourseB, 1,50);
+    public Section testSectionB02 = new Section("02", "MJ", "12:30pm", "Dr. Too Mai", "SH322", testCourseB, 1,50);
+    public Section testSectionB03 = new Section("03", "MJ", "1:00pm", "Dr. Too Mai", "SH323", testCourseB, 1,50);
+    public Section testSectionB04 = new Section("04", "MJ", "1:30pm", "Dr. Too Mai", "SH324", testCourseB, 1,50);
 
-    public Section testSectionC01 = new Section("01", "LWV", "12:00pm", "Dr. Hugh Mungus", "Ch", "691", testCourseC, 50);
-    public Section testSectionC02 = new Section("02", "LWV", "12:30pm", "Dr. Hugh Mungus", "Ch", "692", testCourseC, 50);
-    public Section testSectionC03 = new Section("03", "LWV", "1:00pm", "Dr. Hugh Mungus", "Ch", "693", testCourseC, 50);
-    public Section testSectionC04 = new Section("04", "LWV", "1:30pm", "Dr. Hugh Mungus", "Ch", "694", testCourseC, 50);
+    public Section testSectionC01 = new Section("01", "LWV", "12:00pm", "Dr. Hugh Mungus", "Ch691", testCourseC, 1,50);
+    public Section testSectionC02 = new Section("02", "LWV", "12:30pm", "Dr. Hugh Mungus", "Ch692", testCourseC, 1,50);
+    public Section testSectionC03 = new Section("03", "LWV", "1:00pm", "Dr. Hugh Mungus", "Ch693", testCourseC, 1,50);
+    public Section testSectionC04 = new Section("04", "LWV", "1:30pm", "Dr. Hugh Mungus", "Ch694", testCourseC, 1,50);
 
-    public Section testSectionD01 = new Section("01", "MJ", "12:00pm", "Dr. Brock O. Lee", "ADEM", "777", testCourseD, 50);
-    public Section testSectionD02 = new Section("02", "MJ", "12:30pm", "Dr. Brock O. Lee", "ADEM", "778", testCourseD, 50);
-    public Section testSectionD03 = new Section("03", "MJ", "1:00pm", "Dr. Brock O. Lee", "ADEM", "779", testCourseD, 50);
-    public Section testSectionD04 = new Section("04", "MJ", "1:30pm", "Dr. Brock O. Lee", "ADEM", "775", testCourseD, 50);
+    public Section testSectionD01 = new Section("01", "MJ", "12:00pm", "Dr. Brock O. Lee", "ADEM777", testCourseD, 1,50);
+    public Section testSectionD02 = new Section("02", "MJ", "12:30pm", "Dr. Brock O. Lee", "ADEM778", testCourseD, 1,50);
+    public Section testSectionD03 = new Section("03", "MJ", "1:00pm", "Dr. Brock O. Lee", "ADEM779", testCourseD, 1,50);
+    public Section testSectionD04 = new Section("04", "MJ", "1:30pm", "Dr. Brock O. Lee", "ADEM775", testCourseD, 1,50);
 
     public JsonTest() {
 
@@ -59,11 +59,11 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseB);
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
-
-        testMatriculaA.addSections(testSectionA01, testCourseA);
-        testMatriculaA.addSections(testSectionB02, testCourseB);
-        testMatriculaA.addSections(testSectionC03, testCourseC);
-        testMatriculaA.addSections(testSectionD04, testCourseD);
+        
+        testMatriculaA.addSections(testSectionA01);
+        testMatriculaA.addSections(testSectionB02);
+        testMatriculaA.addSections(testSectionC03);
+        testMatriculaA.addSections(testSectionD04);
 
     }
 

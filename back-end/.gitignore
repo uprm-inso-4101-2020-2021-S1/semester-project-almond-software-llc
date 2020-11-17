@@ -1,3 +1,5 @@
+/User.class
+/MacademiaTest.DB
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -31,3 +33,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/MacademiaTest.DB

@@ -6,6 +6,7 @@ import java.util.Random;
 import com.macademia.main.Course;
 import com.macademia.main.Department;
 import com.macademia.main.Matricula;
+import com.macademia.main.MatriculaPeriod;
 import com.macademia.main.Section;
 import com.macademia.main.Student;
 import com.macademia.main.auth.User;
@@ -15,8 +16,8 @@ public class GeneralTest {
 	public static void main(String[] args) {
 	
 		//Lets create a few department
-		Department FunLand = new Department("The Department of Comedy", "FUNY");
-		Department Drama = new Department("The Department of Drama","DRAM");
+		Department FunLand = new Department("The Department of Comedy", "FUNY","Yellow");
+		Department Drama = new Department("The Department of Drama","DRAM","Black");
 		
 		//Create some courses
 		Course COM = new Course("Intro to Comedy", FunLand, "3101", 3); //creating a course with a department links it back to the department.
@@ -39,9 +40,9 @@ public class GeneralTest {
 		//Lets create some sections for these courses
 		Random rand = new Random();
 		for (Course course : AllClasses) {
-			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", "Dr. Test", "S", "001", course, 50); //Creating a section linked to a course automatically links it back to the course.
-			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", "Dr. Test", "S", "002", course, 50);
-			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", "Dr. Test", "S", "003", course, 50);
+			new Section(rand.nextInt(90)+"", "MWF", "5:30-6:30", "Dr. Test", "S001", course, 1,50); //Creating a section linked to a course automatically links it back to the course.
+			new Section(rand.nextInt(90)+"", "TJ", "5:30-7:00", "Dr. Test", "S002", course, 1,50);
+			new Section(rand.nextInt(90)+"", "MW", "5:30-7:00", "Dr. Test", "S003", course, 1,50);
 		}
 		
 		//Create a user.
@@ -50,34 +51,41 @@ public class GeneralTest {
 		User Person3 = new User("Person3", "This is a password that's very long wow que cool");
 		
 		//Create some matriculas:
-		ArrayList<Course> CourseList1 = new ArrayList<Course>();
-		ArrayList<Course> CourseList2 = new ArrayList<Course>();
-		ArrayList<Course> CourseList3 = new ArrayList<Course>();
+		ArrayList<Section> SectionList1 = new ArrayList<Section>();
+		ArrayList<Section> SectionList2 = new ArrayList<Section>();
+		ArrayList<Section> SectionList3 = new ArrayList<Section>();
 		
-		CourseList1.add(COM); CourseList1.add(DRAM1);
-		CourseList2.add(COM); CourseList2.add(DRAM2);
-		CourseList3.add(DRAM1);
+		SectionList1.add(COM.getSections().get(0)); SectionList1.add(DRAM1.getSections().get(0));
+		SectionList2.add(COM.getSections().get(0)); SectionList2.add(DRAM2.getSections().get(0));
+		SectionList3.add(DRAM1.getSections().get(0));
 
-		// Matricula Mat1 = new Matricula(CourseList1, "FALL");
-		// Matricula Mat2 = new Matricula(CourseList2, "FALL");
-		// Matricula Mat3 = new Matricula(CourseList3, "FALL");
-				
-		//Create a student.
-		// Student Stud1 = new Student(Person1, "El Tipillo", "802-55-5555", Mat1, FunLand);
-		// Student Stud2 = new Student(Person2, "La Tipilla", "802-55-5555", Mat2, FunLand);
-		// Student Stud3 = new Student(Person3, "Bob", "802-55-5555", Mat3, Drama);
+		MatriculaPeriod MatTest = new MatriculaPeriod(2020, "FALL");
 		
-		// Student[] AllStudents = {Stud1,Stud2,Stud3};
+		Matricula Mat1 = new Matricula(SectionList1, MatTest);
+		Matricula Mat2 = new Matricula(SectionList2, MatTest);
+		Matricula Mat3 = new Matricula(SectionList3, MatTest);
+						
+		//Create a student.
+		Student Stud1 = new Student(Person1, "El Tipillo", "802-55-5555", FunLand);
+		Student Stud2 = new Student(Person2, "La Tipilla", "802-55-5555", FunLand);
+		Student Stud3 = new Student(Person3, "Bob", "802-55-5555", Drama);
+
+		Stud1.addMatricula(Mat1);
+		Stud2.addMatricula(Mat2);
+		Stud3.addMatricula(Mat3);
+		
+		
+		Student[] AllStudents = {Stud1,Stud2,Stud3};
 		
 		//I think that's everything.
 		
 		//now lets see something.
-		// for (Student student : AllStudents) {
-		// 	System.out.println(student.toString());
-		// 	PrintStudentDetails("", student);
-		// 	System.out.println();
-		// 	System.out.println();
-		// }
+		for (Student student : AllStudents) {
+			System.out.println(student.toString());
+		 	PrintStudentDetails("", student);
+		 	System.out.println();
+		 	System.out.println();
+		 }
 		
 		
 	}
@@ -86,13 +94,16 @@ public class GeneralTest {
 		System.out.println(Prefix + " |- USERNAME: " + student.getUsername());
 		System.out.println(Prefix + " |- DEPARTMENT: " + student.getDepartment().toString());
 		PrintDepartmentDetails(Prefix + " | ", student.getDepartment());
-		System.out.println(Prefix + " |- MATRICULA: " + student.getMatricula().toString());
-		PrintMatriculaDetails(Prefix + " | ", student.getMatricula());
+		System.out.println(Prefix + " |- " + student.getMatriculas().size() + " Matricula(s)");
+		for (Matricula Mat : student.getMatriculas()) {
+			System.out.println(Prefix + " |  |- MATRICULA: " + Mat.toString());
+			PrintMatriculaDetails(Prefix + " |  | ", Mat);			
+		}
 		System.out.println(Prefix + " =");
 	}
 	
 	public static void PrintMatriculaDetails(String Prefix, Matricula matricula) {
-		for (Course course : matricula.getCoursesTaken()) {PrintCourseDetails(Prefix ,course);}
+		for (Section s : matricula.getSections()) {PrintSectionDetails(Prefix, s);;}
 		System.out.println(Prefix + " =");
 	}
 	

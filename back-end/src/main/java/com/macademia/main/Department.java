@@ -16,6 +16,7 @@ public class Department {
 	private Map<String, Course> CourseCatalog; // It's a map for *easy lookup*. I suggest the Data structure to store a table with all departments.
 	private final String Name;
 	private final String ShortName;
+	private String Color;
 
 	// -[Constructors]----------------------------------------------------------------------
 
@@ -24,11 +25,13 @@ public class Department {
 	 * 
 	 * @param Name      Name of the department (IE "Department of Computer
 	 *                  Engineering")
+	 * @param Color     Color for front-end rendering.                 
 	 * @param ShortName Short name of the department (IE "ICOM")
 	 */
-	public Department(String Name, String ShortName) {
+	public Department(String Name, String ShortName, String Color) {
 		this.Name = Name; // Set name
 		this.ShortName = ShortName;
+		this.Color=Color;
 		CourseCatalog = new Hashtable<String, Course>(); // Initialize the Course
 		// Directory.
 	}
@@ -40,11 +43,12 @@ public class Department {
 	 * @param Name         Name of the department (IE "Department of Computer
 	 *                     Engineering")
 	 * @param ShortName    Short name of the department (IE "ICOM")
+	 * @param Color        Color for the Front-End
 	 * @param CourseCatlog Catalog of courses, where the key is the course number
 	 *                     (IE 3011) and the value is the course.
 	 */
-	public Department(String Name, String ShortName, Map<String, Course> CourseCatalog) {
-		this(Name, ShortName);
+	public Department(String Name, String ShortName, String Color, Map<String, Course> CourseCatalog) {
+		this(Name, ShortName, Color);
 		this.CourseCatalog = CourseCatalog;
 	}
 
@@ -52,21 +56,13 @@ public class Department {
 
 	/**
 	 * Returns the name of this department
-	 * 
-	 * @return
 	 */
-	public String getName() {
-		return Name;
-	}
+	public String getName() {return Name;}
 
 	/**
 	 * Returns the short name of this department
-	 * 
-	 * @return
 	 */
-	public String getShortName() {
-		return ShortName;
-	}
+	public String getShortName() {return ShortName;}
 
 	/**
 	 * Returns the Course Catalog of this department.
@@ -74,8 +70,21 @@ public class Department {
 	 * @return A map where the integer is the Course ID, and Value is the course
 	 *         itself.
 	 */
-	public Map<String, Course> getCatalog() {
-		return CourseCatalog;
+	public Map<String, Course> getCatalog() {return CourseCatalog;}
+	
+	/**
+	 * Gets the color of this department
+	 * @return
+	 */
+	public String GetColor() {return Color;}
+	
+	/**
+	 * Sets the color of this department, and for all courses within it.
+	 * @param Color
+	 */
+	public void SetColor(String Color) {
+		this.Color=Color; //update color.
+		for (String key : CourseCatalog.keySet()) {CourseCatalog.get(key).setColor(Color);} //Update color in each course
 	}
 
 	// -[Functions]----------------------------------------------------------------------
@@ -83,9 +92,7 @@ public class Department {
 	/**
 	 * Adds/updates a course to the course directory.
 	 */
-	public void AddCourse(Course course) {
-		CourseCatalog.put(course.getCode(), course);
-	}
+	public void AddCourse(Course course) {CourseCatalog.put(course.getCode(), course);}
 
 	// -[Overrides]----------------------------------------------------------------------
 
@@ -94,9 +101,7 @@ public class Department {
 	 * 
 	 * @return NAME (CATALOG.COUNT Course(s))
 	 */
-	public String toString() {
-		return Name + " (" + CourseCatalog.size() + "course(s))";
-	}
+	public String toString() {return Name + " (" + CourseCatalog.size() + "course(s))";}
 
 	/**
 	 * Checks if an object is equal to this Department
@@ -106,9 +111,7 @@ public class Department {
 	 *         Department, and has the same Short Name.
 	 */
 	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
+		if (obj == null) {return false;}
 		if (obj instanceof Department) {
 			Department OtherDepartment = (Department) obj;
 			return OtherDepartment.ShortName == ShortName;
