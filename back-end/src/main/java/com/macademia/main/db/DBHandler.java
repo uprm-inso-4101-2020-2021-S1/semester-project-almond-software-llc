@@ -274,6 +274,7 @@ public class DBHandler {
 		//Get Name/ShortName
 		String ShortName = RS.getString("ID");
 		String Name = RS.getString("Name");
+		String Color = RS.getString("Color"); //TODO: Use this.
 		
 		RS.close();
 		
@@ -516,8 +517,8 @@ public class DBHandler {
 	 */
 	public void SaveDepartment(Department dep) throws SQLException{
 		//Save the department itself
-		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName());}
-		else {InsertIntoDepartments(dep.getShortName(), dep.getName());}
+		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName(),"");}
+ 		else {InsertIntoDepartments(dep.getShortName(), dep.getName(),"");} //TODO: Set Color
 		
 		//Save changes to memory
 		DepartmentMap.put(dep.getShortName(), dep);
@@ -798,11 +799,12 @@ public class DBHandler {
 	 * @param Name Name of this department (IE: Department of Software Engineering)
 	 * @throws SQLException
 	 */
-	private void InsertIntoDepartments(String ShortName, String Name) throws SQLException {
-		String SQLString = "INSERT INTO Departments(ID, Name) VALUES(?,?)";
+	private void InsertIntoDepartments(String ShortName, String Name, String Color) throws SQLException {
+		String SQLString = "INSERT INTO Departments(ID, Name, Color) VALUES(?,?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ShortName);  //Short Name
         pstmt.setString(2, Name); //Name  
+        pstmt.setString(3, Color);
         pstmt.executeUpdate();  
 	}
 	
@@ -933,13 +935,14 @@ public class DBHandler {
 	 * @param Name Name of this department (IE: Department of Software Engineering)
 	 * @throws SQLException
 	 */
-	private void UpdateDepartments(String ShortName, String Name) throws SQLException {
-		String SQLString = "UPDATE Departments SET Name = ? WHERE ID = ?;";
+	private void UpdateDepartments(String ShortName, String Name, String Color) throws SQLException {
+		String SQLString = "UPDATE Departments SET Name = ?, Color = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
 		pstmt.setString(1, Name);
-		pstmt.setString(2, ShortName);
+		pstmt.setString(2, Color);
+		pstmt.setString(3, ShortName);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
