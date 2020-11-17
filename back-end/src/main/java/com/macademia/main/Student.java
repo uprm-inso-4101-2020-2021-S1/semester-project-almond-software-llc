@@ -116,7 +116,6 @@ public class Student extends User {
 	 *                                  if the Section doesn't match with the course
 	 */
 	public void addSections(Section e, Course f, MatriculaPeriod m) throws IOException {
-		
 		//Make sure the course and section are the same
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		

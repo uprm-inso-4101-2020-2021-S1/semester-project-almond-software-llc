@@ -24,7 +24,6 @@ public class Section {
     private int capacity;
     private int population;
     private int credits;
-    
     public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
@@ -71,7 +70,6 @@ public class Section {
       if(temp=='P')end+=1200;
       return new Period(start,end);
   */
-    
     
     /**
      * Turns a time into a period

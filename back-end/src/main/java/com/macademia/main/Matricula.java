@@ -33,7 +33,6 @@ public class Matricula {
 	public void addSection(Section e, Course f) {
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		this.totalCredits += e.getCredits();
-		e.increasePopulation();
 		this.sections.add(e);		
 		this.courses.add(f);
 	}
@@ -42,7 +41,6 @@ public class Matricula {
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
-		e.decreasePopulation();
 		this.sections.remove(e);
 		this.courses.remove(f);
 	}
@@ -58,7 +56,6 @@ public class Matricula {
 		
 		if(f==null) {
 			//remove it anyways
-			e.decreasePopulation();
 			this.sections.remove(e);
 			return;
 		}

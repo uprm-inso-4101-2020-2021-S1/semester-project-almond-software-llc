@@ -151,7 +151,11 @@ public class JsonTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        
+    }
+    
+    public static void main(String[] args) {
+    	new JsonTest().toString();
     }
 
 }
