@@ -1,6 +1,7 @@
 package com.macademia.restservice;
 
 import java.io.Console;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macademia.main.*;
+import com.macademia.main.db.DBHandler;
 import com.macademia.main.test.JsonTest;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,7 +23,6 @@ public class MacademiaController {
 
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
-
 	private JsonTest tester = new JsonTest();
 
 	@GetMapping("/macademia")
@@ -89,6 +90,8 @@ public class MacademiaController {
 				return tester.testList;
 			case 1:
 				return tester.testDepartment.getSections();
+			case 2:
+				return this.getMatriculas().get(matriculaIndex).getSections();
 			default:
 				return null;
 		}
