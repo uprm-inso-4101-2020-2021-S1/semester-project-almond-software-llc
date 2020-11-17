@@ -98,7 +98,6 @@ public class Student extends User {
 	 */
 	public void addSections(Section e, Course f, MatriculaPeriod m) throws IOException {
 		
-		//TODO: VERIFY IF THESE WILL ACTUALLY BE EQUAL
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		
 		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
