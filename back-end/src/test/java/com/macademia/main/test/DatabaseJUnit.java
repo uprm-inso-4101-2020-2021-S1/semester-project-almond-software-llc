@@ -96,6 +96,8 @@ class DatabaseJUnit {
 		
 		assertEquals(StudentBeforeSave.getMatriculas().size(), StudentAfterSave.getMatriculas().size());
 		
+		//TODO: Test Turn
+		
 	}
 	
 	@Test
@@ -116,6 +118,8 @@ class DatabaseJUnit {
 		for (int i = 0; i < MatriculaBeforeSave.getSections().size(); i++) {
 			assertEquals(MatriculaBeforeSave.getSections().get(i).toString(), MatriculaAfterSave.getSections().get(i).toString());
 		}
+		
+		//TODO: Test ReadOnly
 	}
 	
 	@Test
@@ -130,6 +134,8 @@ class DatabaseJUnit {
 		//Verify that they are the same
 		assertEquals(DepartmentBeforeSave.getShortName(), DepartmentAfterSave.getShortName());
 		assertEquals(DepartmentBeforeSave.getName(), DepartmentAfterSave.getName());
+		
+		//TODO: Verify Department Color
 		
 	}
 
@@ -190,7 +196,7 @@ class DatabaseJUnit {
 		//Verify that its the same.
 		assertEquals(SectionBeforeSave.getDay(), SectionAfterSave.getDay());
 		assertEquals(SectionBeforeSave.getSecNum(), SectionAfterSave.getSecNum());
-		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //TODO: Switch to period once its done
+		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //No need to test period, since its generated from Time.
 		assertEquals(SectionBeforeSave.getCourseCode(), SectionAfterSave.getCourseCode());
 		assertEquals(SectionBeforeSave.getLocation(), SectionAfterSave.getLocation());
 		assertEquals(SectionBeforeSave.getProfessor(), SectionAfterSave.getProfessor());
