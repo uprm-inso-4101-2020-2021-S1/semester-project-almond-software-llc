@@ -106,16 +106,16 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseB);
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
+        
+        testMatriculaB.addSection(testSectionA01,testCourseA);
+        testMatriculaB.addSection(testSectionB02,testCourseB);
+        testMatriculaB.addSection(testSectionC03,testCourseC);
+        testMatriculaB.addSection(testSectionD04,testCourseD);
 
-        testMatriculaB.addSections(testSectionA01);
-        testMatriculaB.addSections(testSectionB02);
-        testMatriculaB.addSections(testSectionC03);
-        testMatriculaB.addSections(testSectionD04);
-
-        testMatriculaC.addSections(testSectionD01);
-        testMatriculaC.addSections(testSectionC02);
-        testMatriculaC.addSections(testSectionB03);
-        testMatriculaC.addSections(testSectionA04);
+        testMatriculaC.addSection(testSectionD01,testCourseD);
+        testMatriculaC.addSection(testSectionC02,testCourseC);
+        testMatriculaC.addSection(testSectionB03,testCourseB);
+        testMatriculaC.addSection(testSectionA04,testCourseA);
 
         testList.add(testSectionA04);
         testList.add(testSectionB03);
@@ -151,12 +151,7 @@ public class JsonTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         
-        testMatriculaA.addSection(testSectionA01,testCourseA);
-        testMatriculaA.addSection(testSectionB02,testCourseB);
-        testMatriculaA.addSection(testSectionC03,testCourseC);
-        testMatriculaA.addSection(testSectionD04,testCourseD);
     }
     
     public static void main(String[] args) {

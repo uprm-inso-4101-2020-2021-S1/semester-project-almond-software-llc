@@ -71,8 +71,8 @@ public class MacademiaController {
 		Section temp = listSwitch(sourceListIndex, matriculaIndex).get(courseIndex);
 		if (targetListIndex < 2)
 			listSwitch(targetListIndex, matriculaIndex).add(temp);
-		else
-			this.getMatriculas().get(matriculaIndex).addSections(temp);
+		//else
+			//this.getMatriculas().get(matriculaIndex).addSection(temp);
 	}
 
 	@GetMapping("/removeSection")
@@ -83,7 +83,7 @@ public class MacademiaController {
 			listSwitch(sourceListIndex, matriculaIndex).remove(courseIndex);
 		else
 			this.getMatriculas().get(matriculaIndex)
-					.removeSections(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
+					.removeSection(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
 	}
 
 	public List<Course> testingDatabase(@RequestParam(value = "user") String user,
