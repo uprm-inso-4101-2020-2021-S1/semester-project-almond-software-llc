@@ -60,11 +60,10 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
         
-        testMatriculaA.addSections(testSectionA01);
-        testMatriculaA.addSections(testSectionB02);
-        testMatriculaA.addSections(testSectionC03);
-        testMatriculaA.addSections(testSectionD04);
-
+        testMatriculaA.addSection(testSectionA01,testCourseA);
+        testMatriculaA.addSection(testSectionB02,testCourseB);
+        testMatriculaA.addSection(testSectionC03,testCourseC);
+        testMatriculaA.addSection(testSectionD04,testCourseD);
     }
 
 }
