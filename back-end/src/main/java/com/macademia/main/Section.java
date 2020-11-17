@@ -15,33 +15,99 @@ public class Section {
     private String secNum;
     private String day;
     private String time;
+    private Period period;
     private String professor;
     private String location;
     private String courseCode;
-    private String color;
     private String courseName;
+    private String Color;
     private int capacity;
     private int population;
     private int credits;
 
-    // Constructor
     public Section(String secNum, String day, String time, String professor, String Location, Course course,
-            int Population, int capacity, String color) {
+            int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
+        this.period = timetoPeriod(time);
         this.professor = professor;
         this.location = Location;
-        courseCode = course.getDept() + course.getCode();
-        this.credits = course.getCredits();
         this.population = Population;
         this.capacity = capacity;
         this.population = 0;
-        this.color = color;
         this.courseName = course.getName();
 
         // Link this Section's Course to this section
         course.addSection(this);
+
+        // Grab the color and course name from the course
+        UpdateCourseInfo(course);
+    }
+
+    public void setPeriod(Period period) {
+        this.period = period;
+        // also update time
+        this.time = period.toMilitaryTimeString();
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    /*
+     * I have no idea what any of this is and if it works so let's simplify the heck
+     * out of this. String[] per= time.split("-"); char temp =
+     * per[0].charAt(per[0].indexOf('M')-1); String[] re=per[0].split(":");
+     * per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
+     * start=Integer.parseInt(per[0]); if(temp=='P')start+=1200; temp =
+     * per[1].charAt(per[1].indexOf('M')-1); re=per[1].split(":");
+     * per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
+     * end=Integer.parseInt(per[1]); if(temp=='P')end+=1200; return new
+     * Period(start,end);
+     */
+
+    /**
+     * Turns a time into a period
+     * 
+     * @param time
+     * @return
+     */
+    public static Period timetoPeriod(String time) {
+        time = time.replace(" ", ""); // Remove any potential spaces
+        String[] TwoTimes = time.split("-"); // split
+        if (TwoTimes.length != 2) {
+            throw new IllegalArgumentException("Time not formatted properly");
+        } // Make sure there are two times.
+        return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
+    }
+
+    private static int TimeToInt(String Time) {
+        boolean PM = false; // Flag to save if the time ended with PM
+        if (Time.endsWith("AM")) {
+            Time = Time.replace("AM", "");
+        } // Remove AM if it is present.
+        else if (Time.endsWith("PM")) {
+            Time = Time.replace("PM", "");
+            PM = true;
+        } // Remove PM if it is present, and mark the PM flag.
+
+        // Now remove the :
+        Time = Time.replace(":", "");
+
+        // Now we should have a number.
+        int TimeAsInt;
+        try {
+            TimeAsInt = Integer.parseInt(Time);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");
+        }
+
+        // Lastly, if PM is true, add 1200
+        if (PM) {
+            TimeAsInt += 1200;
+        }
+        return TimeAsInt;
     }
 
     /**
@@ -60,17 +126,24 @@ public class Section {
 
     /**
      * Sets the time of this object
+     * 
+     * @param Time
      */
     public void setTime(String t) {
         this.time = t;
+        this.period = timetoPeriod(t);
     }
 
-    public void setCourseCode(Course course) {
+    /**
+     * Updates all course information in this section with the provided course.
+     * 
+     * @param course
+     */
+    public void UpdateCourseInfo(Course course) {
         this.courseCode = course.getDept() + course.getCode();
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
+        this.courseName = course.getName();
+        this.Color = course.getColor();
+        this.credits = course.getCredits();
     }
 
     public void setCapacity(int capacity) {
@@ -148,10 +221,10 @@ public class Section {
     }
 
     public String getColor() {
-        return this.color;
+        return this.Color;
     }
 
-    public String getName() {
+    public String getCourseName() {
         return this.courseName;
     }
 
@@ -164,6 +237,21 @@ public class Section {
 
     public String toString() {
         return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
+    }
+
+    /**
+     * Check if there is conflict in the sections in the matricula
+     * 
+     * @author Josue
+     * @param sec Section to check if conflicts
+     * @return if this section and the given section conflict
+     */
+    public boolean Conflict(Section sec) {
+        for (int i = 0; i < sec.day.length(); i++)
+            for (int j = 0; j < this.day.length(); j++)
+                if (this.day.charAt(j) == sec.day.charAt(i))
+                    return this.period.Conflict(sec.period);
+        return false;
     }
 
 }

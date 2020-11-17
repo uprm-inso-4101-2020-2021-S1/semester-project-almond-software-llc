@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import com.macademia.main.Course;
 import com.macademia.main.Department;
@@ -62,9 +63,16 @@ public class DBHandler {
 		LoadEverything();
 		
 		//Remove these lines of code to have the DBHandler *not* load Deps, Courses, and Sections upon instantiation.
-		
 	}
-
+	
+	/*
+	 * Closes the DBHandler and clears everything.
+	 */
+	public void close() throws SQLException {
+		SQLConn.close(); //Close the SQL Connection.
+		DepartmentMap.clear(); //Clear the Department map
+	}
+	
 	//-[Publicly facing gets]-----------------------------------------------------------------------------
 	
 	/**
@@ -97,6 +105,21 @@ public class DBHandler {
 	}
 	
 	/**
+	 * Gets a list of all students in the system using the exact same method as getDepartments()
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Student> getStudents() throws SQLException{
+		ResultSet RS = selectStudents();
+		ArrayList<Student> Students = new ArrayList<Student>();
+		
+		//I know we access the database like twice to get this data but this allows the handler to kick in. Otherwise this'd be a mess.
+		while(RS.next()) {Students.add(getStudent(RS.getString("ID")));} 
+		RS.close();
+		return Students;		
+	}
+	
+	/**
 	 * Gets a student from the database by finding TiedUsername
 	 * @param user
 	 * @return
@@ -113,13 +136,23 @@ public class DBHandler {
 		Student ReturnStudent = new Student(user, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}
+		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {
+			
+			Matricula mat = getMatricula(Integer.parseInt(MatID));
+			if(mat!=null) {ReturnStudent.addMatricula(mat);} //Make sure we actually found the matricula.
+			}}
 		
 		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {
+			Course pcourse = getCourse(PriorityCourse);
+			if(pcourse!=null) {ReturnStudent.addPriority(pcourse);} //make sure we actually found the course.
+			}}
 		
 		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {
+			Course tcourse = getCourse(CourseTaken);
+			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
+			}}		
 		
 		RS.close(); //We need to close the connection
 		
@@ -143,13 +176,25 @@ public class DBHandler {
 		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {ReturnStudent.addMatricula(getMatricula(Integer.parseInt(MatID)));}}
+		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {
+			
+			Matricula mat = getMatricula(Integer.parseInt(MatID));
+			if(mat!=null) {ReturnStudent.addMatricula(mat);} //Make sure we actually found the matricula.
+			}}
 		
 		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {ReturnStudent.addPriority(getCourse(PriorityCourse));}}
+		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {
+			Course pcourse = getCourse(PriorityCourse);
+			if(pcourse!=null) {ReturnStudent.addPriority(pcourse);} //make sure we actually found the course.
+			}}
 		
 		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {ReturnStudent.addCourseTaken(getCourse(CourseTaken));}}		
+		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {
+			Course tcourse = getCourse(CourseTaken);
+			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
+			}}		
+		
+		String Turn = RS.getString("Turn"); //TODO: actually link this with the user.
 		
 		RS.close(); //We need to close the connection
 		
@@ -170,15 +215,27 @@ public class DBHandler {
 		String[] Sections = RS.getString("Sections").split(",");
 		String Period = RS.getString("Period");
 		int Year = RS.getInt("Year");
+		boolean Readonly = RS.getBoolean("ReadOnly"); //TODO: Actually do the ReadOnly
 		
 		RS.close();
+		
+		MatriculaPeriod matPeriod=new MatriculaPeriod(Year, Period);
+		
+		if(SemestersBetweenToday(matPeriod)>0) {
+			//This matricula is old. Its time to delete it and return null.
+			deleteMatricula(ID);
+			return null;
+		}
 		
 		ArrayList<Section> SectionsList = new ArrayList<Section>(Sections.length);
 		
 		//get an arraylist of all the sections:
-		for (String Section : Sections) {if(Section.length()>0) {SectionsList.add(getSection(Section));}}
+		for (String Section : Sections) {if(Section.length()>0) {
+			Section sect =getSection(Section);
+			if(sect!=null) {SectionsList.add(sect);} //make sure we actually find sections
+			}}
 		
-		Matricula mat =new Matricula(SectionsList, new MatriculaPeriod(Year, Period)); 
+		Matricula mat =new Matricula(SectionsList, matPeriod);
 		mat.setID(IDFromDatabase);
 		
 		return mat;
@@ -217,10 +274,11 @@ public class DBHandler {
 		//Get Name/ShortName
 		String ShortName = RS.getString("ID");
 		String Name = RS.getString("Name");
+		String Color = RS.getString("Color"); 
 		
 		RS.close();
 		
-		Department Dep = new Department(Name,ShortName);
+		Department Dep = new Department(Name,ShortName,Color);
 		DepartmentMap.put(Dep.getShortName(), Dep);
 		return Dep;
 	}
@@ -250,9 +308,7 @@ public class DBHandler {
 	public List<Course> getCourses(Department department) throws SQLException {
 		ResultSet RS = selectCourses(department.getShortName());
 		ArrayList<Course> Courses = new ArrayList<Course>();
-		while(RS.next()) {
-			Courses.add(getCourse(RS.getString("ID")));
-		} 
+		while(RS.next()) {Courses.add(getCourse(RS.getString("ID")));} 
 		RS.close();
 		return Courses;
 	}
@@ -288,12 +344,18 @@ public class DBHandler {
 		
 		//Load Prerequesites
 		for (String prereq : Prereq) {
-			if(prereq.length()!=0) {TheCourse.addPrereq(getCourse(prereq));} //If because empty prereqs still returns "" 
+			if(prereq.length()!=0) {
+				Course preq = getCourse(prereq);
+				if(preq!=null) {TheCourse.addPrereq(preq);} //make sure we found the prereq
+			} //If because empty prereqs still returns "" 
 		}
 		
 		//Load CoRequesites
 		for (String coreq : Coreq) {
-			if(coreq.length()!=0) {TheCourse.addCoreq(getCourse(coreq));}
+			if(coreq.length()!=0) {
+				Course creq = getCourse(coreq);
+				if(creq!=null) {TheCourse.addPrereq(creq);} //make sure we found the coreq
+			} //If because empty prereqs still returns "" 
 		}
 		
 		return TheCourse;
@@ -347,7 +409,6 @@ public class DBHandler {
 		ResultSet RS = selectSection(SectionID);
 		if(!RS.next()) {RS.close(); return null;}
 		
-		//TODO: Convert this to period
 		String day = RS.getString("Days");
 		String time = RS.getString("Time");
 		
@@ -356,7 +417,7 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 		
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap, "green"); //Creating a section automatically links it to a course.
+		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); //Creating a section automatically links it to a course.
 	}
 	
 	//-[Check Exists]-----------------------------------------------------------------------------
@@ -406,9 +467,11 @@ public class DBHandler {
 		String CoursesTaken = "";
 		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
 		
+		//TODO: Save Turn data
+		
 		//Then save the user
-		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
-		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken);}
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
 		
 		//Save the Matriculas
 		for (Matricula Mat : stud.getMatriculas()) {SaveMatricula(Mat);}
@@ -425,7 +488,9 @@ public class DBHandler {
 		
 		int Year = Mat.getPeriod().getMatyear(); 
 		String Period = Mat.getPeriod().getSemesterAsString(); 
-				
+		
+		//Verify we can actually edit this matricula
+		if(SemestersBetweenToday(Mat.getPeriod())>0) {throw new IllegalArgumentException("This Matricula is too old to save");}
 		
 		if(Mat.getID()==-1) {
 			//This is a new matricula. We need to add it
@@ -435,10 +500,12 @@ public class DBHandler {
 			
 			Mat.setID(NewID); //We now have a new unique ID. Save it with that ID
 			
-			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year);
+			//TODO: Implement READONLY flag
+			
+			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year, false);
 		} else {
 			//This is an edited matricula. We need to update it			
-			UpdateMatriculas(Mat.getID(), Sections, Period, Year);
+			UpdateMatriculas(Mat.getID(), Sections, Period, Year, false);
 		}
 		
 		return Mat.getID();
@@ -450,8 +517,8 @@ public class DBHandler {
 	 */
 	public void SaveDepartment(Department dep) throws SQLException{
 		//Save the department itself
-		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName());}
-		else {InsertIntoDepartments(dep.getShortName(), dep.getName());}
+		if(DepartmentExists(dep.getShortName())) {UpdateDepartments(dep.getShortName(), dep.getName(),dep.GetColor());}
+ 		else {InsertIntoDepartments(dep.getShortName(), dep.getName(),dep.GetColor());}
 		
 		//Save changes to memory
 		DepartmentMap.put(dep.getShortName(), dep);
@@ -505,7 +572,7 @@ public class DBHandler {
 		String SectionID = sect.getCourseCode() + "-" + sect.getSecNum(); 
 		boolean L = sect.getCourseCode().endsWith("L");
 		
-		String Time=sect.getTime(); //TODO: Switch to Period for formatting
+		String Time=sect.getTime();
 		String Location=sect.getLocation();
 		String Prof = sect.getProfessor();
 		int CurCap = sect.getPopulation();
@@ -520,6 +587,79 @@ public class DBHandler {
 		
 		//man we should really change that for a map
 		
+	}
+	
+	//-[publicly facing deletes]-----------------------------------------------------------------------------
+	
+	/**
+	 * Deletes the user straight from the database
+	 * @param user
+	 * @throws SQLException
+	 */
+	public void deleteUser(User user) throws SQLException {deleteUser(user.getUsername());}
+	
+	/**
+	 * Deletes a student, its tied user, and all matriculas associated to it.
+	 * @param stud
+	 * @throws SQLException
+	 */
+	public void deleteStudent(Student stud) throws SQLException {
+		//Delete the student
+		deleteStudent(stud.getStudentNumber());
+		
+		//Delete the tieduser
+		deleteUser(stud);
+		
+		//Delete Matriculas
+		for (Matricula mat : stud.getMatriculas()) {deleteMatricula(mat);}
+	}
+	
+	/**
+	 * Deletes a matricula from the database *IF* it's ID is *not* -1
+	 * @param mat
+	 * @throws SQLException
+	 */
+	public void deleteMatricula(Matricula mat) throws SQLException {
+		if(mat.getID()==-1) {return;}
+		deleteMatricula(mat.getID());
+	}
+	
+	/**
+	 * Removes the department from the department map, deletes it from the database, and deletes all courses in its course catalog.
+	 * @param dep
+	 * @throws SQLException
+	 */
+	public void deleteDepartment(Department dep) throws SQLException {
+		if(DepartmentMap.containsKey(dep.getShortName())) {DepartmentMap.remove(dep.getShortName());} //if it's in the map, remove it from the map.
+		deleteDepartment(dep.getShortName()); //delete the department
+		
+		//now, delete every class underneath it.
+		for (Course course : dep.getCatalog().values()) {deleteCourse(course);}
+		
+		//And that's it... at least until we add matriculas as course programs... but I don't think that's happening.
+	}
+	
+	/**
+	 * Deletes a course, and all of its sections from the database.
+	 * @param course
+	 * @throws SQLException
+	 */
+	public void deleteCourse(Course course) throws SQLException {
+		deleteCourse(course.getCourseCode()); //delete the course
+		
+		//Now delete every section
+		for (Section section : course.getSections()) {deleteSection(section);}
+		
+	}
+	
+	/**
+	 * Deletes a section from the database.
+	 * @param sect
+	 * @throws SQLException
+	 */
+	public void deleteSection(Section sect) throws SQLException {
+		//delete the section straight from the database.
+		deleteSection(sect.getCourseCode() + "-" + sect.getSecNum());
 	}
 	
 	//-[privately facing gets]-----------------------------------------------------------------------------
@@ -548,6 +688,7 @@ public class DBHandler {
 	
 	private ResultSet selectUser(String Username) throws SQLException {return GetFromWhere("Users","Username",Username);}
 	
+	private ResultSet selectStudents() throws SQLException {return GetEverythingFrom("Students");}
 	private ResultSet selectStudentFromUsername(String Username) throws SQLException {return GetFromWhere("Students","TiedUser",Username);}
 	private ResultSet selectStudentFromID(String StudentID) throws SQLException {return GetFromWhere("Students","ID",StudentID);}
 	
@@ -563,6 +704,23 @@ public class DBHandler {
 	private ResultSet selectAllSections() throws SQLException {return GetEverythingFrom("Sections");}
 	private ResultSet selectSections(String Course) throws SQLException {return GetFromWhereLike("Sections", "ID", Course + "%");}
 	private ResultSet selectSection(String ID) throws SQLException {return GetFromWhere("Sections", "ID", ID);}
+	
+	//-[privately facing DELETEs]-----------------------------------------------------------------------------
+	
+	/** Handles deleting a value from a table, where the column matches the value
+	 * @return DELETE FROM (TABLE) WHERE (COLUMN) = '(VALUE)';
+	 * @throws SQLException 
+	 */
+	private int deleteFromWhere(String Table, String Column, String Value) throws SQLException {return SQLConn.createStatement().executeUpdate("DELETE FROM " + Table + " WHERE " + Column + " = '" + Value + "';");}
+	
+	//All of these methods can be made public if needed... though for some it *probably* shouldn't
+	private int deleteUser(String Username) throws SQLException                {return deleteFromWhere("Users","Username",Username);}
+	private int deleteStudent(String StudentID) throws SQLException            {return deleteFromWhere("Students","ID",StudentID);}
+	private int deleteMatricula(int ID) throws SQLException                    {return deleteFromWhere("Matriculas","ID",ID+"");}
+	private int deleteDepartment(String ShortName) throws SQLException         {return deleteFromWhere("Departments", "ID", ShortName);}
+	private int deleteCourse(String ID) throws SQLException                    {return deleteFromWhere("Courses", "ID", ID.substring(0,8));}
+	private int deleteSection(String ID) throws SQLException                   {return deleteFromWhere("Sections", "ID", ID);}
+	
 	
 	//-[privately facing INSERTs]-----------------------------------------------------------------------------
 	
@@ -591,8 +749,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken) VALUES(?,?,?,?,?,?,?)";
+	private void InsertIntoStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken, String Turn) throws SQLException {
+    	String SQLString = "INSERT INTO Students(ID, Name, TiedUser, Department, Matriculas, PriorityCourses, CoursesTaken, Turn) VALUES(?,?,?,?,?,?,?,?)";
     	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ID); //ID
         pstmt.setString(2, Name); //Name
@@ -600,7 +758,8 @@ public class DBHandler {
         pstmt.setString(4, Department); //Department
         pstmt.setString(5, Matriculas); //Matriculas
         pstmt.setString(6, PriorityCourses); //PriorityCourses
-        pstmt.setString(7, CoursesTaken); //Courses Taken	
+        pstmt.setString(7, CoursesTaken); //Courses Taken
+        pstmt.setString(8, Turn); //Turn data	
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -613,13 +772,14 @@ public class DBHandler {
 	 * @param Year Year of this Matricula
 	 * @throws SQLException
 	 */
-	private void InsertIntoMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
-		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year) VALUES(?,?,?,?)";
+	private void InsertIntoMatriculas(int ID, String Sections, String Period, int Year, boolean ReadOnly) throws SQLException {
+		String SQLString = "INSERT INTO Matriculas(ID, Sections, Period, Year, ReadOnly) VALUES(?,?,?,?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setInt(1, ID);//ID
         pstmt.setString(2, Sections);//SECTIONS
         pstmt.setString(3, Period);//PERIOD
         pstmt.setInt(4,Year);//YEAR
+        pstmt.setBoolean(5, ReadOnly); //READONLY
         pstmt.executeUpdate();
         pstmt.close();
 	}
@@ -630,11 +790,12 @@ public class DBHandler {
 	 * @param Name Name of this department (IE: Department of Software Engineering)
 	 * @throws SQLException
 	 */
-	private void InsertIntoDepartments(String ShortName, String Name) throws SQLException {
-		String SQLString = "INSERT INTO Departments(ID, Name) VALUES(?,?)";
+	private void InsertIntoDepartments(String ShortName, String Name, String Color) throws SQLException {
+		String SQLString = "INSERT INTO Departments(ID, Name, Color) VALUES(?,?,?)";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
         pstmt.setString(1, ShortName);  //Short Name
         pstmt.setString(2, Name); //Name  
+        pstmt.setString(3, Color);
         pstmt.executeUpdate();  
 	}
 	
@@ -718,8 +879,8 @@ public class DBHandler {
 	 * @param PriorityCourses Comma separated list of Priority Courses (IE: DRAM3001, DRAM3002, DRAM3003)
 	 * @throws SQLException
 	 */
-	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken) throws SQLException {
-		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ? WHERE ID = ?;";
+	private void UpdateStudents(String ID, String Name, String TiedUsername, String Department, String Matriculas, String PriorityCourses, String CoursesTaken, String Turn) throws SQLException {
+		String SQLString = "UPDATE Students SET Name = ?, TiedUser = ?, Department = ?, Matriculas = ?, PriorityCourses = ?, CoursesTaken = ?, Turn = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
@@ -728,8 +889,9 @@ public class DBHandler {
 		pstmt.setString(3, Department);
 		pstmt.setString(4, Matriculas);
 		pstmt.setString(5, PriorityCourses);
-		pstmt.setString(7, ID);
-		pstmt.setString(8, CoursesTaken);
+		pstmt.setString(7, CoursesTaken);
+		pstmt.setString(8, Turn);
+		pstmt.setString(9, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -743,20 +905,20 @@ public class DBHandler {
 	 * @param Year Year of this Matricula
 	 * @throws SQLException
 	 */
-	private void UpdateMatriculas(int ID, String Sections, String Period, int Year) throws SQLException {
-		String SQLString = "UPDATE Matriculas SET Sections = ?, Period = ?, Year= ? WHERE ID = ?;";
+	private void UpdateMatriculas(int ID, String Sections, String Period, int Year, boolean ReadOnly) throws SQLException {
+		String SQLString = "UPDATE Matriculas SET Sections = ?, Period = ?, Year = ?, ReadOnly = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
 		pstmt.setString(1, Sections);
 		pstmt.setString(2, Period);
 		pstmt.setInt(3, Year);
-		pstmt.setInt(4, ID);
+		pstmt.setBoolean(4, ReadOnly);
+		pstmt.setInt(5, ID);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
 	}
-	
 	
 	/**
 	 * UPDATES a record in Departments. Searches by ShortName
@@ -764,13 +926,14 @@ public class DBHandler {
 	 * @param Name Name of this department (IE: Department of Software Engineering)
 	 * @throws SQLException
 	 */
-	private void UpdateDepartments(String ShortName, String Name) throws SQLException {
-		String SQLString = "UPDATE Departments SET Name = ? WHERE ID = ?;";
+	private void UpdateDepartments(String ShortName, String Name, String Color) throws SQLException {
+		String SQLString = "UPDATE Departments SET Name = ?, Color = ? WHERE ID = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 		
 		//Set the things
 		pstmt.setString(1, Name);
-		pstmt.setString(2, ShortName);
+		pstmt.setString(2, Color);
+		pstmt.setString(3, ShortName);
 		
 		pstmt.executeUpdate();
 		pstmt.close();		
@@ -848,6 +1011,11 @@ public class DBHandler {
 		return ListAsString;
 	}
 	
+	/**
+	 * Utility to turn a list of sections toa comma separated list of section IDs
+	 * @param Sections
+	 * @return
+	 */
 	public static String ListOfSectionsToString(List<Section> Sections) {
 		String ListAsString= "";
 		for (Section section : Sections) {
@@ -855,6 +1023,63 @@ public class DBHandler {
 		}
 		if(ListAsString.length()>0) {ListAsString=ListAsString.substring(1);} //Handles the first comma		
 		return ListAsString;
+	}
+
+	/**
+	 * Calculates the semesters between what the current semester is, and the provided semester
+	 * @param period
+	 * @return
+	 * Returns a positive number if there has been more than 0 semesters since the provided period. <br>
+	 * Returns a negative number if the semester is in the future.
+	 * Returns 0 if the semester is the  current one.
+	 */
+	public static int SemestersBetweenToday(MatriculaPeriod period) {
+		LocalDate date = java.time.LocalDate.now();
+		
+
+		int PastSemester=0;
+		
+		switch (period.getSemester()) {
+		case SPRING:
+			PastSemester=1;
+			break;
+		case SUMMER1:
+		case SUMMER2:
+		case EXT_SUMMER:
+			PastSemester=2;
+			break;
+		case FALL:
+			PastSemester=3;
+			break;
+		}
+		
+		int CurrentSemester=0;
+		
+		switch (date.getMonth().getValue()) {
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			CurrentSemester=1;
+			break;
+		case 6:
+		case 7:
+			CurrentSemester=2;
+			break;
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+			CurrentSemester=3;
+			break;
+		}
+		
+		//Now, time to count.
+		return ((date.getYear()*3)+CurrentSemester)-((period.getMatyear()*3)+PastSemester); //Years between times 3 because three semester per year.
+		//-1  because if not this would assume 3 between a matricula for winter one year and spring the next.
+		
 	}
 	
 	/**

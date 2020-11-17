@@ -52,6 +52,30 @@ public class Matricula {
 	public void setPeriod(MatriculaPeriod period) {this.period = period;}
 	public void setID(int ID) {this.ID=ID;}
 
+	/**
+	 * Returns a list of 6 lists of sections. Each list corresponds to a specified day, and contains sections that occur on those days.
+	 * @return
+	 */
+	public List<List<Section>> getSectionsByDay(){
+		List<List<Section>> Week = new ArrayList<List<Section>>();
+		for (int Day = 0; Day < 7; Day++) {Week.add(new ArrayList<Section>());} //Make sure each de-esta cosa has an arraylist.
+		
+		//now go through each section.
+		for (Section section : sections) {
+			for (char DayLetter : section.getDay().toCharArray()) { //Now go through each letter in their days
+				Week.get(LetterToDay(DayLetter)).add(section); //And add them to one of the 6 de-estas cosas using letter to day.
+			}
+		}
+		
+		return Week;
+	}
+	
+	/**
+	 * Turns a letter (LMWJVSD) to a day number (0-7)
+	 * @param Letter
+	 * @return "LMWJVSD".indexOf(Letter)
+	 */
+	private static int LetterToDay(char Letter) {return "LMWJVSD".indexOf(Letter);}
 	
 	/**
 	 * Returns a displayable string for this Matricula

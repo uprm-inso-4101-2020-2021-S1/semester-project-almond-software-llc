@@ -20,6 +20,7 @@ public class Department {
 												// table with all departments.
 	private final String Name;
 	private final String ShortName;
+	private String Color;
 
 	// -[Constructors]----------------------------------------------------------------------
 
@@ -28,11 +29,13 @@ public class Department {
 	 * 
 	 * @param Name      Name of the department (IE "Department of Computer
 	 *                  Engineering")
+	 * @param Color     Color for front-end rendering.
 	 * @param ShortName Short name of the department (IE "ICOM")
 	 */
-	public Department(String Name, String ShortName) {
+	public Department(String Name, String ShortName, String Color) {
 		this.Name = Name; // Set name
 		this.ShortName = ShortName;
+		this.Color = Color;
 		CourseCatalog = new Hashtable<String, Course>(); // Initialize the Course
 		// Directory.
 	}
@@ -44,11 +47,12 @@ public class Department {
 	 * @param Name         Name of the department (IE "Department of Computer
 	 *                     Engineering")
 	 * @param ShortName    Short name of the department (IE "ICOM")
+	 * @param Color        Color for the Front-End
 	 * @param CourseCatlog Catalog of courses, where the key is the course number
 	 *                     (IE 3011) and the value is the course.
 	 */
-	public Department(String Name, String ShortName, Map<String, Course> CourseCatalog) {
-		this(Name, ShortName);
+	public Department(String Name, String ShortName, String Color, Map<String, Course> CourseCatalog) {
+		this(Name, ShortName, Color);
 		this.CourseCatalog = CourseCatalog;
 	}
 
@@ -76,6 +80,27 @@ public class Department {
 	 */
 	public Map<String, Course> getCatalog() {
 		return CourseCatalog;
+	}
+
+	/**
+	 * Gets the color of this department
+	 * 
+	 * @return
+	 */
+	public String GetColor() {
+		return Color;
+	}
+
+	/**
+	 * Sets the color of this department, and for all courses within it.
+	 * 
+	 * @param Color
+	 */
+	public void SetColor(String Color) {
+		this.Color = Color; // update color.
+		for (String key : CourseCatalog.keySet()) {
+			CourseCatalog.get(key).setColor(Color);
+		} // Update color in each course
 	}
 
 	// -[Functions]----------------------------------------------------------------------
@@ -123,7 +148,7 @@ public class Department {
 		List<Section> result = new ArrayList<Section>();
 
 		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
-			for(Section s : e.getValue().getSections()){
+			for (Section s : e.getValue().getSections()) {
 				result.add(s);
 			}
 		}

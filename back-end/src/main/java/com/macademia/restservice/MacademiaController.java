@@ -24,11 +24,12 @@ public class MacademiaController {
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
+	private Student myStudent;
 
 	@GetMapping("/macademia")
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
 			@RequestParam(value = "lastName", defaultValue = "NULL2") String lastName) {
-		return firstName + " " + lastName;
+		return "Welcome! " + firstName + " " + lastName;
 	}
 
 	@GetMapping("/course")
@@ -43,12 +44,12 @@ public class MacademiaController {
 
 	@GetMapping("/department")
 	public Department department() {
-		return tester.testDepartment;
+		return tester.testDepartmentA;
 	}
 
 	@GetMapping("/departmentSections")
 	public List<Section> departmentSections() {
-		return tester.testDepartment.getSections();
+		return tester.testDepartmentA.getSections();
 	}
 
 	@GetMapping("/myMatriculas")
@@ -84,12 +85,25 @@ public class MacademiaController {
 					.removeSections(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
 	}
 
+	public List<Course> testingDatabase(@RequestParam(value = "user") String user,
+			@RequestParam(value = "password") String password) {
+		try {
+			if (tester.db.getUser(user).checkPassword(password)) {
+				myStudent = tester.db.getStudent(tester.db.getUser(user));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return myStudent.getPriority();
+	}
+
 	private List<Section> listSwitch(int targetListIndex, int matriculaIndex) {
 		switch (targetListIndex) {
 			case 0:
 				return tester.testList;
 			case 1:
-				return tester.testDepartment.getSections();
+				return tester.testDepartmentA.getSections();
 			case 2:
 				return this.getMatriculas().get(matriculaIndex).getSections();
 			default:
@@ -100,7 +114,7 @@ public class MacademiaController {
 	private List<Matricula> getMatriculas() {
 		List<Matricula> result = new ArrayList<Matricula>();
 		result.add(0, tester.testMatriculaB);
-		result.add(0, tester.testMatriculaA);
+		result.add(0, tester.testMatriculaC);
 		return result;
 	}
 
