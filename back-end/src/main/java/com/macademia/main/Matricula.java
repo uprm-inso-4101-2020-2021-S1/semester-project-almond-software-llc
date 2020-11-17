@@ -31,15 +31,20 @@ public class Matricula {
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
 	public void addSections(Section e, Course f) {
+		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		this.totalCredits += e.getCredits();
 		e.increasePopulation();
 		this.sections.add(e);		
+		this.courses.add(f);
 	}
 
 	public void removeSections(Section e, Course f) {
+		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
 		e.decreasePopulation();
 		this.sections.remove(e);
+		this.courses.remove(f);
 	}
 
 
