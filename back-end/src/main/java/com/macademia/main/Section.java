@@ -181,7 +181,7 @@ public class Section {
     /**
      * Returns a displayable string for this section
      * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE
-     *         "DRAM3001-21 on Tuesday, Thursday during 5:30-7:00")
+     *         "DRAM3001-21 on MJ during 17:30-19:00")
      */
 
     public String toString() {return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();}
