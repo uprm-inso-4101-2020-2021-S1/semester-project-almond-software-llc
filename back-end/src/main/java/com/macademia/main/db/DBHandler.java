@@ -660,6 +660,8 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	public void deleteCourse(Course course) throws SQLException {
+		if(!DepartmentMap.containsKey(course.getDept())) {return;} //The course is not in memory. Therefore it should not be in the database.
+		if(DepartmentMap.get(course.getDept()).getCatalog().containsKey(course.getCode())) {DepartmentMap.get(course.getDept()).getCatalog().remove(course.getCode());} //Remove it from memory if you can find it
 		deleteCourse(course.getCourseCode()); //delete the course
 		
 		//Now delete every section
