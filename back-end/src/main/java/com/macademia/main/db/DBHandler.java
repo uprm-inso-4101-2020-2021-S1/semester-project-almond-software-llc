@@ -373,6 +373,12 @@ public class DBHandler {
 			} //If because empty prereqs still returns "" 
 		}
 		
+		//Test to verify if autolinking works.
+		if(!dep.getCatalog().containsKey(TheCourse.getCourseCode())) {
+			System.out.println("AutoLinking doesn't work");
+			dep.AddCourse(TheCourse);
+		}
+		
 		return TheCourse;
 	}
 	
@@ -432,7 +438,14 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 		
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); //Creating a section automatically links it to a course.
+		Section theSection = new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap);
+		
+		if(!DepartmentMap.get(course.getDept()).getCatalog().get(course.getCode()).getSections().contains(theSection)) {
+			System.out.println("Auto linking doesn't work!");
+			DepartmentMap.get(course.getDept()).getCatalog().get(course.getCode()).addSection(theSection);
+		}
+		
+		return theSection;
 	}
 	
 	//-[Check Exists]-----------------------------------------------------------------------------
@@ -855,8 +868,8 @@ public class DBHandler {
         pstmt.setString(3, Days); //Days
         pstmt.setString(4, Time); //Time
         pstmt.setString(5, Location); //Location
-        pstmt.setString(7, Prof); //Prof
-        pstmt.setInt(8, CurCap); //CurCap
+        pstmt.setString(6, Prof); //Prof
+        pstmt.setInt(7, CurCap); //CurCap
         pstmt.setInt(8, MaxCap); //MaxCap
         pstmt.executeUpdate();
         pstmt.close();
