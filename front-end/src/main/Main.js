@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../CourseCard/coursecard.js";
+import CourseCard from "../coursecard/CourseCard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
-import ScheduleCard from "../Schedule/schedule.js";
+import ScheduleCard from "../schedulecard/ScheduleCard.js";
 
 const drawerWidth = 240;
 

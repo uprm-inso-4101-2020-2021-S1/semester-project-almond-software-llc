@@ -15,6 +15,7 @@ public class Course {
 	private String dept;
 	private String code;
 	private String courseCode;
+	private String Color;
 	private int credits;
 	private List<Course> prereq;
 	private List<Course> coreq;
@@ -38,6 +39,9 @@ public class Course {
 
 		// Link this course's department to this course
 		dept.AddCourse(this);
+		
+		//Pass down color from Department
+		this.Color=dept.GetColor();
 	}
 
 	// -[Getters]---------------------------------------------
@@ -55,29 +59,46 @@ public class Course {
 	 * @return IE 3101
 	 */
 	public String getCode() {return code;}
+	
+	/**
+	 * Gets the Course Code of this course.
+	 * @return IE ININ4101
+	 */
 	public String getCourseCode() {return courseCode;}
 	public int getCredits() {return credits;}
 	public List<Course> getPrereq() {return prereq;}
 	public List<Course> getCoreq() {return prereq;}
 	public List<Section> getSections() {return sections;}
+	public String getColor() {return Color;}
 
 	// -[Setters]---------------------------------------------
 
-	public void setName(String name) {this.name = name;}
-	public void setDept(Department dept) {this.dept = dept.getShortName();}
-	public void setDept(String dept) {this.dept=dept;}
-	public void setCode(String code) {this.code = code;}
-	public void setCourseCode(String courseCode) {this.courseCode = courseCode;}
-	public void setCredits(int credits) {this.credits = credits;}
+	public void setName(String name) {this.name = name; UpdateSections();}
+	public void setDept(Department dept) {this.dept = dept.getShortName(); UpdateSections();}
+	public void setDept(String dept) {this.dept=dept; UpdateSections();}
+	public void setCode(String code) {this.code = code; UpdateSections();}
+	public void setCourseCode(String courseCode) {this.courseCode = courseCode; UpdateSections();}
+	public void setCredits(int credits) {this.credits = credits; UpdateSections();}
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
 
+	/**
+	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.
+	 * @param Color
+	 */
+	public void setColor(String Color) {this.Color=Color; UpdateSections();}
+	
 	// -[Methods]--------------------------------------------
 
 	public void addPrereq(Course course) {this.prereq.add(course);}
 	public void addCoreq(Course course) {this.coreq.add(course);}
 	public void addSection(Section sect) {this.sections.add(sect);}
 
+	/**
+	 * Updates info in each section of this course
+	 */
+	private void UpdateSections() {for (Section section : sections) {section.UpdateCourseInfo(this);}}
+	
 	/**
 	 * Returns a displayable string for this course
 	 * 

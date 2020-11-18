@@ -30,7 +30,7 @@ class DatabaseJUnit {
 	static User UserBeforeSave = new User("Igtampe","1234"); //Prepare a user
 	static MatriculaPeriod MatPeriodBeforeSave = new MatriculaPeriod(2020, "FALL");
 	static Matricula MatriculaBeforeSave = new Matricula(MatPeriodBeforeSave);
-	static Department DepartmentBeforeSave = new Department("Drama Department", "DRAM");
+	static Department DepartmentBeforeSave = new Department("Drama Department", "DRAM","Red");
 	static Course ActingI = new Course("Acting I", DepartmentBeforeSave, "3001", 3);
 	static Course ActingII = new Course("Acting II", DepartmentBeforeSave, "3002", 3);
 	static Course ActingIII = new Course("Acting III", DepartmentBeforeSave, "3003", 3);
@@ -62,7 +62,7 @@ class DatabaseJUnit {
 	}
 
 	@Test
-	@Order(1)
+	@Order(6)
 	void UserTest() throws Exception {
 		Handler.SaveUser(UserBeforeSave); //Save the user
 		assert(Handler.UserExists(UserBeforeSave.getUsername())); //Verify that the user now exists in the database
@@ -75,7 +75,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(7)
 	void StudentsTest() throws Exception {
 		Handler.SaveStudent(StudentBeforeSave); //Save the student
 		assert(Handler.StudentExists(StudentBeforeSave.getStudentNumber())); //Assert the student exists in the database.
@@ -95,6 +95,8 @@ class DatabaseJUnit {
 		}
 		
 		assertEquals(StudentBeforeSave.getMatriculas().size(), StudentAfterSave.getMatriculas().size());
+		
+		//TODO: Test Turn
 		
 	}
 	
@@ -116,10 +118,12 @@ class DatabaseJUnit {
 		for (int i = 0; i < MatriculaBeforeSave.getSections().size(); i++) {
 			assertEquals(MatriculaBeforeSave.getSections().get(i).toString(), MatriculaAfterSave.getSections().get(i).toString());
 		}
+		
+		//TODO: Test ReadOnly
 	}
 	
 	@Test
-	@Order(3)
+	@Order(1)
 	void DepartmentsTest()  throws Exception {
 		Handler.SaveDepartment(DepartmentBeforeSave); //Save the department
 		
@@ -131,19 +135,21 @@ class DatabaseJUnit {
 		assertEquals(DepartmentBeforeSave.getShortName(), DepartmentAfterSave.getShortName());
 		assertEquals(DepartmentBeforeSave.getName(), DepartmentAfterSave.getName());
 		
+		//TODO: Verify Department Color
+		
 	}
 
 
 	@Test
-	@Order(4)
+	@Order(2)
 	void NoPrereqCourseTest()  throws Exception {CourseTester(ActingI);}
 	
 	@Test
-	@Order(5)
+	@Order(3)
 	void PrereqCourseTest()  throws Exception {CourseTester(Magic);}
 	
 	@Test
-	@Order(6)
+	@Order(4)
 	void LabCourseTest()  throws Exception {CourseTester(MagicLab);}
 	
 	void CourseTester(Course CourseBeforeSaving) throws Exception{
@@ -178,7 +184,7 @@ class DatabaseJUnit {
 	}
 	
 	@Test
-	@Order(7)
+	@Order(5)
 	void SectionsTest() throws Exception {
 		Handler.SaveSeciton(SectionBeforeSave); //Save section
 		String SectionID = SectionBeforeSave.getCourseCode()+"-"+SectionBeforeSave.getSecNum();
@@ -190,7 +196,7 @@ class DatabaseJUnit {
 		//Verify that its the same.
 		assertEquals(SectionBeforeSave.getDay(), SectionAfterSave.getDay());
 		assertEquals(SectionBeforeSave.getSecNum(), SectionAfterSave.getSecNum());
-		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //TODO: Switch to period once its done
+		assertEquals(SectionBeforeSave.getTime(), SectionAfterSave.getTime()); //No need to test period, since its generated from Time.
 		assertEquals(SectionBeforeSave.getCourseCode(), SectionAfterSave.getCourseCode());
 		assertEquals(SectionBeforeSave.getLocation(), SectionAfterSave.getLocation());
 		assertEquals(SectionBeforeSave.getProfessor(), SectionAfterSave.getProfessor());

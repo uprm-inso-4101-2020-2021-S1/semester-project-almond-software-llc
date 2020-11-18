@@ -1,21 +1,13 @@
 package com.macademia.main;
 
 /**
- * Period of a given Matricula
- * @author Gio
- *
- */
-enum per {SPRING, SUMMER1, SUMMER2, EXT_SUMMER, FALL;}
-
-/**
  * 
  * @author Gio, Igtampe
- *
  */
 public class MatriculaPeriod {
 
     private int matriculaYear;
-    private per p;
+    private Semester p;
 
     public MatriculaPeriod(int matriculaYear, String period) {
         this.matriculaYear = matriculaYear;
@@ -23,9 +15,9 @@ public class MatriculaPeriod {
     }
 
     public void setMatYear(int n) {this.matriculaYear = n;}
-    public void setSemester(per p) {this.p = p;}
+    public void setSemester(Semester p) {this.p = p;}
     public int getMatyear() {return this.matriculaYear;}
-    public per getSemester() {return this.p;}
+    public Semester getSemester() {return this.p;}
     public String getSemesterAsString() {return PeriodToString(this.p);}
     
     /**
@@ -33,18 +25,18 @@ public class MatriculaPeriod {
      * @param period
      * @return
      */
-    public static per StringToPeriod(String period) {
+    public static Semester StringToPeriod(String period) {
         switch (period) {
         case "SPRING":
-            return per.SPRING;
+            return Semester.SPRING;
         case "SUMMER1":
-            return per.SUMMER1;
+            return Semester.SUMMER1;
         case "SUMMER2":
-            return per.SUMMER2;
+            return Semester.SUMMER2;
         case "EXT_SUMMER":
-            return per.EXT_SUMMER;
+            return Semester.EXT_SUMMER;
         case "FALL":
-            return per.FALL;
+            return Semester.FALL;
         default:
             throw new IllegalArgumentException("Could not decipher Period '" + period + "'");
         }
@@ -55,7 +47,7 @@ public class MatriculaPeriod {
      * @param Period
      * @return
      */
-    public static String PeriodToString(per Period) {
+    public static String PeriodToString(Semester Period) {
         switch (Period) {
         case SPRING:
             return "SPRING";
