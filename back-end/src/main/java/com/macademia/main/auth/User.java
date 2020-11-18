@@ -1,5 +1,8 @@
 package com.macademia.main.auth;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Holds a User in Macademia
  * @author Igtampe
@@ -10,6 +13,7 @@ public class User{
 	
     private final String Username;
     private final String Password;
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     
 	//-[Constructors]----------------------------------------------------------------------
     
@@ -17,14 +21,17 @@ public class User{
      * Creates a user using the following Username and Password.
      * @param Username
      * @param Password
+     * @param ReHash Whether or not to Re-Hash the password given.
+     * @throws NoSuchAlgorithmException 
      */
-    public User(String Username, String Password){
+    public User(String Username, String Password, boolean ReHash) throws NoSuchAlgorithmException{
         this.Username=Username;
-        this.Password=Password;
+        if(ReHash) {this.Password=Hash(Password);}
+        else {this.Password=Password;}
     }
     
     /**
-     * Creates a user using the given User
+     * Creates a user using the given User. Assumes no ReHashing is necessary.
      * @param user
      */
     public User(User user) {
@@ -51,6 +58,27 @@ public class User{
      * @return True if the password matches, false otherwise.
      */
     public boolean checkPassword(String Password){return this.Password==Password;}
+    
+  //-[Internal Functions]----------------------------------------------------------------------
+    
+    private static String Hash(String data) throws NoSuchAlgorithmException {
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		digest.reset();
+		byte[] hash = digest.digest(data.getBytes());
+		return bytesToStringHex(hash);
+	}
+
+    private static String bytesToStringHex(byte[] bytes) {
+
+		char[] hexChars = new char[bytes.length*2];
+		for (int i = 0; i < bytes.length; i++) {
+			int j = bytes[i] & 0xFF;
+			hexChars[i*2] = hexArray[j>>>4];
+			hexChars[i*2+1] = hexArray[j & 0x0F];
+
+		}
+		return new String(hexChars);
+	}
     
   //-[Overrides]----------------------------------------------------------------------
 	
