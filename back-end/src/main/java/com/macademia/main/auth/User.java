@@ -69,7 +69,15 @@ public class User{
      * Checks whether the password matches
      * @return True if the password matches, false otherwise.
      */
-    public boolean checkPassword(String Password){return this.Password==Password;}
+    public boolean checkPassword(String Password){
+    	try {
+        	return this.Password.contentEquals(Hash(Password));			
+		} catch (Exception e) {
+			System.out.println("There was an error Hashing the provided password");
+			e.printStackTrace();
+			return false;
+		}
+	}
     
   //-[Internal Functions]----------------------------------------------------------------------
     
