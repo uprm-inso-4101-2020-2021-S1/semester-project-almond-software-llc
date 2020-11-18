@@ -19,11 +19,14 @@ public class Turn {
     	//now go:
     	try {
         	Start=LocalDate.parse(TurnTextSplit[0],Format);
-        	End=LocalDate.parse(TurnTextSplit[1],Format);			
+        	End=LocalDate.parse(TurnTextSplit[1],Format);	        
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException("Turn text not formatted correctly");
 		}
+    	
+    	//Now test
+    	if(Start.isAfter(End)) {throw new IllegalArgumentException("Turn cannot start after it ends.");}
     	
     }
 
