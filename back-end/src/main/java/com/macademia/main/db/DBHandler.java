@@ -372,7 +372,7 @@ public class DBHandler {
 				if(creq!=null) {TheCourse.addPrereq(creq);} //make sure we found the coreq
 			} //If because empty prereqs still returns "" 
 		}
-		
+				
 		return TheCourse;
 	}
 	
@@ -418,7 +418,7 @@ public class DBHandler {
 		
 		//See if the section already exists:
 		//To do Probably switch this to a map //This will probbaly ont be done by this point
-		for (Section section : course.getSections()) {if(section.getSecNum()==sectionSplit[1]) {return section;}}
+		for (Section section : course.getSections()) {if(section.getSecNum().contentEquals(sectionSplit[1])) {return section;}}
 		
 		//If we're here then the section doesn't exist. Time to find it in the database.
 		ResultSet RS = selectSection(SectionID);
@@ -432,7 +432,9 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 		
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); //Creating a section automatically links it to a course.
+		Section theSection = new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap);
+		
+		return theSection;
 	}
 	
 	//-[Check Exists]-----------------------------------------------------------------------------
@@ -855,8 +857,8 @@ public class DBHandler {
         pstmt.setString(3, Days); //Days
         pstmt.setString(4, Time); //Time
         pstmt.setString(5, Location); //Location
-        pstmt.setString(7, Prof); //Prof
-        pstmt.setInt(8, CurCap); //CurCap
+        pstmt.setString(6, Prof); //Prof
+        pstmt.setInt(7, CurCap); //CurCap
         pstmt.setInt(8, MaxCap); //MaxCap
         pstmt.executeUpdate();
         pstmt.close();
