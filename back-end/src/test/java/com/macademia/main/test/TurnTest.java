@@ -30,5 +30,16 @@ class TurnTest {
 		Turn turn = new Turn("1/1/2019 15:00-2/2/2019 1:00");
 		assertFalse(turn.isTime());
 	}
+	
+	/**
+	 * Tests to make sure the tostring function produces reparsable text
+	 */
+	@Test
+	void TurnRetroalimentationTest() {
+		Turn turn = new Turn("1/1/2019 15:00-2/2/2019 1:00");
+		Turn turn2 = new Turn(turn.toString());
+		assertEquals(turn, turn2);
+	}
+	
 
 }
