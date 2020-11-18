@@ -301,7 +301,7 @@ public class Student extends User {
 		coursesTaken.addAll(matriculas.get(per).getCourses());
 
 		//AND WE'RE DONE
-		
+		matriculas.get(per).setReadOnly(true);
 	}
 	
 	/**
