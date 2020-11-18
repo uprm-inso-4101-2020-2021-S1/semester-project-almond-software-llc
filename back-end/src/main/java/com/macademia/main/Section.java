@@ -179,11 +179,23 @@ public class Section {
     public String getCourseName() {return this.courseName;}
 
     /**
+     * Compares this section to another object.
+     * @return TRUE if and only if the object isn't null, is an instance of section, and if the course code and section number matches with this section's.
+     */
+    public boolean equals(Object obj) {
+    	if(obj==null) {return false;}
+    	if(obj instanceof Section) {
+    		Section OtherSection = (Section) obj;
+    		return OtherSection.courseCode.contentEquals(courseCode) && OtherSection.secNum.contentEquals(secNum);
+    	}
+    	return false;
+    }
+    
+    /**
      * Returns a displayable string for this section
      * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE
      *         "DRAM3001-21 on MJ during 17:30-19:00")
      */
-
     public String toString() {return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();}
 
     /**
