@@ -675,6 +675,13 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	public void deleteSection(Section sect) throws SQLException {
+		
+		String Dept = sect.getCourseCode().substring(0,4);
+		String Code = sect.getColor().replace(Dept, "");
+		if(!DepartmentMap.containsKey(Dept)) {return;} //The section isn't in memory. Therefore it shouldn't be in the database.
+		if(!DepartmentMap.get(Dept).getCatalog().containsKey(Code)) {return;} //The section is also not in memory.
+		if(DepartmentMap.get(Dept).getCatalog().get(Code).getSections().contains(sect)) {DepartmentMap.get(Dept).getCatalog().get(Code).getSections().remove(sect);} //If it is in memory, delete it.
+		
 		//delete the section straight from the database.
 		deleteSection(sect.getCourseCode() + "-" + sect.getSecNum());
 	}
