@@ -55,25 +55,24 @@ public class Section {
     	this.time=period.toMilitaryTimeString();
 	}
   
-  public Period getPeriod() {return period;}
+    /**
+     * Gets the period of this matricula. 
+     * @return
+     */
+    public Period getPeriod() {return period;}
 
   /**
      * Sets the section Number of this object
      */
-    public void setSecNum(String s) {
-        this.secNum = s;
-    }
+    public void setSecNum(String s) {this.secNum = s;}
 
     /**
      * Sets the day of this object
      */
-    public void setDay(String d) {
-        this.day = d;
-    }
+    public void setDay(String d) {this.day = d;}
 
     /**
      * Sets the time of this object
-     * 
      * @param Time
      */
     public void setTime(String t) {
@@ -83,7 +82,6 @@ public class Section {
 
     /**
      * Updates all course information in this section with the provided course.
-     * 
      * @param course
      */
     public void UpdateCourseInfo(Course course) {
@@ -93,101 +91,106 @@ public class Section {
         this.credits = course.getCredits();
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
+    /**
+     * Gets the capacity of this section
+     * @param capacity
+     */
+    public void setCapacity(int capacity) {this.capacity = capacity;}
 
-    public void increasePopulation() {
-        this.population++;
-    }
+    /**
+     * Increments the population of this selection
+     */
+    public void increasePopulation() {this.population++;}
 
-    public void decreasePopulation() {
-        this.population--;
-    }
+    /**
+     * Decrements the population of this section
+     */
+    public void decreasePopulation() {this.population--;}
 
-    public void setPopulation(int Population) {
-        this.population = Population;
-    } // This is here for the Database handler
+    /**
+     * Sets the population of this section. Mostly here for the DBHandler
+     * @param Population
+     */
+    public void setPopulation(int Population) {this.population = Population;}
 
     // Getters
 
     /**
      * Gets the section number of this object
-     * 
      * @return secNum
      */
-    public String getSecNum() {
-        return this.secNum;
-    }
+    public String getSecNum() {return this.secNum;}
 
     /**
      * Gets the day of this object
-     * 
      * @return day
      */
-    public String getDay() {
-        return this.day;
-    }
+    public String getDay() {return this.day;}
 
     /**
      * Gets the time of this object
-     * 
      * @return time
      */
-    public String getTime() {
-        return this.time;
-    }
+    public String getTime() {return this.time;}
 
-    public String getProfessor() {
-        return this.professor;
-    }
+    /**
+     * Gets the professor of this section
+     * @return Prof
+     */
+    public String getProfessor() {return this.professor;}
 
-    public String getLocation() {
-        return this.location;
-    }
+    /**
+     * Gets the location of this section
+     * @return
+     */
+    public String getLocation() {return this.location;}
 
     /**
      * Returns the course code IE "ICOM4501"
-     * 
      * @return
      */
-    public String getCourseCode() {
-        return this.courseCode;
-    }
+    public String getCourseCode() {return this.courseCode;}
 
-    public int getCredits() {
-        return this.credits;
-    }
+    /**
+     * Gets the credits for this section
+     * @return
+     */
+    public int getCredits() {return this.credits;}
 
-    public int getCapacity() {
-        return this.capacity;
-    }
+    /**
+     * Gets the capacity of this section
+     * @return
+     */
+    public int getCapacity() {return this.capacity;}
 
-    public int getPopulation() {
-        return this.population;
-    }
+    /**
+     * gets the population of this section
+     * @return
+     */
+    public int getPopulation() {return this.population;}
 
-    public String getColor() {
-        return this.Color;
-    }
+    /**
+     * Gets the color of this section. Used by the Front-End
+     * @return
+     */
+    public String getColor() {return this.Color;}
 
-    public String getCourseName() {
-        return this.courseName;
-    }
+    /**
+     * Gets the coure name for this section
+     * @return
+     */
+    public String getCourseName() {return this.courseName;}
 
     /**
      * Returns a displayable string for this section
-     * 
      * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE
      *         "DRAM3001-21 on Tuesday, Thursday during 5:30-7:00")
      */
 
-    public String toString() {
-        return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
-    }
+    public String toString() {return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();}
 
     /**
-     * Check if there is conflict in the sections in the matricula
+     * Function to check if this section conflits with a given section.
      * 
      * @author Josue
      * @param sec Section to check if conflicts
