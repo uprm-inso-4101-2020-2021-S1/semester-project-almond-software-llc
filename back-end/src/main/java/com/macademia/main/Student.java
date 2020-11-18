@@ -135,10 +135,10 @@ public class Student extends User {
 	 */
 	public void addMatricula(Matricula e) {matriculas.put(e.getPeriod(), e);}
 
-	public Matricula createMatricula(MatriculaPeriod p) {
-		Matricula m = new Matricula(p);
-		return m;
-	}
+//	public Matricula createMatricula(MatriculaPeriod p) {
+//		Matricula m = new Matricula(p);
+//		return m;
+//	}
 
 	/**
 	 * Verifies prereqs for a course that is attempted to be added.
