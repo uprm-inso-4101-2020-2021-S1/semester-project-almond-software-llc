@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -18,7 +21,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -83,9 +86,13 @@ export default function Main() {
 
   const [myCourses, setMyCourses] = useState(null);
 
+  const [priorities, setPriorities] = useState(null);
+
+  const [departments, setDepartments] = useState(null);
+
   const [departmentCourses, setDepartmentCourses] = useState(null);
 
-  const [myMatriculas, setMyMatriculas] = useState(null);
+  const [matriculas, setMatriculas] = useState(null);
 
   let [matriculaIndex, setMatriculaIndex] = useState(0);
 
@@ -101,14 +108,25 @@ export default function Main() {
 
   async function fetchData() {
 
-    const resultMyList = await axios.get('http://localhost:8080/myList');
-    setMyCourses(resultMyList.data);
+    // const resultLogin = await axios.get('http://localhost:8080/login?user=testA&password=6969');
 
-    const resultDepartmentCourses = await axios.get('http://localhost:8080/departmentSections');
-    setDepartmentCourses(resultDepartmentCourses.data);
+    const resultPriorities = await axios.get('http://localhost:8080/priority');
+    setPriorities(resultPriorities.data);
 
-    const resultMyMatriculas = await axios.get('http://localhost:8080/myMatriculas');
-    setMyMatriculas(resultMyMatriculas.data);
+    const resultDepartments = await axios.get('http://localhost:8080/departments');
+    setDepartments(resultDepartments.data);
+
+    const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
+    setMatriculas(resultMatriculas.data);
+
+    // const resultMyList = await axios.get('http://localhost:8080/myList');
+    // setMyCourses(resultMyList.data);
+
+    // const resultDepartmentCourses = await axios.get('http://localhost:8080/departmentSections');
+    // setDepartmentCourses(resultDepartmentCourses.data);
+
+    // const resultMyMatriculas = await axios.get('http://localhost:8080/matriculas');
+    // setMatriculas(resultMyMatriculas.data);
 
   }
 
@@ -128,24 +146,24 @@ export default function Main() {
   }
 
   const nextMatricula = () => {
-    setDisableNext((matriculaIndex + 1) >= (myMatriculas.length - 1) ? true : false);
+    setDisableNext((matriculaIndex + 1) >= (matriculas.length - 1) ? true : false);
     setDisablePrevious(false);
     setMatriculaIndex(matriculaIndex + 1);
   }
 
   const addCourse = (sourceListIndex, targetListIndex, courseIndex) => {
-    axios.get('http://localhost:8080/addSection?sourceListIndex=' +
-      sourceListIndex + '&targetListIndex=' +
-      targetListIndex + '&courseIndex=' +
-      courseIndex + '&matriculaIndex=' +
-      matriculaIndex)
+    // axios.get('http://localhost:8080/addSection?sourceListIndex=' +
+    //   sourceListIndex + '&targetListIndex=' +
+    //   targetListIndex + '&courseIndex=' +
+    //   courseIndex + '&matriculaIndex=' +
+    //   matriculaIndex)
   }
 
   const removeCourse = (sourceListIndex, courseIndex) => {
-    axios.get('http://localhost:8080/removeSection?sourceListIndex=' +
-      sourceListIndex + '&courseIndex=' +
-      courseIndex + '&matriculaIndex=' +
-      matriculaIndex)
+    // axios.get('http://localhost:8080/removeSection?sourceListIndex=' +
+    //   sourceListIndex + '&courseIndex=' +
+    //   courseIndex + '&matriculaIndex=' +
+    //   matriculaIndex)
   }
 
   const onDragStart = (e, courseIndex, sourceListIndex) => {
@@ -164,15 +182,74 @@ export default function Main() {
 
     if (targetListIndex !== sourceListIndex) {
 
-      addCourse(sourceListIndex, targetListIndex, courseIndex);
-      removeCourse(sourceListIndex, courseIndex);
+      // addCourse(sourceListIndex, targetListIndex, courseIndex);
+      // removeCourse(sourceListIndex, courseIndex);
       forceUpdate();
 
     }
 
   }
 
-  const renderCourseCards = (list, title, listIndex) => {
+  let [openList, setOpenList] = useState({});
+
+  const toggleList = () => {
+    setOpenList((prevState => ({ ...prevState, [id]: !prevState[id] })));
+  }
+
+  const renderDepartments = (list, title, listIndex) => {
+    return <div>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {list.map((department, i) => (
+          <ListItem key={i}>
+            {renderCourses(department.courses, department.name, i)}
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  }
+
+  const renderCourses = (list, title, listIndex) => {
+    return <div>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {list.map((value, i) => (
+          <div>
+            <Typography className={classes.drawerTypography}>{value.name}: {value.courseCode}</Typography>
+            <ListItem key={i}>
+              {renderSections(value.sections, "", i)}
+            </ListItem>
+          </div>
+        ))}
+      </List>
+    </div>
+
+  }
+
+  const renderSections = (list, title, listIndex) => {
+    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+      <List>
+        {list.map((value, i) => (
+          <div>
+            <ListItem draggable={matriculaIndex === 0} button key={i} onDragStart={(e) => onDragStart(e, i, listIndex)}>
+              <Typography>{value.professor} - {value.secNum}</Typography>
+              {/* <CourseCard
+                courseCode={value.courseCode}
+                section={value.secNum}
+                courseName={value.courseName}
+                professor={value.professor}
+                credits={value.credits}
+                color={value.color} /> */}
+            </ListItem>
+          </div>
+        ))}
+      </List>
+    </div>
+  }
+
+
+  const renderMatricula = (list, title, listIndex) => {
+
     return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
       <List>
         <Typography className={classes.drawerTypography}>{title}</Typography>
@@ -181,7 +258,7 @@ export default function Main() {
             <CourseCard
               courseCode={value.courseCode}
               section={value.secNum}
-              courseName={value.name}
+              courseName={value.courseName}
               professor={value.professor}
               credits={value.credits}
               color={value.color} />
@@ -203,12 +280,13 @@ export default function Main() {
 
       <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
         <Toolbar />
-        {myCourses !== null && departmentCourses !== null ? (
+        {matriculas !== null && departments !== null ? (
           <div className={classes.drawerContainer}>
             {/* <Divider /> */}
-            {renderCourseCards(myCourses, "My Courses", 0)}
-            {/* <Divider /> */}
-            {renderCourseCards(departmentCourses, "Department Courses", 1)}
+            {renderCourses(priorities, "Priority Courses", 0)}
+            <Divider />
+            {/* {renderMatricula(departmentCourses, "Department Courses", 1)} */}
+            {renderDepartments(departments, "Departments", 1)}
           </div>) : (<div />)}
       </Drawer>
 
@@ -225,11 +303,11 @@ export default function Main() {
           </div>
 
           <Card elevation={3} style={{ width: '70%' }}>
-            {myMatriculas !== null ? (
+            {matriculas !== null ? (
               <CardContent>
 
                 <Grid item style={{ textAlign: 'center' }}>
-                  <Typography style={{ fontSize: '30px' }}>{myMatriculas[matriculaIndex].period.semesterAsString} {myMatriculas[matriculaIndex].period.matyear}</Typography>
+                  <Typography style={{ fontSize: '30px' }}>{matriculas[matriculaIndex].period.semesterAsString} {matriculas[matriculaIndex].period.matyear}</Typography>
                 </Grid>
 
                 <Divider />
@@ -237,7 +315,7 @@ export default function Main() {
                 <Grid container diretion='column' justify='space-around' alignItems='center'>
 
                   <Grid item>
-                    {renderCourseCards(myMatriculas[matriculaIndex].sections, "My Matricula", 2)}
+                    {renderMatricula(matriculas[matriculaIndex].sections, "My Matricula", 2)}
                   </Grid>
 
                   <Grid item>
@@ -252,7 +330,7 @@ export default function Main() {
                         <Button>View Schedule</Button>
                       </Grid>
                       <Grid item>
-                        <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
+                        <Typography style={{ color: '#7f7f7f' }}>Total Credits: {matriculas[matriculaIndex].totalCredits}</Typography>
                       </Grid>
                     </Grid>
                   </Grid>

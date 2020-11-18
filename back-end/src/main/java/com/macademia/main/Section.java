@@ -24,7 +24,9 @@ public class Section {
     private int capacity;
     private int population;
     private int credits;
-    public Section(String secNum, String day, String time, String professor, String Location, Course course, int Population, int capacity) {
+
+    public Section(String secNum, String day, String time, String professor, String Location, Course course,
+            int Population, int capacity) {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
@@ -39,38 +41,38 @@ public class Section {
         // Link this Section's Course to this section
         course.addSection(this);
 
-        //Grab the color and course name from the course
+        // Grab the color and course name from the course
         UpdateCourseInfo(course);
     }
 
     public boolean isFull() {
-        if (this.population == this.capacity) return true;
+        if (this.population == this.capacity)
+            return true;
         return false;
     }
-  
-    public void setPeriod(Period period) {
-    	this.period = period;
-    	//also update time
-    	this.time=period.toMilitaryTimeString();
-	}
-   
-  public Period getPeriod() {return period;}
 
-    /* I have no idea what any of this is and if it works so let's simplify the heck out of this.
-  	String[] per= time.split("-");
-      char temp = per[0].charAt(per[0].indexOf('M')-1);
-      String[] re=per[0].split(":");
-      per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-      int start=Integer.parseInt(per[0]);
-      if(temp=='P')start+=1200;
-      temp = per[1].charAt(per[1].indexOf('M')-1);
-      re=per[1].split(":");
-      per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-      int end=Integer.parseInt(per[1]);
-      if(temp=='P')end+=1200;
-      return new Period(start,end);
-  */
-    
+    public void setPeriod(Period period) {
+        this.period = period;
+        // also update time
+        this.time = period.toMilitaryTimeString();
+    }
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    /*
+     * I have no idea what any of this is and if it works so let's simplify the heck
+     * out of this. String[] per= time.split("-"); char temp =
+     * per[0].charAt(per[0].indexOf('M')-1); String[] re=per[0].split(":");
+     * per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
+     * start=Integer.parseInt(per[0]); if(temp=='P')start+=1200; temp =
+     * per[1].charAt(per[1].indexOf('M')-1); re=per[1].split(":");
+     * per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
+     * end=Integer.parseInt(per[1]); if(temp=='P')end+=1200; return new
+     * Period(start,end);
+     */
+
     /**
      * Turns a time into a period
      * 
@@ -87,22 +89,32 @@ public class Section {
     }
 
     private static int TimeToInt(String Time) {
-    	boolean PM=false; //Flag to save if the time ended with PM
-    	Time=Time.toUpperCase(); //Flag to handle lowercase AMs and PMs
-    	if(Time.endsWith("AM")) {Time=Time.replace("AM","");} //Remove AM if it is present.
-    	else if(Time.endsWith("PM")) {Time=Time.replace("PM", ""); PM=true;} //Remove PM if it is present, and mark the PM flag.
-    	
-    	//Now remove the :
-    	Time=Time.replace(":", "");
-    	
-    	//Now we should have a number.
-    	int TimeAsInt;
-    	try {TimeAsInt=Integer.parseInt(Time);} 
-    	catch (NumberFormatException e) {throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");}
-    	
-    	//Lastly, if PM is true, add 1200
-    	if(PM && TimeAsInt>=1300) {TimeAsInt+=1200;}
-    	return TimeAsInt;
+        boolean PM = false; // Flag to save if the time ended with PM
+        Time = Time.toUpperCase(); // Flag to handle lowercase AMs and PMs
+        if (Time.endsWith("AM")) {
+            Time = Time.replace("AM", "");
+        } // Remove AM if it is present.
+        else if (Time.endsWith("PM")) {
+            Time = Time.replace("PM", "");
+            PM = true;
+        } // Remove PM if it is present, and mark the PM flag.
+
+        // Now remove the :
+        Time = Time.replace(":", "");
+
+        // Now we should have a number.
+        int TimeAsInt;
+        try {
+            TimeAsInt = Integer.parseInt(Time);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");
+        }
+
+        // Lastly, if PM is true, add 1200
+        if (PM && TimeAsInt < 1200) {
+            TimeAsInt += 1200;
+        }
+        return TimeAsInt;
     }
 
     /**

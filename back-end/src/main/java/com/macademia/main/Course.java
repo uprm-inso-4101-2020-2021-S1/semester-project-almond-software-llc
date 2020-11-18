@@ -41,7 +41,7 @@ public class Course {
 		dept.AddCourse(this);
 		
 		//Pass down color from Department
-		this.Color=dept.GetColor();
+		this.Color=dept.getColor();
 	}
 
 	// -[Getters]---------------------------------------------

@@ -24,7 +24,7 @@ public class MacademiaController {
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
-	private Student myStudent;
+	private Student currentStudent = null;
 
 	@GetMapping("/macademia")
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
@@ -32,19 +32,36 @@ public class MacademiaController {
 		return "Welcome! " + firstName + " " + lastName;
 	}
 
-	@GetMapping("/course")
-	public Course course() {
-		return tester.testCourseA;
+	@GetMapping("/login")
+	public Student login(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password) {
+		try {
+			if (tester.db.getUser(user).checkPassword(password))
+				currentStudent = tester.db.getStudent(tester.db.getUser(user));
+				// currentStudent = tester.testStudentA;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentStudent;
 	}
 
-	@GetMapping("/section")
-	public Section section() {
-		return tester.testSectionA01;
+	public void initialize() {
+
 	}
 
-	@GetMapping("/department")
-	public Department department() {
-		return tester.testDepartmentA;
+	@GetMapping("/departments")
+	public List<Department> department() throws SQLException {
+		return tester.db.getDepartments();
+	}
+
+	@GetMapping("/priority")
+	public List<Course> priority() throws SQLException {
+		return currentStudent.getPriority();
+	}
+
+	@GetMapping("/matriculas")
+	public Collection<Matricula> matriculas() throws SQLException {
+		return currentStudent.getMatriculas();
 	}
 
 	@GetMapping("/departmentSections")
@@ -63,7 +80,6 @@ public class MacademiaController {
 	}
 
 	@GetMapping("/addSection")
-
 	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "courseIndex") int courseIndex,
@@ -72,7 +88,7 @@ public class MacademiaController {
 		if (targetListIndex < 2)
 			listSwitch(targetListIndex, matriculaIndex).add(temp);
 		// else
-			// this.getMatriculas().get(matriculaIndex).addSection(temp);
+		// this.getMatriculas().get(matriculaIndex).addSection(temp);
 	}
 
 	@GetMapping("/removeSection")
@@ -86,17 +102,9 @@ public class MacademiaController {
 					.removeSection(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
 	}
 
-	public List<Course> testingDatabase(@RequestParam(value = "user") String user,
-			@RequestParam(value = "password") String password) {
-		try {
-			if (tester.db.getUser(user).checkPassword(password)) {
-				myStudent = tester.db.getStudent(tester.db.getUser(user));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return myStudent.getPriority();
+	@GetMapping("/currentStudent")
+	public Student testingDatabase() {
+		return currentStudent;
 	}
 
 	private List<Section> listSwitch(int targetListIndex, int matriculaIndex) {

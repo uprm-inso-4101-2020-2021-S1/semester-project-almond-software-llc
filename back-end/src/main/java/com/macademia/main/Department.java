@@ -1,6 +1,7 @@
 package com.macademia.main;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class Department {
 	 * 
 	 * @return
 	 */
-	public String GetColor() {
+	public String getColor() {
 		return Color;
 	}
 
@@ -96,7 +97,7 @@ public class Department {
 	 * 
 	 * @param Color
 	 */
-	public void SetColor(String Color) {
+	public void setColor(String Color) {
 		this.Color = Color; // update color.
 		for (String key : CourseCatalog.keySet()) {
 			CourseCatalog.get(key).setColor(Color);
@@ -155,6 +156,10 @@ public class Department {
 
 		return result;
 
+	}
+
+	public Collection<Course> getCourses() {
+		return CourseCatalog.values();
 	}
 
 }
