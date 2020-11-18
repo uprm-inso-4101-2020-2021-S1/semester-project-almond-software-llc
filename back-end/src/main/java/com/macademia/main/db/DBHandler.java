@@ -1050,7 +1050,7 @@ public class DBHandler {
 	}
 
 	/**
-	 * Calculates the semesters between what the current semester is, and the provided semester
+	 * Calculates the semesters between what the current semester is, and the provided Matricula Period
 	 * @param period
 	 * @return
 	 * Returns a positive number if there has been more than 0 semesters since the provided period. <br>
