@@ -129,15 +129,22 @@ public class Student extends User {
 		} else {throw new IllegalArgumentException("Course pre-requisites not met.");}
 	}
 
-	public void addMatricula(Matricula e) {
-		matriculas.put(e.getPeriod(), e);
-	}
+	/**
+	 * Adds Matricula to this student's map of matriculas
+	 * @param e
+	 */
+	public void addMatricula(Matricula e) {matriculas.put(e.getPeriod(), e);}
 
 	public Matricula createMatricula(MatriculaPeriod p) {
 		Matricula m = new Matricula(p);
 		return m;
 	}
 
+	/**
+	 * Verifies prereqs for a course that is attempted to be added.
+	 * @param e
+	 * @return
+	 */
 	public boolean verifyPrereqs(Course e) {
 		int counter = 0;
 
@@ -149,6 +156,12 @@ public class Student extends User {
 		return counter == e.getPrereq().size();
 	}
 
+	/**
+	 * Verifies Coreqs for a course that is attempted to be added.
+	 * @param e
+	 * @param per
+	 * @return
+	 */
 	public boolean verifyCoreqs(Course e, MatriculaPeriod per) {
 		int counter = 0;
 
@@ -161,18 +174,30 @@ public class Student extends User {
 		return counter == e.getCoreq().size();
 	}
 
-	public void addCourseTaken(Course e) {
-		coursesTaken.add(e);
-	}
+	/**
+	 * Adds a course taken to the list of courses taken
+	 * @param e
+	 */
+	public void addCourseTaken(Course e) {coursesTaken.add(e);}
 
-	public void addPriority(Course e) {
-		priorities.add(e);
-	}
+	/**
+	 * Adds a course to the list of priority courses.
+	 * @param e
+	 */
+	public void addPriority(Course e) {priorities.add(e);}
 
-	public Course removePriority(int i) {
-		return priorities.remove(i);
-	}
+	/**
+	 * Removes a course from the list of priority courses with the specified index.
+	 * @param i
+	 * @return
+	 */
+	public Course removePriority(int i) {return priorities.remove(i);}
 
+	/**
+	 * Swaps the priorty of courses with indices I and J
+	 * @param i
+	 * @param j
+	 */
 	public void swapPriority(int i, int j) {
 		Course temp = priorities.get(i);
 		priorities.set(i, priorities.get(j));
@@ -183,12 +208,9 @@ public class Student extends User {
 
 	/**
 	 * Returns this student as a displayable string
-	 * 
 	 * @return NAME (STUDENT_NUMBER)
 	 */
-	public String toString() {
-		return Name + " (" + StudentNumber + ")";
-	}
+	public String toString() {return Name + " (" + StudentNumber + ")";}
 
 	/**
 	 * Checks if an object is equal to this student
@@ -208,6 +230,8 @@ public class Student extends User {
 		return false;
 	}
 
+	// -[Turn Funtions]----------------------------------------------------------------------
+	
 	/**
 	 * Executes a matricula turn for that period, without forcing it.
 	 * @param per
