@@ -24,7 +24,6 @@ public class Period {
         this.end = end;
         if(end<start) {throw new IllegalArgumentException("Period cannot start after it ends, or end before it starts");}
     }
-
     /**
      * Checks if this period, and another period conflict.
      * @param per Period to compare
@@ -59,6 +58,40 @@ public class Period {
     	if(PM) {return TimeString+" PM";}
     	else   {return TimeString+" AM";}
     	
+    }
+    
+    /**
+     * Turns a time into a period
+     * 
+     * @param time
+     * @return
+     */
+    public static Period timetoPeriod(String time) {
+        time = time.replace(" ", ""); // Remove any potential spaces
+        String[] TwoTimes = time.split("-"); // split
+        if (TwoTimes.length != 2) {
+            throw new IllegalArgumentException("Time not formatted properly");
+        } // Make sure there are two times.
+        return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
+    }
+
+    private static int TimeToInt(String Time) {
+    	boolean PM=false; //Flag to save if the time ended with PM
+    	Time=Time.toUpperCase(); //Flag to handle lowercase AMs and PMs
+    	if(Time.endsWith("AM")) {Time=Time.replace("AM","");} //Remove AM if it is present.
+    	else if(Time.endsWith("PM")) {Time=Time.replace("PM", ""); PM=true;} //Remove PM if it is present, and mark the PM flag.
+    	
+    	//Now remove the :
+    	Time=Time.replace(":", "");
+    	
+    	//Now we should have a number.
+    	int TimeAsInt;
+    	try {TimeAsInt=Integer.parseInt(Time);} 
+    	catch (NumberFormatException e) {throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");}
+    	
+    	//Lastly, if PM is true, add 1200
+    	if(PM && TimeAsInt<1200) {TimeAsInt+=1200;}
+    	return TimeAsInt;
     }
     
     /**
