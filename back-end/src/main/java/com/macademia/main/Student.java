@@ -112,7 +112,7 @@ public class Student extends User {
 	 */
 	public void addSection(Section e, Course f, MatriculaPeriod m) {
 		//Make sure the course and section are the same
-		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		if(!f.getCourseCode().contentEquals(e.getCourseCode())) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		
 		//Make sure the section isn't full
 		if(e.isFull()) {throw new IllegalArgumentException("Section is full!");}
