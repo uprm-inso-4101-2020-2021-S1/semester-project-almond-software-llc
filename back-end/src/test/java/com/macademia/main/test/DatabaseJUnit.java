@@ -15,6 +15,7 @@ import com.macademia.main.Matricula;
 import com.macademia.main.MatriculaPeriod;
 import com.macademia.main.Section;
 import com.macademia.main.Student;
+import com.macademia.main.Turn;
 import com.macademia.main.auth.User;
 import com.macademia.main.db.DBHandler;
 
@@ -47,7 +48,7 @@ class DatabaseJUnit {
 		Handler = new DBHandler("MacademiaTest.DB",true);
 		
 		//make sure everything is linked here
-		MatriculaBeforeSave.getSections().add(SectionBeforeSave);
+		MatriculaBeforeSave.addSection(SectionBeforeSave, ActingII);
 		Magic.addCoreq(MagicLab);
 		Magic.addPrereq(ActingIV); 
 		ActingII.addPrereq(ActingI);
@@ -55,6 +56,7 @@ class DatabaseJUnit {
 		ActingIV.addPrereq(ActingIII);
 		StudentBeforeSave.addPriority(MagicLab);
 		
+		StudentBeforeSave.SetTurn(new Turn("1/1/2001 1:00-2/2/2002 2:00"));
 	}
 
 	@BeforeEach
@@ -95,8 +97,7 @@ class DatabaseJUnit {
 		}
 		
 		assertEquals(StudentBeforeSave.getMatriculas().size(), StudentAfterSave.getMatriculas().size());
-		
-		//TODO: Test Turn
+		assertEquals(StudentBeforeSave.getTurn(), StudentAfterSave.getTurn());
 		
 	}
 	
@@ -118,8 +119,12 @@ class DatabaseJUnit {
 		for (int i = 0; i < MatriculaBeforeSave.getSections().size(); i++) {
 			assertEquals(MatriculaBeforeSave.getSections().get(i).toString(), MatriculaAfterSave.getSections().get(i).toString());
 		}
-		
-		//TODO: Test ReadOnly
+
+		for (int i = 0; i < MatriculaBeforeSave.getCourses().size(); i++) {
+			assertEquals(MatriculaBeforeSave.getCourses().get(i).toString(), MatriculaAfterSave.getCourses().get(i).toString());
+		}
+
+		assertEquals(MatriculaBeforeSave.getReadOnly(), MatriculaAfterSave.getReadOnly());
 	}
 	
 	@Test
@@ -134,8 +139,7 @@ class DatabaseJUnit {
 		//Verify that they are the same
 		assertEquals(DepartmentBeforeSave.getShortName(), DepartmentAfterSave.getShortName());
 		assertEquals(DepartmentBeforeSave.getName(), DepartmentAfterSave.getName());
-		
-		//TODO: Verify Department Color
+		assertEquals(DepartmentBeforeSave.GetColor(), DepartmentAfterSave.GetColor());
 		
 	}
 
@@ -181,6 +185,8 @@ class DatabaseJUnit {
 			assertEquals(CourseBeforeSaving.getSections().get(i).getSecNum(), CourseAfterSaving.getSections().get(i).getSecNum());
 		}
 		
+		assertEquals(CourseBeforeSaving.getColor(), CourseAfterSaving.getColor());
+		
 	}
 	
 	@Test
@@ -202,7 +208,7 @@ class DatabaseJUnit {
 		assertEquals(SectionBeforeSave.getProfessor(), SectionAfterSave.getProfessor());
 		assertEquals(SectionBeforeSave.getPopulation(), SectionAfterSave.getPopulation());
 		assertEquals(SectionBeforeSave.getCapacity(), SectionAfterSave.getCapacity());
-		
+		assertEquals(SectionBeforeSave.getColor(), SectionAfterSave.getColor());
 	}
 
 }
