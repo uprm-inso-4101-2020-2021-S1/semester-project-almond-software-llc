@@ -54,25 +54,10 @@ public class Section {
     	//also update time
     	this.time=period.toMilitaryTimeString();
 	}
-   
+  
   public Period getPeriod() {return period;}
 
-    /* I have no idea what any of this is and if it works so let's simplify the heck out of this.
-  	String[] per= time.split("-");
-      char temp = per[0].charAt(per[0].indexOf('M')-1);
-      String[] re=per[0].split(":");
-      per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-      int start=Integer.parseInt(per[0]);
-      if(temp=='P')start+=1200;
-      temp = per[1].charAt(per[1].indexOf('M')-1);
-      re=per[1].split(":");
-      per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1);
-      int end=Integer.parseInt(per[1]);
-      if(temp=='P')end+=1200;
-      return new Period(start,end);
-  */
-
-    /**
+  /**
      * Sets the section Number of this object
      */
     public void setSecNum(String s) {
