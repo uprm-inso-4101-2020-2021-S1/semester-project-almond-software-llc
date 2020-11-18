@@ -20,6 +20,7 @@ import com.macademia.main.MatriculaPeriod;
 import com.macademia.main.Section;
 import com.macademia.main.Student;
 import com.macademia.main.auth.User;
+import com.macademia.main.Turn;
 
 /**
  * Handles loading and saving anything from and to the database
@@ -173,30 +174,35 @@ public class DBHandler {
 		String Name = RS.getString("Name");
 		String ID = RS.getString("ID");
 		Department Dep = getDepartment(RS.getString("Department"));
+		String[] Matriculas =RS.getString("Matriculas").split(",");
+		String[] PriorityCourses = RS.getString("PriorityCourses").split(",");
+		String[] CoursesTaken = RS.getString("CoursesTaken").split(",");
+		String TurnText = RS.getString("Turn");
+		RS.close(); //We need to close the connection
+		
 		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
 		
 		//Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {if(!MatID.isBlank()) {
+		for (String MatID : Matriculas) {if(!MatID.isBlank()) {
 			
 			Matricula mat = getMatricula(Integer.parseInt(MatID));
 			if(mat!=null) {ReturnStudent.addMatricula(mat);} //Make sure we actually found the matricula.
-			}}
+		}}
 		
 		//Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {if(!PriorityCourse.isBlank()) {
+		for (String PriorityCourse : PriorityCourses) {if(!PriorityCourse.isBlank()) {
 			Course pcourse = getCourse(PriorityCourse);
 			if(pcourse!=null) {ReturnStudent.addPriority(pcourse);} //make sure we actually found the course.
-			}}
+		}}
 		
 		//Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {if(!CourseTaken.isBlank()) {
+		for (String CourseTaken : CoursesTaken) {if(!CourseTaken.isBlank()) {
 			Course tcourse = getCourse(CourseTaken);
 			if(tcourse!=null) {ReturnStudent.addCourseTaken(tcourse);} //make sure we actually found the course.
-			}}		
+		}}		
 		
-		String Turn = RS.getString("Turn"); //TODO: actually link this with the user.
-		
-		RS.close(); //We need to close the connection
+		//Set Turn
+		ReturnStudent.SetTurn(new Turn(TurnText));
 		
 		return ReturnStudent;
 	}
@@ -408,7 +414,7 @@ public class DBHandler {
 		if(course==null) {return null;} //if the course doesn't exist, neither will the section.		
 		
 		//See if the section already exists:
-		//TODO Probably switch this to a map
+		//To do Probably switch this to a map //This will probbaly ont be done by this point
 		for (Section section : course.getSections()) {if(section.getSecNum()==sectionSplit[1]) {return section;}}
 		
 		//If we're here then the section doesn't exist. Time to find it in the database.
@@ -473,11 +479,9 @@ public class DBHandler {
 		String CoursesTaken = "";
 		CoursesTaken=ListOfCoursesToString(stud.getCoursesTaken());
 		
-		//TODO: Save Turn data
-		
 		//Then save the user
-		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
-		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,"");}
+		if(StudentExists(stud.getStudentNumber())) {UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,stud.getTurn().toString());}
+		else {InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(), stud.getDepartment().getShortName(), Matriculas, PriorityCourses,CoursesTaken,stud.getTurn().toString());}
 		
 		//Save the Matriculas
 		for (Matricula Mat : stud.getMatriculas()) {SaveMatricula(Mat);}
