@@ -73,7 +73,7 @@ public class MatriculaPeriod {
     public String toString() {return SemesterToString(p) + ": " + matriculaYear;}
 
     /**
-     * Returns true if and only if the given object is a Matricula Period object, and if the semester and year are the same
+     * @Return true if and only if the given object is a Matricula Period object, and if the semester and year are the same
      */
     @Override
     public boolean equals(Object obj) {
