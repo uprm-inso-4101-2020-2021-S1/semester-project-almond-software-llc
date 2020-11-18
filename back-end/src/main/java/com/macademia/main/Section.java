@@ -6,9 +6,9 @@ package com.macademia.main;
  * @author Giovanni Garcia
  */
 
-enum Days {
-    MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
-}
+//enum Days {
+//    MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
+//}
 
 public class Section {
     // Variables
