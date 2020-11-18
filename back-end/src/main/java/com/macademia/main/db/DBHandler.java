@@ -215,7 +215,7 @@ public class DBHandler {
 		String[] Sections = RS.getString("Sections").split(",");
 		String Period = RS.getString("Period");
 		int Year = RS.getInt("Year");
-		boolean Readonly = RS.getBoolean("ReadOnly"); //TODO: Actually do the ReadOnly
+		boolean Readonly = RS.getBoolean("ReadOnly");
 		
 		RS.close();
 		
@@ -228,15 +228,21 @@ public class DBHandler {
 		}
 		
 		ArrayList<Section> SectionsList = new ArrayList<Section>(Sections.length);
+		ArrayList<Course> CourseList = new ArrayList<Course>(Sections.length);
 		
 		//get an arraylist of all the sections:
 		for (String Section : Sections) {if(Section.length()>0) {
 			Section sect =getSection(Section);
-			if(sect!=null) {SectionsList.add(sect);} //make sure we actually find sections
-			}}
+			if(sect!=null) { //make sure we actually find sections
+				SectionsList.add(sect);
+				CourseList.add(getCourse(sect.getCourseCode()));
+			} 
+		}}
 		
 		Matricula mat =new Matricula(SectionsList, matPeriod);
+		mat.setCourse(CourseList); //Load courses
 		mat.setID(IDFromDatabase);
+		mat.setReadOnly(Readonly);
 		
 		return mat;
 		
@@ -500,12 +506,10 @@ public class DBHandler {
 			
 			Mat.setID(NewID); //We now have a new unique ID. Save it with that ID
 			
-			//TODO: Implement READONLY flag
-			
-			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year, false);
+			InsertIntoMatriculas(Mat.getID(),Sections, Period, Year, Mat.getReadOnly());
 		} else {
 			//This is an edited matricula. We need to update it			
-			UpdateMatriculas(Mat.getID(), Sections, Period, Year, false);
+			UpdateMatriculas(Mat.getID(), Sections, Period, Year, Mat.getReadOnly());
 		}
 		
 		return Mat.getID();
