@@ -58,4 +58,18 @@ public class Turn {
      */
     public String toString() {return Start.format(Format) + "-" + End.format(Format); }
     
+    /**
+     * Compares this to an object obj
+     * @return TRUE if and only if the object isn't null, the object is an instance of Turn, and if the ToString's content equals this ToString's content.
+     */
+    public boolean equals(Object obj) {
+    	if(obj==null) {return false;}
+    	if(obj instanceof Turn) {
+    		Turn OtherTurn = (Turn)obj;
+    		return OtherTurn.toString().contentEquals(toString());
+    	}
+    	
+    	return false;
+    }
+    
 }
