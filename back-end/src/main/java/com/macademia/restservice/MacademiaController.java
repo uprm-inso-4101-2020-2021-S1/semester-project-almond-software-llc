@@ -91,6 +91,9 @@ public class MacademiaController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return myStudent.getPriority();
 	}

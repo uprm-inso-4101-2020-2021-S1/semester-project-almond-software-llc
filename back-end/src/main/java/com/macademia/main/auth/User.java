@@ -11,11 +11,19 @@ public class User{
 
 	//-[Variables]----------------------------------------------------------------------
 	
-    private final String Username;
-    private final String Password;
+    private String Username;
+    private String Password; //No longer final in case a student needs to change their password.
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     
 	//-[Constructors]----------------------------------------------------------------------
+    
+    /**
+     * Creates a user using the following username and password, hashing the password.
+     * @param Username
+     * @param Password
+     * @throws NoSuchAlgorithmException
+     */
+    public User(String Username, String Password) {this(Username,Password,true);}
     
     /**
      * Creates a user using the following Username and Password.
@@ -24,9 +32,13 @@ public class User{
      * @param ReHash Whether or not to Re-Hash the password given.
      * @throws NoSuchAlgorithmException 
      */
-    public User(String Username, String Password, boolean ReHash) throws NoSuchAlgorithmException{
+    public User(String Username, String Password, boolean ReHash){
         this.Username=Username;
-        if(ReHash) {this.Password=Hash(Password);}
+        if(ReHash) {
+        	try {this.Password=Hash(Password);	} 
+        	catch (Exception e) {throw new IllegalArgumentException("Invalid password provided"); }
+        	//haha this doesn't make me have to declare it gracias a dios
+    	}
         else {this.Password=Password;}
     }
     

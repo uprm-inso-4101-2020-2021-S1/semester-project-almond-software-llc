@@ -92,6 +92,7 @@ public class DBHandler {
 	 * @param Username
 	 * @return
 	 * @throws SQLException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public User getUser(String Username) throws SQLException {
 		
@@ -101,7 +102,7 @@ public class DBHandler {
 		String username = RS.getString("Username");
 		String Password = RS.getString("Password");
 		RS.close();
-		return new User(username,Password);
+		return new User(username,Password,false);
 
 	}
 	
@@ -109,6 +110,7 @@ public class DBHandler {
 	 * Gets a list of all students in the system using the exact same method as getDepartments()
 	 * @return
 	 * @throws SQLException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public List<Student> getStudents() throws SQLException{
 		ResultSet RS = selectStudents();
@@ -165,6 +167,7 @@ public class DBHandler {
 	 * @param StudentNumber
 	 * @return
 	 * @throws SQLException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public Student getStudent(String StudentNumber) throws SQLException {
 		ResultSet RS= selectStudentFromID(StudentNumber);
@@ -453,6 +456,7 @@ public class DBHandler {
 	/**
 	 * Saves a user to the SQL Database
 	 * @param user
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public void SaveUser(User user) throws SQLException {
 		if(UserExists(user.getUsername())) {UpdateUsers(user.getUsername(),user.getPassword());}
@@ -461,6 +465,7 @@ public class DBHandler {
 	
 	/**
 	 * Saves a student to the SQL Database, including saving every Matricula 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public void SaveStudent(Student stud) throws SQLException {
 		
