@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from "./main/UserAuthentication/login";
 //import Register from './main/UserAuthentication/register';
 import { BrowserRouter as Router } from "react-router-dom";
+import Main from './main/Main_COPY.js';
+
 
 ReactDOM.render(
   <Router>

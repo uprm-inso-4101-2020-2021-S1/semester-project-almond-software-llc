@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../CourseCard/coursecard.js";
+import CourseCard from "../coursecard/CourseCard";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -94,6 +95,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Main() {
 
   const classes = useStyles();
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/matricula').then(res => {
+      console.log(res);
+    })
+  })
 
   // let [tempCourse, setTempCourse] = useState({})
 

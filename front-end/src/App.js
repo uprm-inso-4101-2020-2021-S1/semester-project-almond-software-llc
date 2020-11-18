@@ -1,6 +1,7 @@
 import React from 'react';
 import "date-fns";
 import Main from './main/Main.js';
+import Main from './main/Main_COPY.js';
 import './App.css';
 import Login from './main/UserAuthentication/login';
 import Register from "./main/UserAuthentication/register";
