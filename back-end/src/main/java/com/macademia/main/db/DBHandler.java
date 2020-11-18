@@ -372,13 +372,7 @@ public class DBHandler {
 				if(creq!=null) {TheCourse.addPrereq(creq);} //make sure we found the coreq
 			} //If because empty prereqs still returns "" 
 		}
-		
-		//Test to verify if autolinking works.
-		if(!dep.getCatalog().containsKey(TheCourse.getCourseCode())) {
-			System.out.println("AutoLinking doesn't work");
-			dep.AddCourse(TheCourse);
-		}
-		
+				
 		return TheCourse;
 	}
 	
@@ -424,7 +418,7 @@ public class DBHandler {
 		
 		//See if the section already exists:
 		//To do Probably switch this to a map //This will probbaly ont be done by this point
-		for (Section section : course.getSections()) {if(section.getSecNum()==sectionSplit[1]) {return section;}}
+		for (Section section : course.getSections()) {if(section.getSecNum().contentEquals(sectionSplit[1])) {return section;}}
 		
 		//If we're here then the section doesn't exist. Time to find it in the database.
 		ResultSet RS = selectSection(SectionID);
@@ -439,11 +433,6 @@ public class DBHandler {
 		int MaxCap = RS.getInt("MaxCap");
 		
 		Section theSection = new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap);
-		
-		if(!DepartmentMap.get(course.getDept()).getCatalog().get(course.getCode()).getSections().contains(theSection)) {
-			System.out.println("Auto linking doesn't work!");
-			DepartmentMap.get(course.getDept()).getCatalog().get(course.getCode()).addSection(theSection);
-		}
 		
 		return theSection;
 	}
