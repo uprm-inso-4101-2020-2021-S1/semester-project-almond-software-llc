@@ -143,14 +143,14 @@ public class Department {
 		return false;
 	}
 
+	/**
+	 * Gets all sections from this department's courses
+	 * @return
+	 */
 	public List<Section> getSections() {
-
 		List<Section> result = new ArrayList<Section>();
-
 		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
-			for (Section s : e.getValue().getSections()) {
-				result.add(s);
-			}
+			for (Section s : e.getValue().getSections()) {result.add(s);}
 		}
 
 		return result;
