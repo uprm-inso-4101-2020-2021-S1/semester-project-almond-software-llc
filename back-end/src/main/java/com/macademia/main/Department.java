@@ -108,9 +108,19 @@ public class Department {
 	/**
 	 * Adds/updates a course to the course directory.
 	 */
-	public void AddCourse(Course course) {
+	public void AddCourse(Course course) {CourseCatalog.put(course.getCode(), course);}
+	
+	/**
+	 * Gets all sections from this department's courses
+	 * @return
+	 */
+	public List<Section> getSections() {
+		List<Section> result = new ArrayList<Section>();
+		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
+			for (Section s : e.getValue().getSections()) {result.add(s);}
+		}
 
-		CourseCatalog.put(course.getCode(), course);
+		return result;
 
 	}
 
@@ -141,20 +151,6 @@ public class Department {
 			return OtherDepartment.ShortName.contentEquals(ShortName);
 		}
 		return false;
-	}
-
-	/**
-	 * Gets all sections from this department's courses
-	 * @return
-	 */
-	public List<Section> getSections() {
-		List<Section> result = new ArrayList<Section>();
-		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
-			for (Section s : e.getValue().getSections()) {result.add(s);}
-		}
-
-		return result;
-
 	}
 
 }
