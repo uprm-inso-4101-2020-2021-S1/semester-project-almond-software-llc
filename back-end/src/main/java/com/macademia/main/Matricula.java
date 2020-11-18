@@ -41,7 +41,7 @@ public class Matricula {
 
 	public void removeSection(Section e, Course f) {
 		if(ReadOnly) {throw new IllegalStateException("Matricula marked as read only!");}
-		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		if(!f.getCourseCode().contentEquals(e.getCourseCode())) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
 		this.sections.remove(e);
