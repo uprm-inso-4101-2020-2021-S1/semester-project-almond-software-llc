@@ -11,21 +11,21 @@ public class MatriculaPeriod {
 
     public MatriculaPeriod(int matriculaYear, String period) {
         this.matriculaYear = matriculaYear;
-        this.p = StringToPeriod(period);
+        this.p = StringToSemester(period);
     }
 
     public void setMatYear(int n) {this.matriculaYear = n;}
     public void setSemester(Semester p) {this.p = p;}
     public int getMatyear() {return this.matriculaYear;}
     public Semester getSemester() {return this.p;}
-    public String getSemesterAsString() {return PeriodToString(this.p);}
+    public String getSemesterAsString() {return SemesterToString(this.p);}
     
     /**
      * Turns a String into a Period
      * @param period
      * @return
      */
-    public static Semester StringToPeriod(String period) {
+    public static Semester StringToSemester(String period) {
         switch (period) {
         case "SPRING":
             return Semester.SPRING;
@@ -47,7 +47,7 @@ public class MatriculaPeriod {
      * @param Period
      * @return
      */
-    public static String PeriodToString(Semester Period) {
+    public static String SemesterToString(Semester Period) {
         switch (Period) {
         case SPRING:
             return "SPRING";
@@ -70,7 +70,7 @@ public class MatriculaPeriod {
      * @return (PERIOD): (YEAR)
      */    
     @Override
-    public String toString() {return PeriodToString(p) + ": " + matriculaYear;}
+    public String toString() {return SemesterToString(p) + ": " + matriculaYear;}
 
     /**
      * Returns true if and only if the given object is a Matricula Period object, and if the semester and year are the same
