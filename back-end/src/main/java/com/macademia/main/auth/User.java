@@ -117,7 +117,7 @@ public class User{
   		if(obj==null) {return false;}
   		if(obj instanceof User) {
   			User OtherUser = (User)obj;
-  			return OtherUser.Username==Username;
+  			return OtherUser.Username.contentEquals(Username);
   		}
   		return false;
   	}

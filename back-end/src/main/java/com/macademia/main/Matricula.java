@@ -55,7 +55,7 @@ public class Matricula {
 		//Find the course to remove
 		Course f=null;
 		for (Course course : courses) {
-			if(course.getCourseCode()==e.getCourseCode()) {f=course; break;} //found it
+			if(course.getCourseCode().contentEquals(e.getCourseCode())) {f=course; break;} //found it
 		}
 		
 		if(f==null) {
@@ -75,7 +75,7 @@ public class Matricula {
 		//find the section that we have that matches the course code
 		Section e=null;
 		for (Section section : sections) {
-			if(section.getCourseCode()==f.getCourseCode()) {e=section; break;} //found it
+			if(section.getCourseCode().contentEquals(f.getCourseCode())) {e=section; break;} //found it
 		}
 		
 		if(e==null) {

@@ -203,7 +203,7 @@ public class Student extends User {
 		}
 		if (obj instanceof Student) {
 			Student OtherStudent = (Student) obj;
-			return OtherStudent.StudentNumber == StudentNumber;
+			return OtherStudent.StudentNumber.contentEquals(StudentNumber);
 		}
 		return false;
 	}

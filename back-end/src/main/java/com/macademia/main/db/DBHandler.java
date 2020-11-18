@@ -598,7 +598,7 @@ public class DBHandler {
 		else {InsertIntoSections(SectionID, L, sect.getDay(), Time, Location, Prof, CurCap, MaxCap);}		
 		
 		//Save section to memory
-		for (int i = 0; i < HeadCourse.getSections().size(); i++) {if(HeadCourse.getSections().get(i).getSecNum()==sect.getSecNum()) {HeadCourse.getSections().set(i, sect);}}
+		for (int i = 0; i < HeadCourse.getSections().size(); i++) {if(HeadCourse.getSections().get(i).getSecNum().contentEquals(sect.getSecNum())) {HeadCourse.getSections().set(i, sect);}}
 		
 		//man we should really change that for a map
 		
