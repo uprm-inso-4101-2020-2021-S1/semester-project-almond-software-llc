@@ -138,7 +138,7 @@ public class Department {
 		}
 		if (obj instanceof Department) {
 			Department OtherDepartment = (Department) obj;
-			return OtherDepartment.ShortName == ShortName;
+			return OtherDepartment.ShortName.contentEquals(ShortName);
 		}
 		return false;
 	}
