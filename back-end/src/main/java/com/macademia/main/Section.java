@@ -44,7 +44,7 @@ public class Section {
         UpdateCourseInfo(course);
     }
 
-    public boolean isFull() {return this.population == this.capacity;}
+    public boolean isFull() {return this.population >= this.capacity;}
   
     public void setPeriod(Period period) {
     	this.period = period;
