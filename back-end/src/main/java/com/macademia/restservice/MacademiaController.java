@@ -1,12 +1,9 @@
 package com.macademia.restservice;
 
-import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+//import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macademia.main.*;
-import com.macademia.main.db.DBHandler;
 import com.macademia.main.test.JsonTest;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MacademiaController {
 
-	private static final String template = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
+	//private static final String template = "Hello, %s!";
+	//private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
 	private Student currentStudent = null;
 
@@ -102,9 +98,26 @@ public class MacademiaController {
 					.removeSection(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
 	}
 
+<<<<<<< HEAD
 	@GetMapping("/currentStudent")
 	public Student testingDatabase() {
 		return currentStudent;
+=======
+	public List<Course> testingDatabase(@RequestParam(value = "user") String user,
+			@RequestParam(value = "password") String password) {
+		try {
+			if (tester.db.getUser(user).checkPassword(password)) {
+				myStudent = tester.db.getStudent(tester.db.getUser(user));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return myStudent.getPriority();
+>>>>>>> 9e700647a5fdf687eb4f37cd00e0f46db29625d8
 	}
 
 	private List<Section> listSwitch(int targetListIndex, int matriculaIndex) {

@@ -509,8 +509,7 @@ public class DBHandler {
 			}
 		}
 
-		// If we're here then the section doesn't exist. Time to find it in the
-		// database.
+		// If we're here then the section doesn't exist. Time to find it in the database.
 		ResultSet RS = selectSection(SectionID);
 		if (!RS.next()) {
 			RS.close();
