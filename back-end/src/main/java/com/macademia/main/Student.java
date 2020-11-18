@@ -110,7 +110,7 @@ public class Student extends User {
 	 * @throws IllegalArgumentException if the course prerequesites aren't met, or
 	 *                                  if the Section doesn't match with the course
 	 */
-	public void addSections(Section e, Course f, MatriculaPeriod m) {
+	public void addSection(Section e, Course f, MatriculaPeriod m) {
 		//Make sure the course and section are the same
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		
@@ -316,7 +316,7 @@ public class Student extends User {
 	
 	public boolean attemptEnrollSection(Section e, Course f, MatriculaPeriod m) {
 		try {
-			addSections(e, f, m);
+			addSection(e, f, m);
 			return true;
 			} 
 		catch (IllegalArgumentException e2) {return false;}
