@@ -167,11 +167,12 @@ public class JsonTest {
 
         testStudentA.addMatricula(testMatriculaC);
         testStudentA.addMatricula(testMatriculaB);
+        testStudentA.SetTurn(new Turn("12/25/2020 15:00-12/25/2020 15:30"));
 
-        testStudentA.getMatricula(testPeriodB).addSection(testSectionI01,testCourseI);
-        testStudentA.getMatricula(testPeriodB).addSection(testSectionJ01,testCourseJ);
-        testStudentA.getMatricula(testPeriodB).addSection(testSectionK01,testCourseK);
-        testStudentA.getMatricula(testPeriodB).addSection(testSectionL01,testCourseL);
+        testMatriculaB.addSection(testSectionI01,testCourseI);
+        testMatriculaB.addSection(testSectionJ01,testCourseJ);
+        testMatriculaB.addSection(testSectionK01,testCourseK);
+        testMatriculaB.addSection(testSectionL01,testCourseL);
 
         testMatriculaC.addSection(testSectionM01,testCourseM);
         testMatriculaC.addSection(testSectionN01,testCourseN);
@@ -199,8 +200,6 @@ public class JsonTest {
 
             db.SaveUser(testUserA);
             db.SaveStudent(testStudentA);
-            
-            // db.getStudent(testUserA).get
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block

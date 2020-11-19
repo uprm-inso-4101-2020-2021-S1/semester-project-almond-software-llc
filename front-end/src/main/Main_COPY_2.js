@@ -21,7 +21,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
 
-const drawerWidth = 340;
+const drawerWidth = 270;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -84,19 +84,21 @@ export default function Main() {
 
   const classes = useStyles();
 
-  const [myCourses, setMyCourses] = useState(null);
-
   const [priorities, setPriorities] = useState(null);
 
   const [departments, setDepartments] = useState(null);
 
-  const [departmentCourses, setDepartmentCourses] = useState(null);
-
   const [matriculas, setMatriculas] = useState(null);
+
+  const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
+
+  let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
+
+  let [departmentIndex, setDepartmentIndex] = useState(0);
 
   let [matriculaIndex, setMatriculaIndex] = useState(0);
 
-  let [tempCourseIndex, setCourseIndex] = useState(0);
+  let [tempValueIndex, setValueIndex] = useState(0);
 
   let [tempSourceListIndex, setSourceListIndex] = useState(0);
 
@@ -119,20 +121,10 @@ export default function Main() {
     const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
     setMatriculas(resultMatriculas.data);
 
-    // const resultMyList = await axios.get('http://localhost:8080/myList');
-    // setMyCourses(resultMyList.data);
-
-    // const resultDepartmentCourses = await axios.get('http://localhost:8080/departmentSections');
-    // setDepartmentCourses(resultDepartmentCourses.data);
-
-    // const resultMyMatriculas = await axios.get('http://localhost:8080/matriculas');
-    // setMatriculas(resultMyMatriculas.data);
-
   }
 
   useEffect(() => {
     fetchData();
-    console.log('updated lists');
   }, [elTicko]);
 
   const forceUpdate = () => {
@@ -151,117 +143,163 @@ export default function Main() {
     setMatriculaIndex(matriculaIndex + 1);
   }
 
-  const addCourse = (sourceListIndex, targetListIndex, courseIndex) => {
-    // axios.get('http://localhost:8080/addSection?sourceListIndex=' +
-    //   sourceListIndex + '&targetListIndex=' +
-    //   targetListIndex + '&courseIndex=' +
-    //   courseIndex + '&matriculaIndex=' +
-    //   matriculaIndex)
+  const addCourse = (sourceListIndex, targetListIndex, valueIndex, departmentIndex, matriculaIndex) => {
   }
 
   const removeCourse = (sourceListIndex, courseIndex) => {
-    // axios.get('http://localhost:8080/removeSection?sourceListIndex=' +
-    //   sourceListIndex + '&courseIndex=' +
-    //   courseIndex + '&matriculaIndex=' +
-    //   matriculaIndex)
   }
 
-  const onDragStart = (e, courseIndex, sourceListIndex) => {
-    setCourseIndex(courseIndex);
-    setSourceListIndex(sourceListIndex);
+  const addSection = (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
+  }
+
+  const removeSection = (sourceListIndex, courseIndex) => {
+  }
+
+  const listCourseSwitch = (listIndex, departmentIndex) => {
+    switch (listIndex) {
+      case 0:
+        return priorities;
+      case 1:
+        return departments[departmentIndex].courses;
+      default:
+        console.log('INVALID');
+    }
+  }
+
+  const listSectionSwitch = (listIndex, courseIndex) => {
+    switch (listIndex) {
+      case 0:
+        return priorities[courseIndex].sections;
+      case 1:
+        return matriculas[matriculaIndex].sections;
+      default:
+        console.log('INVALID');
+    }
+  }
+
+  const listNameSwitch = (listType, listIndex) => {
+    if (listIndex === 0) {
+      return 'from: priority courses';
+    } else {
+      if (listType === 0) {
+        return 'from: department courses';
+      } else {
+        return 'from: matricula sections';
+      }
+    }
   }
 
   const onDragOver = (e) => {
     e.preventDefault();
   }
 
+  const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
+
+    if (listType === 0) {
+      console.log('list type: course');
+      console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
+      console.log(listNameSwitch(listType, sourceListIndex));
+    } else {
+      console.log('list type: section');
+      console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
+      console.log(listNameSwitch(listType, sourceListIndex));
+    }
+
+    setIsCourseSection(listType)
+    setValueIndex(valueIndex);
+    setSourceListIndex(sourceListIndex);
+
+    if (listType === 0) {
+      setPriorityCourseIndex(mainListIndex);
+    } else {
+      setDepartmentIndex(mainListIndex);
+    }
+
+  }
+
   const onDrop = (e, targetListIndex) => {
 
-    let courseIndex = tempCourseIndex;
+    let valueIndex = tempValueIndex;
     let sourceListIndex = tempSourceListIndex;
 
     if (targetListIndex !== sourceListIndex) {
 
-      // addCourse(sourceListIndex, targetListIndex, courseIndex);
-      // removeCourse(sourceListIndex, courseIndex);
+      switch (isCourseSection) {
+        case 0:
+          addCourse(sourceListIndex, targetListIndex, valueIndex, departmentIndex, matriculaIndex);
+          removeCourse();
+          break;
+        case 1:
+          addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
+          removeSection();
+          break;
+        default:
+          console.log('INVALID');
+      }
+
       forceUpdate();
 
     }
 
   }
 
-  let [openList, setOpenList] = useState({});
-
-  const toggleList = () => {
-    setOpenList((prevState => ({ ...prevState, [id]: !prevState[id] })));
-  }
-
-  const renderDepartments = (list, title, listIndex) => {
-    return <div>
-      <List>
-        <Typography className={classes.drawerTypography}>{title}</Typography>
-        {list.map((department, i) => (
-          <ListItem key={i}>
-            {renderCourses(department.courses, department.name, i)}
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  }
-
-  const renderCourses = (list, title, listIndex) => {
-    return <div>
-      <List>
-        <Typography className={classes.drawerTypography}>{title}</Typography>
-        {list.map((value, i) => (
-          <div>
-            <Typography className={classes.drawerTypography}>{value.name}: {value.courseCode}</Typography>
-            <ListItem key={i}>
-              {renderSections(value.sections, "", i)}
-            </ListItem>
-          </div>
-        ))}
-      </List>
-    </div>
-
-  }
-
-  const renderSections = (list, title, listIndex) => {
+  const renderDepartments = (departmentsList, title, listIndex) => {
     return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
       <List>
-        {list.map((value, i) => (
-          <div>
-            <ListItem draggable={matriculaIndex === 0} button key={i} onDragStart={(e) => onDragStart(e, i, listIndex)}>
-              <Typography>{value.professor} - {value.secNum}</Typography>
-              {/* <CourseCard
-                courseCode={value.courseCode}
-                section={value.secNum}
-                courseName={value.courseName}
-                professor={value.professor}
-                credits={value.credits}
-                color={value.color} /> */}
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {departmentsList.map((department, departmentsIndex) => (
+          <div key={departmentsIndex}>
+            <ListItem>
+              <Typography>{department.name}</Typography>
             </ListItem>
+            <List>
+              {department.courses.map((course, coursesIndex) => (
+                <ListItem draggable={true} button key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 1, departmentsIndex)}>
+                  <Typography>{course.name}</Typography>
+                </ListItem>
+              ))}
+            </List>
           </div>
         ))}
       </List>
     </div>
   }
 
-
-  const renderMatricula = (list, title, listIndex) => {
-
+  const renderPriorityCourses = (coursesList, title, listIndex) => {
     return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
       <List>
         <Typography className={classes.drawerTypography}>{title}</Typography>
-        {list.map((value, courseIndex) => (
-          <ListItem draggable={matriculaIndex === 0} button key={courseIndex} onDragStart={(e) => onDragStart(e, courseIndex, listIndex)}>
+        {coursesList.map((course, coursesIndex) => (
+          <div key={coursesIndex}>
+            <ListItem draggable={true} button key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 0, coursesIndex)}>
+              <Typography className={classes.drawerTypography}>{course.name}: {course.courseCode}</Typography>
+            </ListItem>
+            <List>
+              {course.sections.map((section, sectionsIndex) => (
+                <ListItem draggable={true} button key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 0, coursesIndex)}>
+                  <Typography>{section.secNum}</Typography>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ))}
+      </List>
+    </div>
+  }
+
+  const renderMatricula = (matriculaList, title, listIndex) => {
+    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {matriculaList.map((sections, sectionsIndex) => (
+          <ListItem draggable={matriculaIndex === 0} button key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 1, matriculaIndex)}>
             <CourseCard
-              courseCode={value.courseCode}
-              section={value.secNum}
-              courseName={value.courseName}
-              professor={value.professor}
-              credits={value.credits}
-              color={value.color} />
+              courseCode={sections.courseCode}
+              section={sections.secNum}
+              courseName={sections.courseName}
+              professor={sections.professor}
+              credits={sections.credits}
+              color={sections.color} />
           </ListItem>
         ))}
       </List>
@@ -280,12 +318,10 @@ export default function Main() {
 
       <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
         <Toolbar />
-        {matriculas !== null && departments !== null ? (
+        {priorities !== null && departments !== null ? (
           <div className={classes.drawerContainer}>
-            {/* <Divider /> */}
-            {renderCourses(priorities, "Priority Courses", 0)}
+            {renderPriorityCourses(priorities, "Priority Courses", 0)}
             <Divider />
-            {/* {renderMatricula(departmentCourses, "Department Courses", 1)} */}
             {renderDepartments(departments, "Departments", 1)}
           </div>) : (<div />)}
       </Drawer>

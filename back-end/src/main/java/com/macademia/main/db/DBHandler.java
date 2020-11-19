@@ -20,6 +20,7 @@ import com.macademia.main.MatriculaPeriod;
 import com.macademia.main.Section;
 import com.macademia.main.Student;
 import com.macademia.main.auth.User;
+import com.macademia.main.Turn;
 
 /**
  * Handles loading and saving anything from and to the database
@@ -103,6 +104,7 @@ public class DBHandler {
 	 * @param Username
 	 * @return
 	 * @throws SQLException
+	 * @throws NoSuchAlgorithmException
 	 */
 	public User getUser(String Username) throws SQLException {
 
@@ -115,7 +117,7 @@ public class DBHandler {
 		String username = RS.getString("Username");
 		String Password = RS.getString("Password");
 		RS.close();
-		return new User(username, Password);
+		return new User(username, Password, false);
 
 	}
 
@@ -125,6 +127,7 @@ public class DBHandler {
 	 * 
 	 * @return
 	 * @throws SQLException
+	 * @throws NoSuchAlgorithmException
 	 */
 	public List<Student> getStudents() throws SQLException {
 		ResultSet RS = selectStudents();
@@ -162,6 +165,7 @@ public class DBHandler {
 		// Get all matriculas
 		for (String MatID : RS.getString("Matriculas").split(",")) {
 			if (!MatID.isBlank()) {
+
 				Matricula mat = getMatricula(Integer.parseInt(MatID));
 				if (mat != null) {
 					ReturnStudent.addMatricula(mat);
@@ -200,6 +204,7 @@ public class DBHandler {
 	 * @param StudentNumber
 	 * @return
 	 * @throws SQLException
+	 * @throws NoSuchAlgorithmException
 	 */
 	public Student getStudent(String StudentNumber) throws SQLException {
 		ResultSet RS = selectStudentFromID(StudentNumber);
@@ -212,10 +217,16 @@ public class DBHandler {
 		String Name = RS.getString("Name");
 		String ID = RS.getString("ID");
 		Department Dep = getDepartment(RS.getString("Department"));
+		String[] Matriculas = RS.getString("Matriculas").split(",");
+		String[] PriorityCourses = RS.getString("PriorityCourses").split(",");
+		String[] CoursesTaken = RS.getString("CoursesTaken").split(",");
+		String TurnText = RS.getString("Turn");
+		RS.close(); // We need to close the connection
+
 		Student ReturnStudent = new Student(TiedUser, Name, ID, Dep);
 
 		// Get all matriculas
-		for (String MatID : RS.getString("Matriculas").split(",")) {
+		for (String MatID : Matriculas) {
 			if (!MatID.isBlank()) {
 
 				Matricula mat = getMatricula(Integer.parseInt(MatID));
@@ -226,7 +237,7 @@ public class DBHandler {
 		}
 
 		// Get Priority Courses
-		for (String PriorityCourse : RS.getString("PriorityCourses").split(",")) {
+		for (String PriorityCourse : PriorityCourses) {
 			if (!PriorityCourse.isBlank()) {
 				Course pcourse = getCourse(PriorityCourse);
 				if (pcourse != null) {
@@ -236,7 +247,7 @@ public class DBHandler {
 		}
 
 		// Get Courses Taken
-		for (String CourseTaken : RS.getString("CoursesTaken").split(",")) {
+		for (String CourseTaken : CoursesTaken) {
 			if (!CourseTaken.isBlank()) {
 				Course tcourse = getCourse(CourseTaken);
 				if (tcourse != null) {
@@ -245,9 +256,8 @@ public class DBHandler {
 			}
 		}
 
-		String Turn = RS.getString("Turn"); // TODO: actually link this with the user.
-
-		RS.close(); // We need to close the connection
+		// Set Turn
+		ReturnStudent.SetTurn(new Turn(TurnText));
 
 		return ReturnStudent;
 	}
@@ -270,7 +280,7 @@ public class DBHandler {
 		String[] Sections = RS.getString("Sections").split(",");
 		String Period = RS.getString("Period");
 		int Year = RS.getInt("Year");
-		boolean Readonly = RS.getBoolean("ReadOnly"); // TODO: Actually do the ReadOnly
+		boolean Readonly = RS.getBoolean("ReadOnly");
 
 		RS.close();
 
@@ -283,19 +293,23 @@ public class DBHandler {
 		}
 
 		ArrayList<Section> SectionsList = new ArrayList<Section>(Sections.length);
+		ArrayList<Course> CourseList = new ArrayList<Course>(Sections.length);
 
 		// get an arraylist of all the sections:
 		for (String Section : Sections) {
 			if (Section.length() > 0) {
 				Section sect = getSection(Section);
-				if (sect != null) {
+				if (sect != null) { // make sure we actually find sections
 					SectionsList.add(sect);
-				} // make sure we actually find sections
+					CourseList.add(getCourse(sect.getCourseCode()));
+				}
 			}
 		}
 
 		Matricula mat = new Matricula(SectionsList, matPeriod);
+		mat.setCourse(CourseList); // Load courses
 		mat.setID(IDFromDatabase);
+		mat.setReadOnly(Readonly);
 
 		return mat;
 
@@ -502,14 +516,16 @@ public class DBHandler {
 		} // if the course doesn't exist, neither will the section.
 
 		// See if the section already exists:
-		// TODO Probably switch this to a map
+		// To do Probably switch this to a map //This will probbaly ont be done by this
+		// point
 		for (Section section : course.getSections()) {
-			if (section.getSecNum() == sectionSplit[1]) {
+			if (section.getSecNum().contentEquals(sectionSplit[1])) {
 				return section;
 			}
 		}
 
-		// If we're here then the section doesn't exist. Time to find it in the database.
+		// If we're here then the section doesn't exist. Time to find it in the
+		// database.
 		ResultSet RS = selectSection(SectionID);
 		if (!RS.next()) {
 			RS.close();
@@ -524,9 +540,9 @@ public class DBHandler {
 		int CurCap = RS.getInt("CurCap");
 		int MaxCap = RS.getInt("MaxCap");
 
-		return new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap); // Creating a section
-																								// automatically links
-																								// it to a course.
+		Section theSection = new Section(sectionSplit[1], day, time, Prof, Location, course, CurCap, MaxCap);
+
+		return theSection;
 	}
 
 	// -[Check
@@ -574,6 +590,7 @@ public class DBHandler {
 	 * Saves a user to the SQL Database
 	 * 
 	 * @param user
+	 * @throws NoSuchAlgorithmException
 	 */
 	public void SaveUser(User user) throws SQLException {
 		if (UserExists(user.getUsername())) {
@@ -585,6 +602,8 @@ public class DBHandler {
 
 	/**
 	 * Saves a student to the SQL Database, including saving every Matricula
+	 * 
+	 * @throws NoSuchAlgorithmException
 	 */
 	public void SaveStudent(Student stud) throws SQLException {
 
@@ -604,15 +623,15 @@ public class DBHandler {
 		String CoursesTaken = "";
 		CoursesTaken = ListOfCoursesToString(stud.getCoursesTaken());
 
-		// TODO: Save Turn data
-
 		// Then save the user
 		if (StudentExists(stud.getStudentNumber())) {
 			UpdateStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(),
-					stud.getDepartment().getShortName(), Matriculas, PriorityCourses, CoursesTaken, "");
+					stud.getDepartment().getShortName(), Matriculas, PriorityCourses, CoursesTaken,
+					stud.getTurn().toString());
 		} else {
 			InsertIntoStudents(stud.getStudentNumber(), stud.getName(), stud.getUsername(),
-					stud.getDepartment().getShortName(), Matriculas, PriorityCourses, CoursesTaken, "");
+					stud.getDepartment().getShortName(), Matriculas, PriorityCourses, CoursesTaken,
+					stud.getTurn().toString());
 		}
 
 		// Save the Matriculas
@@ -649,12 +668,10 @@ public class DBHandler {
 
 			Mat.setID(NewID); // We now have a new unique ID. Save it with that ID
 
-			// TODO: Implement READONLY flag
-
-			InsertIntoMatriculas(Mat.getID(), Sections, Period, Year, false);
+			InsertIntoMatriculas(Mat.getID(), Sections, Period, Year, Mat.getReadOnly());
 		} else {
 			// This is an edited matricula. We need to update it
-			UpdateMatriculas(Mat.getID(), Sections, Period, Year, false);
+			UpdateMatriculas(Mat.getID(), Sections, Period, Year, Mat.getReadOnly());
 		}
 
 		return Mat.getID();
@@ -1128,8 +1145,8 @@ public class DBHandler {
 		pstmt.setString(3, Days); // Days
 		pstmt.setString(4, Time); // Time
 		pstmt.setString(5, Location); // Location
-		pstmt.setString(7, Prof); // Prof
-		pstmt.setInt(8, CurCap); // CurCap
+		pstmt.setString(6, Prof); // Prof
+		pstmt.setInt(7, CurCap); // CurCap
 		pstmt.setInt(8, MaxCap); // MaxCap
 		pstmt.executeUpdate();
 		pstmt.close();
