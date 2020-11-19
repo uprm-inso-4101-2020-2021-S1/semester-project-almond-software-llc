@@ -11,6 +11,7 @@ public class Matricula {
 	private int totalCredits;
 	private MatriculaPeriod period;
 	private int ID = -1;
+	private boolean ReadOnly=false;
 
 	// -[Constructor]-----------------------------------------
 	public Matricula(MatriculaPeriod period) {
@@ -31,13 +32,15 @@ public class Matricula {
 	// had to include both section and course whenever adding a new section into a matricula 
 	// in order to keep track of sections and courses taken
 	public void addSection(Section e, Course f) {
-		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
+		if(ReadOnly) {throw new IllegalStateException("Matricula marked as read only!");}
+		if(!f.getCourseCode().contentEquals(e.getCourseCode())) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		this.totalCredits += e.getCredits();
 		this.sections.add(e);		
 		this.courses.add(f);
 	}
 
 	public void removeSection(Section e, Course f) {
+		if(ReadOnly) {throw new IllegalStateException("Matricula marked as read only!");}
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
@@ -46,6 +49,7 @@ public class Matricula {
 	}
 	
 	public void removeSection(Section e) {
+		if(ReadOnly) {throw new IllegalStateException("Matricula marked as read only!");}
 		if(!sections.contains(e)) {return;}
 		
 		//Find the course to remove
@@ -66,6 +70,7 @@ public class Matricula {
 	}
 	
 	public void removeCourse(Course f) {
+		if(ReadOnly) {throw new IllegalStateException("Matricula marked as read only!");}
 		if(!courses.contains(f)) {return;}
 		//find the section that we have that matches the course code
 		Section e=null;
@@ -90,12 +95,14 @@ public class Matricula {
 	public int getTotalCredits() {return totalCredits;}
 	public MatriculaPeriod getPeriod() {return period;}
 	public int getID() {return ID;}
-
-	public void setSections(List<Section> sections) {this.sections = sections;}
-	public void setCourse(List<Course> courses) {this.courses=courses;}
-	public void setTotalCredits(int totalCredits) {this.totalCredits = totalCredits;}
-	public void setPeriod(MatriculaPeriod period) {this.period = period;}
+	public boolean getReadOnly() {return ReadOnly;}
+	
+	public void setSections(List<Section> sections) {if(!this.ReadOnly) {this.sections = sections;}}
+	public void setCourse(List<Course> courses) {if(!this.ReadOnly) {this.courses=courses;}}
+	public void setTotalCredits(int totalCredits) {if(!this.ReadOnly) {this.totalCredits = totalCredits;}}
+	public void setPeriod(MatriculaPeriod period) {if(!this.ReadOnly) {this.period = period;}}
 	public void setID(int ID) {this.ID=ID;}
+	public void setReadOnly(boolean ReadOnly) {this.ReadOnly=ReadOnly;}
 
 	/**
 	 * Returns a list of 6 lists of sections. Each list corresponds to a specified day, and contains sections that occur on those days.

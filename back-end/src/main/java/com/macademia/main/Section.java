@@ -101,7 +101,7 @@ public class Section {
     	catch (NumberFormatException e) {throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");}
     	
     	//Lastly, if PM is true, add 1200
-    	if(PM && TimeAsInt>=1300) {TimeAsInt+=1200;}
+    	if(PM && TimeAsInt<1200) {TimeAsInt+=1200;}
     	return TimeAsInt;
     }
 

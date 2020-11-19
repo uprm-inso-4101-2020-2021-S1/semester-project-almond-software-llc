@@ -947,7 +947,7 @@ export default function Main() {
                     )}
                 </Grid>
                 <Grid item>
-                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3} >
+                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
                     <Grid item>
 
                       <ScheduleCard />
