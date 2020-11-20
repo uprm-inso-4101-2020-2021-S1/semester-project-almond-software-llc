@@ -23,6 +23,7 @@ public class Student extends User {
 	private Map<MatriculaPeriod, Matricula> matriculas;
 	private List<Course> priorities;
 	private List<Course> coursesTaken;
+	private Turn turn;
 
 	// -[Constructors]----------------------------------------------------------------------
 
@@ -51,57 +52,52 @@ public class Student extends User {
 	/**
 	 * Gets this student's Student Number (ID)
 	 */
-	public String getStudentNumber() {
-		return StudentNumber;
-	}
+	public String getStudentNumber() {return StudentNumber;}
 
 	/**
 	 * Gets this student's Name (Not Username)
 	 */
-	public String getName() {
-		return Name;
-	}
+	public String getName() {return Name;}
 
 	/**
 	 * Gets this student's department.
 	 */
-	public Department getDepartment() {
-		return department;
-	}
+	public Department getDepartment() {return department;}
 
 	/**
 	 * Gets this student's Matriculas
 	 */
-	public Collection<Matricula> getMatriculas() {
-		return matriculas.values();
-	}
+	public Collection<Matricula> getMatriculas() {return matriculas.values();}
 
 	/**
 	 * Gets this student's matricula for a specified matricula period
-	 * 
 	 * @param Mat
 	 */
-	public Matricula getMatricula(MatriculaPeriod Mat) {
-		return matriculas.get(Mat);
-	}
+	public Matricula getMatricula(MatriculaPeriod Mat) {return matriculas.get(Mat);}
 
 	/**
 	 * Gets this student's priority courses
-	 * 
 	 * @return
 	 */
-	public List<Course> getPriority() {
-		return priorities;
-	}
+	public List<Course> getPriority() {return priorities;}
 
 	/**
 	 * gets Courses this student has taken
-	 * 
 	 * @return
 	 */
-	public List<Course> getCoursesTaken() {
-		return coursesTaken;
-	}
+	public List<Course> getCoursesTaken() {return coursesTaken;}
+	
+	/**
+	 * Gets this Student's Matricula Turn
+	 * @return
+	 */
+	public Turn getTurn() {return turn;}
+	
+	/**
+	 * Sets this student's matricula turn
+	 * @param turn
+	 */
+	public void SetTurn(Turn turn) {this.turn=turn;}
 
 	// -[Check-Up]----------------------------------------------------------------------
 
@@ -127,7 +123,7 @@ public class Student extends User {
 		}
 		
 		//lastly, Verify prereqs and coreqs.
-		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
+		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f,m) || f.getCoreq().isEmpty())) {
 			if(!matriculas.containsKey(m)) {addMatricula(new Matricula(m));} //If the matricula doesn't exist, add it.
 			matriculas.get(m).addSection(e,f);
 		} else {throw new IllegalArgumentException("Course pre-requisites not met.");}
@@ -153,12 +149,14 @@ public class Student extends User {
 		return counter == e.getPrereq().size();
 	}
 
-	public boolean verifyCoreqs(Course e) {
+	public boolean verifyCoreqs(Course e, MatriculaPeriod per) {
 		int counter = 0;
+
+		List<Course> allCourses = new ArrayList<Course>(coursesTaken);
+		allCourses.addAll(matriculas.get(per).getCourses()); //AllCourses we will have for Coreqs
+
 		for (int j = 0; j < e.getCoreq().size(); j++) {
-			if (coursesTaken.contains(e.getCoreq().get(j))) {
-				counter++;
-			}
+			if (allCourses.contains(e.getCoreq().get(j))) {counter++;}
 		}
 		return counter == e.getCoreq().size();
 	}
@@ -210,13 +208,19 @@ public class Student extends User {
 		return false;
 	}
 
+	/**
+	 * Executes a matricula turn for that period, without forcing it.
+	 * @param per
+	 */
+	public void turn(MatriculaPeriod per) {turn(per,false);}	
 	
 	/**
 	 * EXECUTES A MATRICULA TURN FOR THAT PERIOD
 	 * @param per
 	 */
-	public void turn(MatriculaPeriod per) {
+	public void turn(MatriculaPeriod per, Boolean force) {
 		
+		if(!turn.isTime()) {throw new IllegalStateException("It's not this user's turn to execute their matricula");}
 		if(!matriculas.containsKey(per)) {throw new IllegalArgumentException("No matricula exists for that period");}
 		
 		int count = 0; //Count of classes that we missed

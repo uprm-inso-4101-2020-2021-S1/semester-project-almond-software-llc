@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../coursecard/CourseCard_COPY.js";
+import CourseCard from "../coursecard/CourseCard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";

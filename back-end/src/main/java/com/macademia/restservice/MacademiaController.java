@@ -2,6 +2,7 @@ package com.macademia.restservice;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 //import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,10 +18,10 @@ import com.macademia.main.test.JsonTest;
 @RestController
 public class MacademiaController {
 
-	//private static final String template = "Hello, %s!";
-	//private final AtomicLong counter = new AtomicLong();
+	// private static final String template = "Hello, %s!";
+	// private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
-	private Student myStudent;
+	private Student currentStudent = null;
 
 	@GetMapping("/macademia")
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
@@ -28,81 +29,109 @@ public class MacademiaController {
 		return "Welcome! " + firstName + " " + lastName;
 	}
 
-	@GetMapping("/course")
-	public Course course() {
-		return tester.testCourseA;
+	@GetMapping("/login")
+	public boolean login(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password) {
+		try {
+			if (tester.db.getUser(user).checkPassword(password)) {
+				currentStudent = tester.db.getStudent(tester.db.getUser(user));
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
-	@GetMapping("/section")
-	public Section section() {
-		return tester.testSectionA01;
+	@GetMapping("/departments")
+	public List<Department> department() throws SQLException {
+		return tester.db.getDepartments();
 	}
 
-	@GetMapping("/department")
-	public Department department() {
-		return tester.testDepartmentA;
+	@GetMapping("/priority")
+	public List<Course> priority() throws SQLException {
+		return currentStudent.getPriority();
 	}
 
-	@GetMapping("/departmentSections")
-	public List<Section> departmentSections() {
-		return tester.testDepartmentA.getSections();
-	}
-
-	@GetMapping("/myMatriculas")
-	public List<Matricula> matricula() {
-		return this.getMatriculas();
-	}
-
-	@GetMapping("/myList")
-	public List<Section> myList() {
-		return tester.testList;
+	@GetMapping("/matriculas")
+	public Collection<Matricula> matriculas() throws SQLException {
+		return currentStudent.getMatriculas();
 	}
 
 	@GetMapping("/addSection")
-
 	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
-			@RequestParam(value = "courseIndex") int courseIndex,
+			@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
-		Section temp = listSwitch(sourceListIndex, matriculaIndex).get(courseIndex);
-		if (targetListIndex < 2)
-			listSwitch(targetListIndex, matriculaIndex).add(temp);
-		// else
-			// this.getMatriculas().get(matriculaIndex).addSection(temp);
+		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaIndex).get(valueIndex);
+		Course tempCourse = null;
+		try {
+			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (targetListIndex == 0) {
+			currentStudent.getPriority().get(priorityCourseIndex).addSection(tempSection);
+		} else {
+			((List<Matricula>) currentStudent.getMatriculas()).get(matriculaIndex).addSection(tempSection, tempCourse);
+		}
 	}
 
 	@GetMapping("/removeSection")
 	public void removeSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "courseIndex") int courseIndex,
 			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
-		if (sourceListIndex < 2)
-			listSwitch(sourceListIndex, matriculaIndex).remove(courseIndex);
-		else
-			this.getMatriculas().get(matriculaIndex)
-					.removeSection(this.getMatriculas().get(matriculaIndex).getSections().get(matriculaIndex));
 	}
 
-	public List<Course> testingDatabase(@RequestParam(value = "user") String user,
-			@RequestParam(value = "password") String password) {
-		try {
-			if (tester.db.getUser(user).checkPassword(password)) {
-				myStudent = tester.db.getStudent(tester.db.getUser(user));
+	@GetMapping("/addCourse")
+	public void addCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+			@RequestParam(value = "targetListIndex") int targetListIndex,
+			@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "departmentIndex") int departmentIndex,
+			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex).get(valueIndex);
+		if (targetListIndex == 0) {
+			currentStudent.getPriority().add(tempCourse);
+		} else {
+			try {
+				tester.db.getDepartments().get(departmentIndex).AddCourse(tempCourse);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return myStudent.getPriority();
 	}
 
-	private List<Section> listSwitch(int targetListIndex, int matriculaIndex) {
-		switch (targetListIndex) {
+	@GetMapping("/removeCourse")
+	public void removeCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+			@RequestParam(value = "courseIndex") int courseIndex,
+			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+	}
+
+	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaIndex) {
+		switch (sourceListIndex) {
 			case 0:
-				return tester.testList;
+				return currentStudent.getPriority().get(priorityCourseIndex).getSections();
 			case 1:
-				return tester.testDepartmentA.getSections();
-			case 2:
-				return this.getMatriculas().get(matriculaIndex).getSections();
+				return ((List<Matricula>) currentStudent.getMatriculas()).get(matriculaIndex).getSections();
+			default:
+				return null;
+		}
+	}
+
+	private List<Course> courseListSwitch(int sourceListIndex, int departmentIndex) {
+		switch (sourceListIndex) {
+			case 0:
+				return currentStudent.getPriority();
+			case 1:
+				try {
+					return (List<Course>) tester.db.getDepartments().get(departmentIndex).getCourses();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			default:
 				return null;
 		}

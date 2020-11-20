@@ -44,7 +44,7 @@ public class Matricula {
 		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
 		if(!sections.contains(e)) {return;} //make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
-		this.sections.remove(e);
+		this.sections.remove(f);
 		this.courses.remove(f);
 	}
 	

@@ -22,38 +22,51 @@ public class JsonTest {
     public List<Section> testList = new ArrayList<Section>();
     public Matricula testMatriculaB = new Matricula(testPeriodB);
     public Matricula testMatriculaC = new Matricula(testPeriodC);
+    public Department testPrereqDepartment = new Department("The Department of Testing Prerequisites", "TPRQ", "Black");
+    public Department testCoreqDepartment = new Department("The Department of Testing Corequisites", "TCRQ", "Gray");
+    public Department testCoursesTakenDepartment = new Department("The Department of Testing Courses Taken", "TTKN", "Cyan");
     public Department testDepartmentA = new Department("The Department of Testing A", "TSTA", "Green");
-    public Department testDepartmentB = new Department("The Department of Testing A", "TSTB", "Purple");
+    public Department testDepartmentB = new Department("The Department of Testing B", "TSTB", "Purple");
     public Department testDepartmentC = new Department("The Department of Testing C", "TSTC", "Red");
     public Department testDepartmentD = new Department("The Department of Testing D", "TSTD", "Blue");
 
     public User testUserA = new User("testA", "6969");
     public Student testStudentA = new Student(testUserA, "Test McTesterson", "420-77-6969", testDepartmentA);
 
-    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testDepartmentA, "4001", 1);
-    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testDepartmentA, "3002", 2);
-    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testDepartmentA, "2003", 3);
-    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testDepartmentA, "1004", 4);
+    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testPrereqDepartment, "4001", 1);
+    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testPrereqDepartment, "3002", 2);
+    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testPrereqDepartment, "2003", 3);
+    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testPrereqDepartment, "1004", 4);
 
-    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testDepartmentA, "4004", 1);
-    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testDepartmentA, "3003", 2);
-    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testDepartmentA, "2002", 3);
-    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testDepartmentA, "1001", 4);
+    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testCoreqDepartment, "4004", 1);
+    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testCoreqDepartment, "3003", 2);
+    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testCoreqDepartment, "2002", 3);
+    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testCoreqDepartment, "1001", 4);
 
-    public Course testCourseTakenA = new Course("Test Course Taken A", testDepartmentB, "7001", 3);
-    public Course testCourseTakenB = new Course("Test Course Taken B", testDepartmentB, "7002", 3);
-    public Course testCourseTakenC = new Course("Test Course Taken C", testDepartmentB, "7003", 3);
-    public Course testCourseTakenD = new Course("Test Course Taken D", testDepartmentB, "7004", 3);
+    public Course testCourseTakenA = new Course("Test Course Taken A", testCoursesTakenDepartment, "7001", 3);
+    public Course testCourseTakenB = new Course("Test Course Taken B", testCoursesTakenDepartment, "7002", 3);
+    public Course testCourseTakenC = new Course("Test Course Taken C", testCoursesTakenDepartment, "7003", 3);
+    public Course testCourseTakenD = new Course("Test Course Taken D", testCoursesTakenDepartment, "7004", 3);
 
-    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4000", 1);
-    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3000", 2);
-    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2000", 3);
-    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1000", 4);
+    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4023", 1);
+    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3024", 2);
+    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2025", 3);
+    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1026", 4);
 
     public Course testCourseE = new Course("Test Course E", testDepartmentD, "8100", 4);
     public Course testCourseF = new Course("Test Course F", testDepartmentD, "7100", 3);
-    public Course testCourseG = new Course("Test Course G", testDepartmentD, "7100", 2);
+    public Course testCourseG = new Course("Test Course G", testDepartmentD, "6100", 2);
     public Course testCourseH = new Course("Test Course H", testDepartmentD, "5100", 1);
+
+    public Course testCourseI = new Course("Test Course I", testDepartmentB, "5110", 4);
+    public Course testCourseJ = new Course("Test Course J", testDepartmentB, "6130", 3);
+    public Course testCourseK = new Course("Test Course K", testDepartmentB, "7140", 2);
+    public Course testCourseL = new Course("Test Course L", testDepartmentB, "8125", 1);
+
+    public Course testCourseM = new Course("Test Course M", testDepartmentC, "8123", 4);
+    public Course testCourseN = new Course("Test Course N", testDepartmentC, "7142", 3);
+    public Course testCourseO = new Course("Test Course O", testDepartmentC, "6131", 2);
+    public Course testCourseP = new Course("Test Course P", testDepartmentC, "5115", 1);
 
     public Section testSectionA01 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourseA, 1, 50);
     public Section testSectionA02 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Juan N. Onlee", "S423", testCourseA, 1, 50);
@@ -95,6 +108,46 @@ public class JsonTest {
     public Section testSectionH03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Brock O. Lee", "ADEM779", testCourseH, 1, 50);
     public Section testSectionH04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Brock O. Lee", "ADEM775", testCourseH, 1, 50);
 
+    public Section testSectionI01 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourseI, 1, 50);
+    public Section testSectionI02 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Juan N. Onlee", "S423", testCourseI, 1, 50);
+    public Section testSectionI03 = new Section("03", "LWV", "1:00PM-1:50PM", "Dr. Juan N. Onlee", "S422", testCourseI, 1, 50);
+    public Section testSectionI04 = new Section("04", "LWV", "1:30PM-2:20PM", "Dr. Juan N. Onlee", "S421", testCourseI, 1, 50);
+
+    public Section testSectionJ01 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Mai", "SH321", testCourseJ, 1, 50);
+    public Section testSectionJ02 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Too Mai", "SH322", testCourseJ, 1, 50);
+    public Section testSectionJ03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Too Mai", "SH323", testCourseJ, 1, 50);
+    public Section testSectionJ04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Too Mai", "SH324", testCourseJ, 1, 50);
+
+    public Section testSectionK01 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Hugh Mungus", "Ch691", testCourseK, 1, 50);
+    public Section testSectionK02 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Hugh Mungus", "Ch692", testCourseK, 1, 50);
+    public Section testSectionK03 = new Section("03", "LWV", "1:00PM-1:50PM", "Dr. Hugh Mungus", "Ch693", testCourseK, 1, 50);
+    public Section testSectionK04 = new Section("04", "LWV", "1:30PM-2:20PM", "Dr. Hugh Mungus", "Ch694", testCourseK, 1, 50);
+
+    public Section testSectionL01 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourseL, 1, 50);
+    public Section testSectionL02 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Brock O. Lee", "ADEM778", testCourseL, 1, 50);
+    public Section testSectionL03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Brock O. Lee", "ADEM779", testCourseL, 1, 50);
+    public Section testSectionL04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Brock O. Lee", "ADEM775", testCourseL, 1, 50);
+
+    public Section testSectionM01 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourseM, 1, 50);
+    public Section testSectionM02 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Juan N. Onlee", "S423", testCourseM, 1, 50);
+    public Section testSectionM03 = new Section("03", "LWV", "1:00PM-1:50PM", "Dr. Juan N. Onlee", "S422", testCourseM, 1, 50);
+    public Section testSectionM04 = new Section("04", "LWV", "1:30PM-2:20PM", "Dr. Juan N. Onlee", "S421", testCourseM, 1, 50);
+
+    public Section testSectionN01 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Mai", "SH321", testCourseN, 1, 50);
+    public Section testSectionN02 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Too Mai", "SH322", testCourseN, 1, 50);
+    public Section testSectionN03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Too Mai", "SH323", testCourseN, 1, 50);
+    public Section testSectionN04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Too Mai", "SH324", testCourseN, 1, 50);
+
+    public Section testSectionO01 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Hugh Mungus", "Ch691", testCourseO, 1, 50);
+    public Section testSectionO02 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Hugh Mungus", "Ch692", testCourseO, 1, 50);
+    public Section testSectionO03 = new Section("03", "LWV", "1:00PM-1:50PM", "Dr. Hugh Mungus", "Ch693", testCourseO, 1, 50);
+    public Section testSectionO04 = new Section("04", "LWV", "1:30PM-2:20PM", "Dr. Hugh Mungus", "Ch694", testCourseO, 1, 50);
+
+    public Section testSectionP01 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourseP, 1, 50);
+    public Section testSectionP02 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Brock O. Lee", "ADEM778", testCourseP, 1, 50);
+    public Section testSectionP03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Brock O. Lee", "ADEM779", testCourseP, 1, 50);
+    public Section testSectionP04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Brock O. Lee", "ADEM775", testCourseP, 1, 50);
+
     public JsonTest() {
 
         testCourseA.addPrereq(testPrereqCourseA);
@@ -106,36 +159,25 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseB);
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
-        
-        testMatriculaB.addSection(testSectionA01,testCourseA);
-        testMatriculaB.addSection(testSectionB02,testCourseB);
-        testMatriculaB.addSection(testSectionC03,testCourseC);
-        testMatriculaB.addSection(testSectionD04,testCourseD);
-
-<<<<<<< HEAD
-        testMatriculaB.addSection(testSectionA01, testCourseA);
-        testMatriculaB.addSection(testSectionB02, testCourseB);
-        testMatriculaB.addSection(testSectionC03, testCourseC);
-        testMatriculaB.addSection(testSectionD04, testCourseD);
-
-        testMatriculaC.addSection(testSectionD01, testCourseE);
-        testMatriculaC.addSection(testSectionC02, testCourseF);
-        testMatriculaC.addSection(testSectionB03, testCourseG);
-        testMatriculaC.addSection(testSectionA04, testCourseH);
-=======
-        testMatriculaC.addSection(testSectionD01,testCourseD);
-        testMatriculaC.addSection(testSectionC02,testCourseC);
-        testMatriculaC.addSection(testSectionB03,testCourseB);
-        testMatriculaC.addSection(testSectionA04,testCourseA);
->>>>>>> fe3a1fb819dc8c03cc09488b87b0869ce1d0946d
-
+  
         testList.add(testSectionA04);
         testList.add(testSectionB03);
         testList.add(testSectionC02);
         testList.add(testSectionD01);
 
-        testStudentA.addMatricula(testMatriculaB);
         testStudentA.addMatricula(testMatriculaC);
+        testStudentA.addMatricula(testMatriculaB);
+        testStudentA.SetTurn(new Turn("12/25/2020 15:00-12/25/2020 15:30"));
+
+        testMatriculaB.addSection(testSectionI01,testCourseI);
+        testMatriculaB.addSection(testSectionJ01,testCourseJ);
+        testMatriculaB.addSection(testSectionK01,testCourseK);
+        testMatriculaB.addSection(testSectionL01,testCourseL);
+
+        testMatriculaC.addSection(testSectionM01,testCourseM);
+        testMatriculaC.addSection(testSectionN01,testCourseN);
+        testMatriculaC.addSection(testSectionO01,testCourseO);
+        testMatriculaC.addSection(testSectionP01,testCourseP);
 
         testStudentA.addCourseTaken(testCourseTakenA);
         testStudentA.addCourseTaken(testCourseTakenB);
@@ -163,11 +205,7 @@ public class JsonTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-    }
-    
-    public static void main(String[] args) {
-    	new JsonTest().toString();
+
     }
 
 }

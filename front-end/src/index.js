@@ -5,7 +5,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from './main/Main_COPY.js';
+import Main from './main/Main_COPY_2.js';
 
 
 ReactDOM.render(
