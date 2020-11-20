@@ -17,6 +17,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import ScheduleCard from "../schedulecard/ScheduleCard.js";
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
@@ -375,26 +376,23 @@ export default function Main() {
 
                 <Divider />
 
-                <Grid container diretion='column' justify='space-around' alignItems='center'>
+                <Grid container justify='space-around' alignItems='center'>
 
                   <Grid item>
                     {renderMatricula(matriculas[matriculaIndex].sections, "My Matricula", 2)}
                   </Grid>
 
                   <Grid item>
-                    <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
+
                       <Grid item>
-                        <Button>Add Section</Button>
+                        <ScheduleCard />
                       </Grid>
-                      <Grid item>
-                        <Button>Remove Section</Button>
-                      </Grid>
-                      <Grid item>
-                        <Button>View Schedule</Button>
-                      </Grid>
+
                       <Grid item>
                         <Typography style={{ color: '#7f7f7f' }}>Total Credits: {matriculas[matriculaIndex].totalCredits}</Typography>
                       </Grid>
+
                     </Grid>
                   </Grid>
 

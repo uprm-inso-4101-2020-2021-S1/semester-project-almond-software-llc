@@ -2,11 +2,60 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import { withStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
+import DialogActions from '@material-ui/core/DialogActions';
 
-export default function SectionCard(props) {
+const styles = (theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+    const { children, classes, onClose, ...other } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root} {...other}>
+            <Typography variant="h6">{children}</Typography>
+            {onClose ? (
+                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+}))(MuiDialogContent);
+
+export default function CourseCard(props) {
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <Card elevation={2} style={{ width: '200px', height: '100px' }}>
@@ -19,7 +68,7 @@ export default function SectionCard(props) {
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}> - {props.section}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.courseName}</Typography>
+                            <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.time}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.professor}</Typography>
@@ -30,9 +79,39 @@ export default function SectionCard(props) {
                     </Grid>
                 </CardContent>
                 <div>
-                    <IconButton aria-label="delete">
-                        <ErrorOutlineIcon style={{ width: 15, height: 15 }} />
+                    <IconButton onClick={handleClickOpen}>
+                        <ErrorOutlineIcon style={{ width: '15px', height: '15px' }}></ErrorOutlineIcon>
                     </IconButton>
+                    <Typography style={{ fontSize: 13, color: '#7f7f7f', position: 'relative', top: '33px', left: '5px' }}>
+                        {props.population}/{props.capacity}
+                    </Typography>
+                    <Dialog style={{ padding: '10px' }} onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                            {props.courseName}
+                        </DialogTitle>
+                        <DialogContent dividers style={{ width: '600px', height: '300px' }}>
+                            <Grid container justify="space-evenly">
+
+                                <Grid container direction="column" justify="space-evenly" alignItems="center">
+                                    <Grid item>
+                                        <Typography style={{ float: 'left' }}>Available on: {props.availability} semester</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography style={{ float: 'left' }}>Pre-requisites: N/A </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography style={{ float: 'left' }}>Co-requisites: N/A </Typography>
+                                    </Grid>
+
+                                </Grid>
+                                <Grid container justify="flex-start">
+                                    <Grid item>
+                                        <Typography style={{ float: 'left', padding: '10px' }}>Description: {props.description}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </DialogContent>
+                    </Dialog>
                 </div>
                 <div style={{ backgroundColor: props.color, width: '10%', height: '150px' }} />
             </div>
@@ -41,23 +120,3 @@ export default function SectionCard(props) {
     );
 
 }
-
-{/* <Typography>
-    <Table>
-        <TableRow style={{ position: "relative", bottom: 10, right: 5, lineHeight: 1 }}>
-            <span style={{ fontSize: 18, fontWeight: "bold" }}>{props.courseCode}</span>
-            <span style={{ fontSize: 10, color: '#7f7f7f', position: "relative", bottom: 4 }}> - {props.section}</span>
-            <br />
-            <span style={{ fontSize: 12, color: '#7f7f7f' }}>{props.courseName}</span>
-            <br />
-            <span style={{ fontSize: 9, color: '#7f7f7f' }}>{props.professor}</span>
-            <br />
-            <span style={{ fontSize: 13, color: '#7f7f7f' }}>{props.credits} credits</span>
-        </TableRow>
-        <TableRow >
-            <IconButton aria-label="delete" style={{ positon: "relative", width: 10, height: 10, bottom: 25, left: 80 }}>
-                <ErrorOutlineIcon style={{ width: 15, height: 15 }} />
-            </IconButton>
-        </TableRow>
-    </Table>
-</Typography> */}
