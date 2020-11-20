@@ -91,8 +91,6 @@ export default function Main() {
 
   const [matriculas, setMatriculas] = useState(null);
 
-  const [currentMatricula, setCurrentMatricula] = useState(null);
-
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
@@ -123,9 +121,6 @@ export default function Main() {
 
     const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
     setMatriculas(resultMatriculas.data);
-
-    const resultCurrentMatricula = await axios.get('http://localhost:8080/currentMatricula');
-    setCurrentMatricula(resultCurrentMatricula.data);
 
   }
 
@@ -239,12 +234,12 @@ export default function Main() {
 
       switch (isCourseSection) {
         case 0:
-          if(targetListIndex !== 2){
+          if (targetListIndex !== 2) {
             addCourse(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex);
           }
           break;
         case 1:
-          if(targetListIndex !== 1){
+          if (targetListIndex !== 1) {
             addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
           }
           break;
