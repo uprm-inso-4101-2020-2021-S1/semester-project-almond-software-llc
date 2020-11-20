@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Grid from '@material-ui/core/Grid';
 
-export default function CourseCard(props) {
+export default function CourseCard_COPY(props) {
     return (
         <Card elevation={2} style={{ width: '175px', height: '85px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>

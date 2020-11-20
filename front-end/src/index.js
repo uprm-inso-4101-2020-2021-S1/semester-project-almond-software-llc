@@ -10,7 +10,7 @@ import Main from './main/Main_COPY_2.js';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Main />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

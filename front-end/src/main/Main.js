@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
+import SectionCard from "../sectioncard/SectionCard";
 import CourseCard from "../coursecard/CourseCard";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,7 +22,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -81,543 +85,53 @@ export default function Main() {
 
   const classes = useStyles();
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/matricula').then(res => {
-      console.log(res);
-    })
-  })
+  const [priorities, setPriorities] = useState(null);
 
-  // let [tempCourse, setTempCourse] = useState({})
+  const [departments, setDepartments] = useState(null);
 
-  let [myCourses, setMyCourses] = useState([
-    {
-      section: '001',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '401',
-      courseName: 'Test Course 1',
-      courseCode: 'TEST3001',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'purple',
-      list: 0,
-    },
-    {
-      section: '002',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '402',
-      courseName: 'Test Course 2',
-      courseCode: 'TEST3002',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'purple',
-      list: 0,
-    },
-    {
-      section: '003',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '403',
-      courseName: 'Test Course 3',
-      courseCode: 'TEST3003',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'purple',
-      list: 0,
-    },
-    {
-      section: '004',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '404',
-      courseName: 'Test Course 4',
-      courseCode: 'TEST3004',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'purple',
-      list: 0,
-    },
-  ]);
+  const [matriculas, setMatriculas] = useState(null);
 
-  let [departmentCourses, setDepartmentCourses] = useState([
-    {
-      section: '005',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '401',
-      courseName: 'Test Course 5',
-      courseCode: 'TEST4005',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'green',
-      list: 1,
-    },
-    {
-      section: '006',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '402',
-      courseName: 'Test Course 6',
-      courseCode: 'TEST4006',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'green',
-      list: 1,
-    },
-    {
-      section: '007',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '403',
-      courseName: 'Test Course 7',
-      courseCode: 'TEST4007',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'green',
-      list: 1,
-    },
-    {
-      section: '008',
-      day: 'LWV',
-      time: '12:00pm',
-      professor: 'Dr. Test',
-      building: 'T',
-      room: '408',
-      courseName: 'Test Course 8',
-      courseCode: 'TEST4008',
-      capacity: 15,
-      population: 0,
-      credits: 3,
-      color: 'green',
-      list: 1,
-    },
-  ]);
+  const [currentMatricula, setCurrentMatricula] = useState(null);
+
+  const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
+
+  let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
+
+  let [departmentIndex, setDepartmentIndex] = useState(0);
 
   let [matriculaIndex, setMatriculaIndex] = useState(0);
+
+  let [tempValueIndex, setValueIndex] = useState(0);
+
+  let [tempSourceListIndex, setSourceListIndex] = useState(0);
 
   let [disablePrevious, setDisablePrevious] = useState(true);
 
   let [disableNext, setDisableNext] = useState(false);
 
-  let matriculaA = {
-    period: '2020',
-    totalCredits: 12,
-    data: [
-      {
-        section: '005',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 5',
-        courseCode: 'TEST1005',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '006',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 6',
-        courseCode: 'TEST1006',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '007',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 7',
-        courseCode: 'TEST1007',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '008',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '408',
-        courseName: 'Test Course 8',
-        courseCode: 'TEST1008',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-    ]
-  };
-
-  let matriculaB = {
-    period: '2021',
-    totalCredits: 12,
-    data: [
-      {
-        section: '005',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 5',
-        courseCode: 'TEST2005',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'red',
-        list: 2,
-      },
-      {
-        section: '006',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 6',
-        courseCode: 'TEST2006',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'red',
-        list: 2,
-      },
-      {
-        section: '007',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 7',
-        courseCode: 'TEST2007',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'red',
-        list: 2,
-      },
-      {
-        section: '008',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '408',
-        courseName: 'Test Course 8',
-        courseCode: 'TEST2008',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'red',
-        list: 2,
-      },
-    ]
-  };
-
-  let matriculaC = {
-    period: '2022',
-    totalCredits: 12,
-    data: [
-      {
-        section: '005',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 5',
-        courseCode: 'TEST3005',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'yellow',
-        list: 2,
-      },
-      {
-        section: '006',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 6',
-        courseCode: 'TEST3006',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'yellow',
-        list: 2,
-      },
-      {
-        section: '007',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 7',
-        courseCode: 'TEST3007',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'yellow',
-        list: 2,
-      },
-      {
-        section: '008',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '408',
-        courseName: 'Test Course 8',
-        courseCode: 'TEST3008',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'yellow',
-        list: 2,
-      },
-    ]
-  };
-
-  let [myMatriculas, setMyMatriculas] = useState([matriculaA, matriculaB, matriculaC]);
-
-  let [totalCredits, setTotalCredits] = useState(12);
-
   let [elTicko, setElTicko] = useState(false);
 
-  let tempCourse = {};
+  async function fetchData() {
 
-  let lists = {
-    myCourses: [
-      {
-        section: '001',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 1',
-        courseCode: 'TEST3001',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'purple',
-        list: 0,
-      },
-      {
-        section: '002',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 2',
-        courseCode: 'TEST3002',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'purple',
-        list: 0,
-      },
-      {
-        section: '003',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 3',
-        courseCode: 'TEST3003',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'purple',
-        list: 0,
-      },
-      {
-        section: '004',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '404',
-        courseName: 'Test Course 4',
-        courseCode: 'TEST3004',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'purple',
-        list: 0,
-      },
-    ],
-    departmentCourses: [
-      {
-        section: '005',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 5',
-        courseCode: 'TEST4005',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'green',
-        list: 1,
-      },
-      {
-        section: '006',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 6',
-        courseCode: 'TEST4006',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'green',
-        list: 1,
-      },
-      {
-        section: '007',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 7',
-        courseCode: 'TEST4007',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'green',
-        list: 1,
-      },
-      {
-        section: '008',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '408',
-        courseName: 'Test Course 8',
-        courseCode: 'TEST4008',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'green',
-        list: 1,
-      },
-    ],
-    myMatricula: [
-      {
-        section: '005',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '401',
-        courseName: 'Test Course 5',
-        courseCode: 'TEST6005',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '006',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '402',
-        courseName: 'Test Course 6',
-        courseCode: 'TEST6006',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '007',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '403',
-        courseName: 'Test Course 7',
-        courseCode: 'TEST6007',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-      {
-        section: '008',
-        day: 'LWV',
-        time: '12:00pm',
-        professor: 'Dr. Test',
-        building: 'T',
-        room: '408',
-        courseName: 'Test Course 8',
-        courseCode: 'TEST6008',
-        capacity: 15,
-        population: 0,
-        credits: 3,
-        color: 'blue',
-        list: 2,
-      },
-    ],
+    // const resultLogin = await axios.get('http://localhost:8080/login?user=testA&password=6969');
+
+    const resultPriorities = await axios.get('http://localhost:8080/priority');
+    setPriorities(resultPriorities.data);
+
+    const resultDepartments = await axios.get('http://localhost:8080/departments');
+    setDepartments(resultDepartments.data);
+
+    const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
+    setMatriculas(resultMatriculas.data);
+
+    const resultCurrentMatricula = await axios.get('http://localhost:8080/currentMatricula');
+    setCurrentMatricula(resultCurrentMatricula.data);
+
   }
+
+  useEffect(() => {
+    fetchData();
+  }, [elTicko]);
 
   const forceUpdate = () => {
     setElTicko(!elTicko);
@@ -630,145 +144,198 @@ export default function Main() {
   }
 
   const nextMatricula = () => {
-    setDisableNext((matriculaIndex + 1) >= (myMatriculas.length - 1) ? true : false);
+    setDisableNext((matriculaIndex + 1) >= (matriculas.length - 1) ? true : false);
     setDisablePrevious(false);
     setMatriculaIndex(matriculaIndex + 1);
   }
 
-  const verifyCourse = (list, course) => {
-
-    switch (list) {
-
-      case 0:
-        myCourses.forEach(value => {
-          if (value.courseCode === course.courseCode) {
-            return false;
-          }
-        });
-        return true;
-
-      case 1:
-        departmentCourses.forEach(value => {
-          if (value.courseCode === course.courseCode) {
-            return false;
-          }
-        });
-        return true;
-
-      case 2:
-        myMatriculas[matriculaIndex].data.forEach(value => {
-          if (value.courseCode === course.courseCode) {
-            return false;
-          }
-        });
-        return true;
-
-      default:
-        console.log("INVALID");
-        return false;
-
-    }
-
+  const addCourse = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/addCourse?'
+      + 'sourceListIndex=' + sourceListIndex
+      + '&targetListIndex=' + targetListIndex
+      + '&valueIndex=' + valueIndex
+      + '&priorityCourseIndex=' + priorityCourseIndex
+      + '&departmentIndex=' + departmentIndex
+      + '&matriculaIndex=' + matriculaIndex);
   }
 
-  const addCourse = (list, course) => {
-
-    switch (list) {
-
-      case 0:
-        if (verifyCourse(list, course)) {
-          myCourses.push(course);
-        }
-        break;
-
-      case 1:
-        if (verifyCourse(list, course)) {
-          departmentCourses.push(course);
-        }
-        break;
-
-      case 2:
-        if (verifyCourse(list, course)) {
-          myMatriculas[matriculaIndex].data.push(course);
-        }
-        myMatriculas[matriculaIndex].totalCredits + course.credits;
-        break;
-
-      default:
-        console.log("INVALID");
-        break;
-
-    }
-
+  const addSection = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/addSection?'
+      + 'sourceListIndex=' + sourceListIndex
+      + '&targetListIndex=' + targetListIndex
+      + '&valueIndex=' + valueIndex
+      + '&priorityCourseIndex=' + priorityCourseIndex
+      + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
+      + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semester);
   }
 
-  const removeCourse = (e_list, course) => {
-
-    switch (e_list) {
-
+  const listCourseSwitch = (listIndex, departmentIndex) => {
+    switch (listIndex) {
       case 0:
-        myCourses.forEach((value, i) => {
-          if (value.courseCode === course.courseCode) {
-            myCourses.splice(i, 1);
-          }
-        });
-        break;
-
+        return priorities;
       case 1:
-        departmentCourses.forEach((value, i) => {
-          if (value.courseCode === course.courseCode) {
-            departmentCourses.splice(i, 1);
-          }
-        });
-        break;
-
-      case 2:
-        myMatriculas[matriculaIndex].data.forEach((value, i) => {
-          if (value.courseCode === course.courseCode) {
-            myMatriculas[matriculaIndex].data.splice(i, 1);
-          }
-        });
-        myMatriculas[matriculaIndex].totalCredits - course.credits;
-        break;
-
+        return departments[departmentIndex].courses;
       default:
-        console.log("INVALID");
-        break;
-
+        console.log('INVALID');
     }
-
   }
 
-  const onDragStart = (e, course) => {
-    e.dataTransfer.setData('list', course.list);
-    tempCourse = course;
+  const listSectionSwitch = (listIndex, courseIndex) => {
+    switch (listIndex) {
+      case 0:
+        return priorities[courseIndex].sections;
+      case 2:
+        return matriculas[matriculaIndex].sections;
+      default:
+        console.log('INVALID');
+    }
+  }
+
+  const listNameSwitch = (listType, listIndex) => {
+    if (listIndex === 0) {
+      return 'from: priority courses';
+    } else {
+      if (listType === 0) {
+        return 'from: department courses';
+      } else {
+        return 'from: matricula sections';
+      }
+    }
   }
 
   const onDragOver = (e) => {
     e.preventDefault();
   }
 
-  const onDrop = (e, list) => {
+  const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
 
-    let course = tempCourse;
-    let e_list = tempCourse.list;
+    if (listType === 0) {
+      console.log('list type: course');
+      console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
+      console.log(listNameSwitch(listType, sourceListIndex));
+    } else {
+      console.log('list type: section');
+      console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
+      console.log(listNameSwitch(listType, sourceListIndex));
+    }
 
-    if (list != course.list) {
+    setIsCourseSection(listType);
+    setValueIndex(valueIndex);
+    setSourceListIndex(sourceListIndex);
 
-      addCourse(list, course);
+    setPriorityCourseIndex(mainListIndex);
+    setDepartmentIndex(mainListIndex);
 
-      removeCourse(e_list, course);
+  }
+
+  const onDrop = (e, targetListIndex) => {
+
+    let valueIndex = tempValueIndex;
+    let sourceListIndex = tempSourceListIndex;
+
+    if (targetListIndex !== sourceListIndex) {
+
+      console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
+
+      switch (isCourseSection) {
+        case 0:
+          if(targetListIndex !== 2){
+            addCourse(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex);
+          }
+          break;
+        case 1:
+          if(targetListIndex !== 1){
+            addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
+          }
+          break;
+        default:
+          console.log('INVALID');
+      }
 
       forceUpdate();
 
     }
 
-    console.log('=====================================');
-    console.log('myCourses: ' + myCourses.length + ', ' + myCourses);
-    console.log('departmentCourses: ' + departmentCourses.length + ', ' + departmentCourses);
-    console.log('myMatricula: ' + myMatriculas[matriculaIndex].data.length + ', ' + myMatriculas[matriculaIndex].data);
-    console.log('=====================================');
+  }
 
+  const renderDepartments = (departmentsList, title, listIndex) => {
+    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {departmentsList.map((department, departmentsIndex) => (
+          <div key={departmentsIndex}>
+            <ListItem>
+              <Typography>{department.name}</Typography>
+            </ListItem>
+            <List>
+              {department.courses.map((course, coursesIndex) => (
+                <ListItem draggable={true} key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 1, departmentsIndex)}>
+                  <CourseCard
+                    courseCode={course.courseCode}
+                    courseName={course.name}
+                    credits={course.credits}
+                    color={course.color}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ))}
+      </List>
+    </div>
+  }
+
+  const renderPriorityCourses = (coursesList, title, listIndex) => {
+    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {coursesList.map((course, coursesIndex) => (
+          <div key={coursesIndex}>
+            <ListItem draggable={true} key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 0, coursesIndex)}>
+              <CourseCard
+                courseCode={course.courseCode}
+                courseName={course.name}
+                credits={course.credits}
+                color={course.color}
+              />
+            </ListItem>
+            <List>
+              {course.sections.map((section, sectionsIndex) => (
+                <ListItem draggable={true} key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 0, coursesIndex)}>
+                  <SectionCard
+                    courseCode={section.courseCode}
+                    section={section.secNum}
+                    courseName={section.courseName}
+                    professor={section.professor}
+                    credits={section.credits}
+                    color={section.color}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ))}
+      </List>
+    </div>
+  }
+
+  const renderMatricula = (matriculaList, title, listIndex) => {
+    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+      <List>
+        <Typography className={classes.drawerTypography}>{title}</Typography>
+        {matriculaList.map((sections, sectionsIndex) => (
+          <ListItem draggable={matriculaIndex === 0} key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)}>
+            <SectionCard
+              courseCode={sections.courseCode}
+              section={sections.secNum}
+              courseName={sections.courseName}
+              professor={sections.professor}
+              credits={sections.credits}
+              color={sections.color} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
   }
 
   return (
@@ -782,51 +349,13 @@ export default function Main() {
       </AppBar>
 
       <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
-
         <Toolbar />
-
-        <div className={classes.drawerContainer}>
-
-          <Divider />
-
-          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 0)}>
-            <List>
-              <Typography className={classes.drawerTypography}>My Courses</Typography>
-              {myCourses.map((value, i) => (
-                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                  <CourseCard
-                    courseCode={value.courseCode}
-                    section={value.section}
-                    courseName={value.courseName}
-                    professor={value.professor}
-                    credits={value.credits}
-                    color={value.color} />
-                </ListItem>
-              ))}
-            </List>
-          </div>
-
-          <Divider />
-
-          <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 1)}>
-            <List>
-              <Typography className={classes.drawerTypography}>Department of INSO</Typography>
-              {departmentCourses.map((value, i) => (
-                <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                  <CourseCard
-                    courseCode={value.courseCode}
-                    section={value.section}
-                    courseName={value.courseName}
-                    professor={value.professor}
-                    credits={value.credits}
-                    color={value.color} />
-                </ListItem>
-              ))}
-            </List>
-          </div>
-
-        </div>
-
+        {priorities !== null && departments !== null ? (
+          <div className={classes.drawerContainer}>
+            {renderPriorityCourses(priorities, "Priority Courses", 0)}
+            <Divider />
+            {renderDepartments(departments, "Departments", 1)}
+          </div>) : (<div />)}
       </Drawer>
 
       <main className={classes.content} style={{ height: '100vh' }}>
@@ -836,68 +365,52 @@ export default function Main() {
         <div className={classes.centerContent}>
 
           <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
-            <IconButton disabled={disablePrevious} onClick={() => previousMatricula()}>
+            <IconButton disabled={disableNext} onClick={() => nextMatricula()}>
               <NavigateBeforeIcon style={{ height: '50px', width: '50px' }} />
             </IconButton>
           </div>
 
           <Card elevation={3} style={{ width: '70%' }}>
-            <CardContent>
+            {matriculas !== null ? (
+              <CardContent>
 
-              <Grid item style={{ textAlign: 'center' }}>
-                <Typography style={{ fontSize: '30px' }}>{myMatriculas[matriculaIndex].period}</Typography>
-              </Grid>
-
-              <Divider />
-
-              <Grid container diretion='column' justify='space-around' alignItems='center'>
-
-                <Grid item>
-                  {myMatriculas[matriculaIndex].data.length === 0 ? (
-                    <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{ height: '100px', width: '100px' }} />
-                  ) : (
-                      <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, 2)} style={{}}>
-                        <List>
-                          {myMatriculas[matriculaIndex].data.map((value, i) => (
-                            <ListItem draggable button key={i} onDragStart={(e) => onDragStart(e, value)}>
-                              <CourseCard
-                                courseCode={value.courseCode}
-                                section={value.section}
-                                courseName={value.courseName}
-                                professor={value.professor}
-                                credits={value.credits}
-                                color={value.color} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </div>
-                    )}
+                <Grid item style={{ textAlign: 'center' }}>
+                  <Typography style={{ fontSize: '30px' }}>{matriculas[matriculaIndex].period.semesterAsString} {matriculas[matriculaIndex].period.matyear}</Typography>
                 </Grid>
 
-                <Grid item>
-                  <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
-                    <Grid item>
-                      <Button>Add Section</Button>
-                    </Grid>
-                    <Grid item>
-                      <Button>Remove Section</Button>
-                    </Grid>
-                    <Grid item>
-                      <Button>View Schedule</Button>
-                    </Grid>
-                    <Grid item>
-                      <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
+                <Divider />
+
+                <Grid container diretion='column' justify='space-around' alignItems='center'>
+
+                  <Grid item>
+                    {renderMatricula(matriculas[matriculaIndex].sections, "My Matricula", 2)}
+                  </Grid>
+
+                  <Grid item>
+                    <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
+                      <Grid item>
+                        <Button>Add Section</Button>
+                      </Grid>
+                      <Grid item>
+                        <Button>Remove Section</Button>
+                      </Grid>
+                      <Grid item>
+                        <Button>View Schedule</Button>
+                      </Grid>
+                      <Grid item>
+                        <Typography style={{ color: '#7f7f7f' }}>Total Credits: {matriculas[matriculaIndex].totalCredits}</Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
+
                 </Grid>
 
-              </Grid>
-
-            </CardContent>
+              </CardContent>
+            ) : (<div />)}
           </Card>
 
           <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
-            <IconButton disabled={disableNext} onClick={() => nextMatricula()}>
+            <IconButton disabled={disablePrevious} onClick={() => previousMatricula()}>
               <NavigateNextIcon style={{ height: '50px', width: '50px' }} />
             </IconButton>
           </div>
