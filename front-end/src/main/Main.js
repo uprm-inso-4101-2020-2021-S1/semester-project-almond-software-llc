@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../coursecard/CourseCard.js";
+import CourseCard from "../sectioncard/SectionCard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -749,7 +749,7 @@ export default function Main() {
         if (verifyCourse(list, course)) {
           myMatriculas[matriculaIndex].data.push(course);
         }
-        myMatriculas[matriculaIndex].totalCredits + course.credits;
+        // myMatriculas[matriculaIndex].totalCredits + course.credits;
         break;
 
       default:
@@ -786,7 +786,7 @@ export default function Main() {
             myMatriculas[matriculaIndex].data.splice(i, 1);
           }
         });
-        myMatriculas[matriculaIndex].totalCredits - course.credits;
+        // myMatriculas[matriculaIndex].totalCredits - course.credits;
         break;
 
       default:
