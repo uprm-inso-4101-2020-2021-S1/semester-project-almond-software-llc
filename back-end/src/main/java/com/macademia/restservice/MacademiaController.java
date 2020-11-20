@@ -1,5 +1,6 @@
 package com.macademia.restservice;
 
+import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,64 +59,95 @@ public class MacademiaController {
 		return currentStudent.getMatriculas();
 	}
 
+	@GetMapping("/currentMatricula")
+	public Matricula currentMatricula() throws SQLException {
+		return currentStudent.getCurrentMatricula();
+	}
+
 	@GetMapping("/addSection")
 	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
-		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaIndex).get(valueIndex);
+			@RequestParam(value = "matriculaYear") int matriculaYear,
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod) {
+
+		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod).get(valueIndex);
 		Course tempCourse = null;
+		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
+
 		try {
 			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// add
 		if (targetListIndex == 0) {
-			currentStudent.getPriority().get(priorityCourseIndex).addSection(tempSection);
+			if (!currentStudent.getPriority().contains(tempCourse))
+				currentStudent.getPriority().add(tempCourse);
 		} else {
-			((List<Matricula>) currentStudent.getMatriculas()).get(matriculaIndex).addSection(tempSection, tempCourse);
+			if (!currentStudent.getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
+				currentStudent.getMatricula(tempPeriod).addSection(tempSection, tempCourse);
+			}
+		}
+		// remove
+		if (sourceListIndex == 0) {
+			currentStudent.getPriority().remove(priorityCourseIndex);
+		} else {
+			currentStudent.getMatricula(tempPeriod).getSections().remove(valueIndex);
+			currentStudent.getMatricula(tempPeriod).getCourses().remove(tempCourse);
 		}
 	}
 
+	// FIX
+	// TRY ADDING THE REMOVE FUNCTIONALITY IN THE ADD FUNCTIONALITY SO THAT IT'S IN
+	// SEQUENCE, AND NOT GLITCHED OUT
 	@GetMapping("/removeSection")
 	public void removeSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
-			@RequestParam(value = "courseIndex") int courseIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+			@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
+			@RequestParam(value = "departmentIndex") int departmentIndex,
+			@RequestParam(value = "matriculaYear") int matriculaYear,
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod) {
+		if (sourceListIndex == 0) {
+			courseListSwitch(sourceListIndex, departmentIndex).remove(valueIndex);
+		} else {
+			sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod).remove(valueIndex);
+		}
 	}
 
 	@GetMapping("/addCourse")
 	public void addCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "departmentIndex") int departmentIndex,
 			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
 		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex).get(valueIndex);
-		if (targetListIndex == 0) {
+		// add
+		if (!currentStudent.getPriority().contains(tempCourse)) {
 			currentStudent.getPriority().add(tempCourse);
-		} else {
-			try {
-				tester.db.getDepartments().get(departmentIndex).AddCourse(tempCourse);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
+		// remove
+		currentStudent.getPriority().remove(priorityCourseIndex);
 	}
 
 	@GetMapping("/removeCourse")
-	public void removeCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
-			@RequestParam(value = "courseIndex") int courseIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
+	public List<Course> removeCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+			@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "departmentIndex") int departmentIndex) {
+		courseListSwitch(sourceListIndex, departmentIndex).remove(valueIndex);
+		return courseListSwitch(sourceListIndex, departmentIndex);
 	}
 
-	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaIndex) {
+	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaYear,
+			String matriculaPeriod) {
 		switch (sourceListIndex) {
 			case 0:
 				return currentStudent.getPriority().get(priorityCourseIndex).getSections();
-			case 1:
-				return ((List<Matricula>) currentStudent.getMatriculas()).get(matriculaIndex).getSections();
+			case 2:
+				return currentStudent.getMatricula(new MatriculaPeriod(matriculaYear, matriculaPeriod)).getSections();
 			default:
 				return null;
 		}
@@ -127,7 +159,7 @@ public class MacademiaController {
 				return currentStudent.getPriority();
 			case 1:
 				try {
-					return (List<Course>) tester.db.getDepartments().get(departmentIndex).getCourses();
+					return tester.db.getDepartments().get(departmentIndex).getCourses();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -135,13 +167,6 @@ public class MacademiaController {
 			default:
 				return null;
 		}
-	}
-
-	private List<Matricula> getMatriculas() {
-		List<Matricula> result = new ArrayList<Matricula>();
-		result.add(0, tester.testMatriculaB);
-		result.add(0, tester.testMatriculaC);
-		return result;
 	}
 
 }

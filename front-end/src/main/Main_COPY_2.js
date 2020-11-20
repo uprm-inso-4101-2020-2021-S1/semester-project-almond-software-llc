@@ -8,7 +8,8 @@ import Collapse from '@material-ui/core/Collapse';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import CourseCard from "../coursecard/CourseCard.js";
+import SectionCard from "../sectioncard/SectionCard";
+import CourseCard from "../coursecard/CourseCard"
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -90,6 +91,8 @@ export default function Main() {
 
   const [matriculas, setMatriculas] = useState(null);
 
+  const [currentMatricula, setCurrentMatricula] = useState(null);
+
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
@@ -121,6 +124,9 @@ export default function Main() {
     const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
     setMatriculas(resultMatriculas.data);
 
+    const resultCurrentMatricula = await axios.get('http://localhost:8080/currentMatricula');
+    setCurrentMatricula(resultCurrentMatricula.data);
+
   }
 
   useEffect(() => {
@@ -143,16 +149,24 @@ export default function Main() {
     setMatriculaIndex(matriculaIndex + 1);
   }
 
-  const addCourse = (sourceListIndex, targetListIndex, valueIndex, departmentIndex, matriculaIndex) => {
+  const addCourse = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/addCourse?'
+      + 'sourceListIndex=' + sourceListIndex
+      + '&targetListIndex=' + targetListIndex
+      + '&valueIndex=' + valueIndex
+      + '&priorityCourseIndex=' + priorityCourseIndex
+      + '&departmentIndex=' + departmentIndex
+      + '&matriculaIndex=' + matriculaIndex);
   }
 
-  const removeCourse = (sourceListIndex, courseIndex) => {
-  }
-
-  const addSection = (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
-  }
-
-  const removeSection = (sourceListIndex, courseIndex) => {
+  const addSection = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/addSection?'
+      + 'sourceListIndex=' + sourceListIndex
+      + '&targetListIndex=' + targetListIndex
+      + '&valueIndex=' + valueIndex
+      + '&priorityCourseIndex=' + priorityCourseIndex
+      + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
+      + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semester);
   }
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
@@ -170,7 +184,7 @@ export default function Main() {
     switch (listIndex) {
       case 0:
         return priorities[courseIndex].sections;
-      case 1:
+      case 2:
         return matriculas[matriculaIndex].sections;
       default:
         console.log('INVALID');
@@ -205,15 +219,12 @@ export default function Main() {
       console.log(listNameSwitch(listType, sourceListIndex));
     }
 
-    setIsCourseSection(listType)
+    setIsCourseSection(listType);
     setValueIndex(valueIndex);
     setSourceListIndex(sourceListIndex);
 
-    if (listType === 0) {
-      setPriorityCourseIndex(mainListIndex);
-    } else {
-      setDepartmentIndex(mainListIndex);
-    }
+    setPriorityCourseIndex(mainListIndex);
+    setDepartmentIndex(mainListIndex);
 
   }
 
@@ -224,14 +235,18 @@ export default function Main() {
 
     if (targetListIndex !== sourceListIndex) {
 
+      console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
+
       switch (isCourseSection) {
         case 0:
-          addCourse(sourceListIndex, targetListIndex, valueIndex, departmentIndex, matriculaIndex);
-          removeCourse();
+          if(targetListIndex !== 2){
+            addCourse(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex);
+          }
           break;
         case 1:
-          addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
-          removeSection();
+          if(targetListIndex !== 1){
+            addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
+          }
           break;
         default:
           console.log('INVALID');
@@ -254,8 +269,13 @@ export default function Main() {
             </ListItem>
             <List>
               {department.courses.map((course, coursesIndex) => (
-                <ListItem draggable={true} button key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 1, departmentsIndex)}>
-                  <Typography>{course.name}</Typography>
+                <ListItem draggable={true} key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 1, departmentsIndex)}>
+                  <CourseCard
+                    courseCode={course.courseCode}
+                    courseName={course.name}
+                    credits={course.credits}
+                    color={course.color}
+                  />
                 </ListItem>
               ))}
             </List>
@@ -271,13 +291,25 @@ export default function Main() {
         <Typography className={classes.drawerTypography}>{title}</Typography>
         {coursesList.map((course, coursesIndex) => (
           <div key={coursesIndex}>
-            <ListItem draggable={true} button key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 0, coursesIndex)}>
-              <Typography className={classes.drawerTypography}>{course.name}: {course.courseCode}</Typography>
+            <ListItem draggable={true} key={coursesIndex} onDragStart={(e) => onDragStart(e, 0, coursesIndex, 0, coursesIndex)}>
+              <CourseCard
+                courseCode={course.courseCode}
+                courseName={course.name}
+                credits={course.credits}
+                color={course.color}
+              />
             </ListItem>
             <List>
               {course.sections.map((section, sectionsIndex) => (
-                <ListItem draggable={true} button key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 0, coursesIndex)}>
-                  <Typography>{section.secNum}</Typography>
+                <ListItem draggable={true} key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 0, coursesIndex)}>
+                  <SectionCard
+                    courseCode={section.courseCode}
+                    section={section.secNum}
+                    courseName={section.courseName}
+                    professor={section.professor}
+                    credits={section.credits}
+                    color={section.color}
+                  />
                 </ListItem>
               ))}
             </List>
@@ -292,8 +324,8 @@ export default function Main() {
       <List>
         <Typography className={classes.drawerTypography}>{title}</Typography>
         {matriculaList.map((sections, sectionsIndex) => (
-          <ListItem draggable={matriculaIndex === 0} button key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 1, matriculaIndex)}>
-            <CourseCard
+          <ListItem draggable={matriculaIndex === 0} key={sectionsIndex} onDragStart={(e) => onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)}>
+            <SectionCard
               courseCode={sections.courseCode}
               section={sections.secNum}
               courseName={sections.courseName}
