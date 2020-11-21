@@ -89,8 +89,6 @@ export default function Main(props) {
 
   let history = useHistory();
 
-  const [userActive, setUserActive] = useState(true);
-
   const [priorities, setPriorities] = useState(null);
 
   const [departments, setDepartments] = useState(null);
@@ -214,16 +212,6 @@ export default function Main(props) {
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
 
-    // if (listType === 0) {
-    //   console.log('list type: course');
-    //   console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
-    //   console.log(listNameSwitch(listType, sourceListIndex));
-    // } else {
-    //   console.log('list type: section');
-    //   console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
-    //   console.log(listNameSwitch(listType, sourceListIndex));
-    // }
-
     setIsCourseSection(listType);
     setValueIndex(valueIndex);
     setSourceListIndex(sourceListIndex);
@@ -239,8 +227,6 @@ export default function Main(props) {
     let sourceListIndex = tempSourceListIndex;
 
     if (targetListIndex !== sourceListIndex) {
-
-      // console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
 
       switch (isCourseSection) {
         case 0:
@@ -351,7 +337,6 @@ export default function Main(props) {
 
   return (
     <div className={classes.root}>
-
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <img src={Macademia} className={classes.image} />
@@ -369,9 +354,7 @@ export default function Main(props) {
       </Drawer>
 
       <main className={classes.content} style={{ height: '100vh' }}>
-
         <Toolbar />
-
         <div className={classes.centerContent}>
 
           <div style={{ display: 'flex', alignItems: 'center', padding: '50px' }}>
@@ -423,9 +406,7 @@ export default function Main(props) {
           </div>
 
         </div>
-
       </main>
-
     </div>
   );
 }
