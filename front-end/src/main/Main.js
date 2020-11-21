@@ -946,18 +946,21 @@ export default function Main() {
                       </div>
                     )}
                 </Grid>
+                
                 <Grid item>
                   <Grid container direction='column' justify='space-around' alignItems='center' spacing={3}>
+
                     <Grid item>
-
                       <ScheduleCard />
-
                     </Grid>
+
                     <Grid item>
                       <Typography style={{ color: '#7f7f7f' }}>Total Credits: {myMatriculas[matriculaIndex].totalCredits}</Typography>
                     </Grid>
+
                   </Grid>
                 </Grid>
+                
               </Grid>
             </CardContent>
           </Card>

@@ -9,43 +9,26 @@ import Grid from '@material-ui/core/Grid';
 export default function ScheduleCard(props) {
 
     return (
-        <Card elevation={2} style={{ width: '600px', height: '400px' }}>
+        <Card elevation={2} style={{ width: '500px', height: '300px' }}>
             <Grid container style={{ backgroundColor: 'green', height: '8%', color: 'white' }}>
-                <Grid item style={{ textAlign: 'center', width: '8%', float: 'left' }}>◉</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>MON</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>TUE</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>WED</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>THU</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>FRI</Grid>
-                <Grid item style={{ textAlign: 'center', width: '15.33%' }}>SAT</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>MON</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>TUE</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>WED</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>THU</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>FRI</Grid>
+                <Grid item style={{ textAlign: 'center', width: '16.666%' }}>SAT</Grid>
             </Grid>
             <Grid container style={{ display: 'inline-block', height: '92%', width: '100%', float: 'left' }}>
-                <Grid container style={{ height: '33.33%', borderTop: 'dotted 1px silver' }}>
-                    <Grid container style={{ textAlign: 'center', width: '8%', height: '100%', backgroundColor: 'lightgray' }}>06:00</Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                </Grid>
-                <Grid container style={{ height: '33.33%', borderTop: 'dotted 1px silver' }}>
-                    <Grid container style={{ textAlign: 'center', width: '8%', height: '100%', backgroundColor: 'lightgray' }}>12:00</Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                </Grid>
-                <Grid container style={{ height: '33.33%', borderTop: 'dotted 1px silver' }}>
-                    <Grid container style={{ textAlign: 'center', width: '8%', height: '100%', backgroundColor: 'lightgray' }}>18:00</Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
-                    <Grid container style={{ width: '15.33%', height: '100%', borderLeft: 'dotted 1px silver' }}></Grid>
+                <Grid container style={{ height: "100%", borderTop: 'dotted 1px silver' }}>
+                    {props.currentMatricula.sectionsByDay.map((day, i) => (
+                        <Grid container style={{ width: '16.666%', height: '100%', borderLeft: 'dotted 1px silver' }}>
+                            {day.map((section, i) => (
+                                <Grid item>
+                                    <Typography>{section.courseCode}</Typography>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    ))}
                 </Grid>
             </Grid>
         </Card>

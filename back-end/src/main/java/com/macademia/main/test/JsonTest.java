@@ -165,8 +165,8 @@ public class JsonTest {
         testList.add(testSectionC02);
         testList.add(testSectionD01);
 
-        testStudentA.addMatricula(testMatriculaC);
         testStudentA.addMatricula(testMatriculaB);
+        testStudentA.addMatricula(testMatriculaC);
         testStudentA.SetTurn(new Turn("12/25/2020 15:00-12/25/2020 15:30"));
 
         testMatriculaB.addSection(testSectionI01,testCourseI);

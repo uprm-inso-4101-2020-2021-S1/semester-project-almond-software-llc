@@ -68,7 +68,7 @@ export default function CourseCard(props) {
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}> - {props.section}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.time}</Typography>
+                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.time}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.professor}</Typography>

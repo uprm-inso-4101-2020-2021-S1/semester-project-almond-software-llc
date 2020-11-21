@@ -158,8 +158,12 @@ public class Department {
 
 	}
 
-	public Collection<Course> getCourses() {
-		return CourseCatalog.values();
+	public List<Course> getCourses() {
+		List<Course> result = new ArrayList<Course>();
+		for(Course c : CourseCatalog.values()){
+			result.add(c);
+		}
+		return result;
 	}
 
 }
