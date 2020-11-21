@@ -10,7 +10,7 @@ public class Turn {
 
     /**
      * Receives a turntext from the database and converts it into a turn
-     * @param TurnText MM/DD/YYYY HH:mm-MM/DD/YYYY HH:m
+     * @param TurnText MM/DD/YYYY HH:mm-MM/DD/YYYY HH:mm
      */
     public Turn(String TurnText){
     	String TurnTextSplit[]= TurnText.split("-");

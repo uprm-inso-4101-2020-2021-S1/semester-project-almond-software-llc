@@ -774,7 +774,7 @@ public class DBHandler {
 
 		// Save section to memory
 		for (int i = 0; i < HeadCourse.getSections().size(); i++) {
-			if (HeadCourse.getSections().get(i).getSecNum() == sect.getSecNum()) {
+			if (HeadCourse.getSections().get(i).getSecNum().contentEquals(sect.getSecNum())) {
 				HeadCourse.getSections().set(i, sect);
 			}
 		}
@@ -857,6 +857,12 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	public void deleteCourse(Course course) throws SQLException {
+		if (!DepartmentMap.containsKey(course.getDept())) {
+			return;
+		} // The course is not in memory. Therefore it should not be in the database.
+		if (DepartmentMap.get(course.getDept()).getCatalog().containsKey(course.getCode())) {
+			DepartmentMap.get(course.getDept()).getCatalog().remove(course.getCode());
+		} // Remove it from memory if you can find it
 		deleteCourse(course.getCourseCode()); // delete the course
 
 		// Now delete every section
@@ -873,6 +879,19 @@ public class DBHandler {
 	 * @throws SQLException
 	 */
 	public void deleteSection(Section sect) throws SQLException {
+
+		String Dept = sect.getCourseCode().substring(0, 4);
+		String Code = sect.getColor().replace(Dept, "");
+		if (!DepartmentMap.containsKey(Dept)) {
+			return;
+		} // The section isn't in memory. Therefore it shouldn't be in the database.
+		if (!DepartmentMap.get(Dept).getCatalog().containsKey(Code)) {
+			return;
+		} // The section is also not in memory.
+		if (DepartmentMap.get(Dept).getCatalog().get(Code).getSections().contains(sect)) {
+			DepartmentMap.get(Dept).getCatalog().get(Code).getSections().remove(sect);
+		} // If it is in memory, delete it.
+
 		// delete the section straight from the database.
 		deleteSection(sect.getCourseCode() + "-" + sect.getSecNum());
 	}
@@ -1354,7 +1373,7 @@ public class DBHandler {
 
 	/**
 	 * Calculates the semesters between what the current semester is, and the
-	 * provided semester
+	 * provided Matricula Period
 	 * 
 	 * @param period
 	 * @return Returns a positive number if there has been more than 0 semesters

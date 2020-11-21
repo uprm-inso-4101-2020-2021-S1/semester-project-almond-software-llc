@@ -107,16 +107,10 @@ public class GeneralTest {
 		System.out.println(Prefix + " =");
 	}
 	
-	// public static void PrintDepartmentDetails(String Prefix, Department department) {
-	// 	System.out.println(Prefix + " |- SHORT: " + department.getShortName());
-	// 	for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
-	// 	System.out.println(Prefix + " =");
-	// }
-
 	public static void PrintDepartmentDetails(String Prefix, Department department) {
 		System.out.println(Prefix + " |- SHORT: " + department.getShortName());
-		// for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
-		// System.out.println(Prefix + " =");
+		for (Course course : department.getCatalog().values()) {PrintCourseDetails(Prefix ,course);}
+		System.out.println(Prefix + " =");
 	}
 
 	public static void PrintCourseDetails(String Prefix, Course course) {

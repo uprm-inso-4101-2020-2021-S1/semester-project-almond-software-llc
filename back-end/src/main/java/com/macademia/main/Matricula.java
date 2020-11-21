@@ -48,7 +48,7 @@ public class Matricula implements Comparable<Matricula> {
 		if (ReadOnly) {
 			throw new IllegalStateException("Matricula marked as read only!");
 		}
-		if (f.getDept() + f.getCode() != e.getCourseCode()) {
+		if (!f.getCourseCode().contentEquals(e.getCourseCode())) {
 			throw new IllegalArgumentException("Course doesn't match with section.");
 		}
 		if (!sections.contains(e)) {
@@ -70,7 +70,7 @@ public class Matricula implements Comparable<Matricula> {
 		// Find the course to remove
 		Course f = null;
 		for (Course course : courses) {
-			if (course.getCourseCode() == e.getCourseCode()) {
+			if (course.getCourseCode().contentEquals(e.getCourseCode())) {
 				f = course;
 				break;
 			} // found it
@@ -97,7 +97,7 @@ public class Matricula implements Comparable<Matricula> {
 		// find the section that we have that matches the course code
 		Section e = null;
 		for (Section section : sections) {
-			if (section.getCourseCode() == f.getCourseCode()) {
+			if (section.getCourseCode().contentEquals(f.getCourseCode())) {
 				e = section;
 				break;
 			} // found it

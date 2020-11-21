@@ -6,9 +6,9 @@ package com.macademia.main;
  * @author Giovanni Garcia
  */
 
-enum Days {
-    MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
-}
+// enum Days {
+// MTWJ, MWF, TJ, S, MTWJF, MWJF, MTWF;
+// }
 
 public class Section {
     // Variables
@@ -30,7 +30,7 @@ public class Section {
         this.secNum = secNum;
         this.day = day;
         this.time = time;
-        this.period = timetoPeriod(time);
+        this.period = Period.timetoPeriod(time);
         this.professor = professor;
         this.location = Location;
         this.population = Population;
@@ -46,9 +46,7 @@ public class Section {
     }
 
     public boolean isFull() {
-        if (this.population == this.capacity)
-            return true;
-        return false;
+        return this.population >= this.capacity;
     }
 
     public void setPeriod(Period period) {
@@ -57,64 +55,13 @@ public class Section {
         this.time = period.toMilitaryTimeString();
     }
 
-    public Period getPeriod() {
-        return period;
-    }
-
-    /*
-     * I have no idea what any of this is and if it works so let's simplify the heck
-     * out of this. String[] per= time.split("-"); char temp =
-     * per[0].charAt(per[0].indexOf('M')-1); String[] re=per[0].split(":");
-     * per[0]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
-     * start=Integer.parseInt(per[0]); if(temp=='P')start+=1200; temp =
-     * per[1].charAt(per[1].indexOf('M')-1); re=per[1].split(":");
-     * per[1]=re[0]+re[1].substring(0,re[1].indexOf('M')-1); int
-     * end=Integer.parseInt(per[1]); if(temp=='P')end+=1200; return new
-     * Period(start,end);
-     */
-
     /**
-     * Turns a time into a period
+     * Gets the period of this matricula.
      * 
-     * @param time
      * @return
      */
-    public static Period timetoPeriod(String time) {
-        time = time.replace(" ", ""); // Remove any potential spaces
-        String[] TwoTimes = time.split("-"); // split
-        if (TwoTimes.length != 2) {
-            throw new IllegalArgumentException("Time not formatted properly");
-        } // Make sure there are two times.
-        return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
-    }
-
-    private static int TimeToInt(String Time) {
-        boolean PM = false; // Flag to save if the time ended with PM
-        Time = Time.toUpperCase(); // Flag to handle lowercase AMs and PMs
-        if (Time.endsWith("AM")) {
-            Time = Time.replace("AM", "");
-        } // Remove AM if it is present.
-        else if (Time.endsWith("PM")) {
-            Time = Time.replace("PM", "");
-            PM = true;
-        } // Remove PM if it is present, and mark the PM flag.
-
-        // Now remove the :
-        Time = Time.replace(":", "");
-
-        // Now we should have a number.
-        int TimeAsInt;
-        try {
-            TimeAsInt = Integer.parseInt(Time);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Impropperly formatted time. Could not convert " + Time + "to an int");
-        }
-
-        // Lastly, if PM is true, add 1200
-        if (PM && TimeAsInt < 1200) {
-            TimeAsInt += 1200;
-        }
-        return TimeAsInt;
+    public Period getPeriod() {
+        return period;
     }
 
     /**
@@ -138,7 +85,7 @@ public class Section {
      */
     public void setTime(String t) {
         this.time = t;
-        this.period = timetoPeriod(t);
+        this.period = Period.timetoPeriod(t);
     }
 
     /**
@@ -153,21 +100,37 @@ public class Section {
         this.credits = course.getCredits();
     }
 
+    /**
+     * Gets the capacity of this section
+     * 
+     * @param capacity
+     */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
+    /**
+     * Increments the population of this selection
+     */
     public void increasePopulation() {
         this.population++;
     }
 
+    /**
+     * Decrements the population of this section
+     */
     public void decreasePopulation() {
         this.population--;
     }
 
+    /**
+     * Sets the population of this section. Mostly here for the DBHandler
+     * 
+     * @param Population
+     */
     public void setPopulation(int Population) {
         this.population = Population;
-    } // This is here for the Database handler
+    }
 
     // Getters
 
@@ -198,10 +161,20 @@ public class Section {
         return this.time;
     }
 
+    /**
+     * Gets the professor of this section
+     * 
+     * @return Prof
+     */
     public String getProfessor() {
         return this.professor;
     }
 
+    /**
+     * Gets the location of this section
+     * 
+     * @return
+     */
     public String getLocation() {
         return this.location;
     }
@@ -215,39 +188,81 @@ public class Section {
         return this.courseCode;
     }
 
+    /**
+     * Gets the credits for this section
+     * 
+     * @return
+     */
     public int getCredits() {
         return this.credits;
     }
 
+    /**
+     * Gets the capacity of this section
+     * 
+     * @return
+     */
     public int getCapacity() {
         return this.capacity;
     }
 
+    /**
+     * gets the population of this section
+     * 
+     * @return
+     */
     public int getPopulation() {
         return this.population;
     }
 
+    /**
+     * Gets the color of this section. Used by the Front-End
+     * 
+     * @return
+     */
     public String getColor() {
         return this.Color;
     }
 
+    /**
+     * Gets the coure name for this section
+     * 
+     * @return
+     */
     public String getCourseName() {
         return this.courseName;
+    }
+
+    /**
+     * Compares this section to another object.
+     * 
+     * @return TRUE if and only if the object isn't null, is an instance of section,
+     *         and if the course code and section number matches with this
+     *         section's.
+     */
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof Section) {
+            Section OtherSection = (Section) obj;
+            return OtherSection.courseCode.contentEquals(courseCode) && OtherSection.secNum.contentEquals(secNum);
+        }
+        return false;
     }
 
     /**
      * Returns a displayable string for this section
      * 
      * @return DeptShortNameCourseCode-SectionNum on Days during Time (IE
-     *         "DRAM3001-21 on Tuesday, Thursday during 5:30-7:00")
+     *         "DRAM3001-21 on MJ during 17:30-19:00")
      */
-
     public String toString() {
         return getCourseCode() + "-" + getSecNum() + " on " + getDay() + " during " + getTime();
     }
 
     /**
-     * Check if there is conflict in the sections in the matricula
+     * Function to check if this section conflits with a given section.
      * 
      * @author Josue
      * @param sec Section to check if conflicts

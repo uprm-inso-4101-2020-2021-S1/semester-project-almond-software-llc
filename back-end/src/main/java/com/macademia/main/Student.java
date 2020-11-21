@@ -79,7 +79,7 @@ public class Student extends User {
 	 */
 	public List<Matricula> getMatriculas() {
 		List<Matricula> result = new ArrayList<Matricula>();
-		for(Matricula m : this.matriculas.values()){
+		for (Matricula m : this.matriculas.values()) {
 			result.add(m);
 		}
 		Collections.sort(result);
@@ -153,9 +153,9 @@ public class Student extends User {
 	 * @throws IllegalArgumentException if the course prerequesites aren't met, or
 	 *                                  if the Section doesn't match with the course
 	 */
-	public void addSections(Section e, Course f, MatriculaPeriod m) {
+	public void addSection(Section e, Course f, MatriculaPeriod m) {
 		// Make sure the course and section are the same
-		if (f.getDept() + f.getCode() != e.getCourseCode()) {
+		if (!f.getCourseCode().contentEquals(e.getCourseCode())) {
 			throw new IllegalArgumentException("Course doesn't match with section.");
 		}
 
@@ -183,16 +183,26 @@ public class Student extends User {
 		}
 	}
 
+	/**
+	 * Adds Matricula to this student's map of matriculas
+	 * 
+	 * @param e
+	 */
 	public void addMatricula(Matricula e) {
-		this.currentMatricula = e;
 		matriculas.put(e.getPeriod(), e);
 	}
 
-	public Matricula createMatricula(MatriculaPeriod p) {
-		Matricula m = new Matricula(p);
-		return m;
-	}
+	// public Matricula createMatricula(MatriculaPeriod p) {
+	// Matricula m = new Matricula(p);
+	// return m;
+	// }
 
+	/**
+	 * Verifies prereqs for a course that is attempted to be added.
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public boolean verifyPrereqs(Course e) {
 		int counter = 0;
 
@@ -204,6 +214,13 @@ public class Student extends User {
 		return counter == e.getPrereq().size();
 	}
 
+	/**
+	 * Verifies Coreqs for a course that is attempted to be added.
+	 * 
+	 * @param e
+	 * @param per
+	 * @return
+	 */
 	public boolean verifyCoreqs(Course e, MatriculaPeriod per) {
 		int counter = 0;
 
@@ -218,18 +235,40 @@ public class Student extends User {
 		return counter == e.getCoreq().size();
 	}
 
+	/**
+	 * Adds a course taken to the list of courses taken
+	 * 
+	 * @param e
+	 */
 	public void addCourseTaken(Course e) {
 		coursesTaken.add(e);
 	}
 
+	/**
+	 * Adds a course to the list of priority courses.
+	 * 
+	 * @param e
+	 */
 	public void addPriority(Course e) {
 		priorities.add(e);
 	}
 
+	/**
+	 * Removes a course from the list of priority courses with the specified index.
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public Course removePriority(int i) {
 		return priorities.remove(i);
 	}
 
+	/**
+	 * Swaps the priorty of courses with indices I and J
+	 * 
+	 * @param i
+	 * @param j
+	 */
 	public void swapPriority(int i, int j) {
 		Course temp = priorities.get(i);
 		priorities.set(i, priorities.get(j));
@@ -260,10 +299,13 @@ public class Student extends User {
 		}
 		if (obj instanceof Student) {
 			Student OtherStudent = (Student) obj;
-			return OtherStudent.StudentNumber == StudentNumber;
+			return OtherStudent.StudentNumber.contentEquals(StudentNumber);
 		}
 		return false;
 	}
+
+	// -[Turn
+	// Funtions]----------------------------------------------------------------------
 
 	/**
 	 * Executes a matricula turn for that period, without forcing it.
@@ -375,7 +417,7 @@ public class Student extends User {
 		coursesTaken.addAll(matriculas.get(per).getCourses());
 
 		// AND WE'RE DONE
-
+		matriculas.get(per).setReadOnly(true);
 	}
 
 	/**
@@ -395,7 +437,7 @@ public class Student extends User {
 
 	public boolean attemptEnrollSection(Section e, Course f, MatriculaPeriod m) {
 		try {
-			addSections(e, f, m);
+			addSection(e, f, m);
 			return true;
 		} catch (IllegalArgumentException e2) {
 			return false;

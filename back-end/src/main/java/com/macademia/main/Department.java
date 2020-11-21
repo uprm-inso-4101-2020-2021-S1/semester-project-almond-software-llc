@@ -110,8 +110,23 @@ public class Department {
 	 * Adds/updates a course to the course directory.
 	 */
 	public void AddCourse(Course course) {
-
 		CourseCatalog.put(course.getCode(), course);
+	}
+
+	/**
+	 * Gets all sections from this department's courses
+	 * 
+	 * @return
+	 */
+	public List<Section> getSections() {
+		List<Section> result = new ArrayList<Section>();
+		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
+			for (Section s : e.getValue().getSections()) {
+				result.add(s);
+			}
+		}
+
+		return result;
 
 	}
 
@@ -139,28 +154,14 @@ public class Department {
 		}
 		if (obj instanceof Department) {
 			Department OtherDepartment = (Department) obj;
-			return OtherDepartment.ShortName == ShortName;
+			return OtherDepartment.ShortName.contentEquals(ShortName);
 		}
 		return false;
 	}
 
-	public List<Section> getSections() {
-
-		List<Section> result = new ArrayList<Section>();
-
-		for (Entry<String, Course> e : CourseCatalog.entrySet()) {
-			for (Section s : e.getValue().getSections()) {
-				result.add(s);
-			}
-		}
-
-		return result;
-
-	}
-
 	public List<Course> getCourses() {
 		List<Course> result = new ArrayList<Course>();
-		for(Course c : CourseCatalog.values()){
+		for (Course c : CourseCatalog.values()) {
 			result.add(c);
 		}
 		return result;

@@ -100,6 +100,19 @@ public class Course {
 	private void UpdateSections() {for (Section section : sections) {section.UpdateCourseInfo(this);}}
 	
 	/**
+	 * Determines whether this course is equal to the provided object
+	 * @return TRUE if and only if the object is not null, if the object is an instance of Course, and if the Course Code is the same.
+	 */
+	public boolean equals(Object obj) {
+		if(obj==null) {return false;}
+		if(obj instanceof Course) {
+			Course otherCourse = (Course) obj;
+			return otherCourse.courseCode.contentEquals(courseCode);
+		}
+		return false;
+	}
+	
+	/**
 	 * Returns a displayable string for this course
 	 * 
 	 * @return CourseName (DeptShortNameCourseCode) Credits Credit(s) (IE "Acting 1
