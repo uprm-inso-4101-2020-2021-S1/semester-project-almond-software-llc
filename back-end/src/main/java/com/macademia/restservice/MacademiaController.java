@@ -4,8 +4,10 @@ import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 //import java.util.concurrent.atomic.AtomicLong;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,7 @@ public class MacademiaController {
 	// private static final String template = "Hello, %s!";
 	// private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
-	private Student currentStudent = null;
+	private Map<String, Student> currentStudents = new HashMap<String, Student>();
 
 	@GetMapping("/macademia")
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
@@ -34,7 +36,7 @@ public class MacademiaController {
 	public boolean login(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password) {
 		try {
 			if (tester.db.getUser(user).checkPassword(password)) {
-				currentStudent = tester.db.getStudent(tester.db.getUser(user));
+				currentStudents.put(user, tester.db.getStudent(tester.db.getUser(user)));
 				return true;
 			}
 		} catch (SQLException e) {
@@ -44,35 +46,37 @@ public class MacademiaController {
 		return false;
 	}
 
+	@GetMapping("/userActive")
+	public boolean login(@RequestParam(value = "user") String user) {
+		return currentStudents.containsKey(user);
+	}
+
 	@GetMapping("/departments")
 	public List<Department> department() throws SQLException {
 		return tester.db.getDepartments();
 	}
 
 	@GetMapping("/priority")
-	public List<Course> priority() throws SQLException {
-		return currentStudent.getPriority();
+	public List<Course> priority(@RequestParam(value = "user") String user) throws SQLException {
+		return currentStudents.get(user).getPriority();
 	}
 
 	@GetMapping("/matriculas")
-	public Collection<Matricula> matriculas() throws SQLException {
-		return currentStudent.getMatriculas();
+	public Collection<Matricula> matriculas(@RequestParam(value = "user") String user) throws SQLException {
+		return currentStudents.get(user).getMatriculas();
 	}
 
-	@GetMapping("/currentMatricula")
-	public Matricula currentMatricula() throws SQLException {
-		return currentStudent.getCurrentMatricula();
-	}
-
-	@GetMapping("/addSection")
-	public void addSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+	@GetMapping("/transferSection")
+	public void transferSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "matriculaYear") int matriculaYear,
-			@RequestParam(value = "matriculaPeriod") String matriculaPeriod) {
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
+			@RequestParam(value = "user") String user) {
 
-		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod).get(valueIndex);
+		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod,
+				user).get(valueIndex);
 		Course tempCourse = null;
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
 
@@ -84,79 +88,68 @@ public class MacademiaController {
 		}
 		// add
 		if (targetListIndex == 0) {
-			if (!currentStudent.getPriority().contains(tempCourse))
-				currentStudent.getPriority().add(tempCourse);
+			if (!currentStudents.get(user).getPriority().contains(tempCourse))
+				currentStudents.get(user).getPriority().add(tempCourse);
 		} else {
-			if (!currentStudent.getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
-				currentStudent.getMatricula(tempPeriod).addSection(tempSection, tempCourse);
+			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
+				currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
 			}
 		}
 		// remove
 		if (sourceListIndex == 0) {
-			currentStudent.getPriority().remove(priorityCourseIndex);
+			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
 		} else {
-			currentStudent.getMatricula(tempPeriod).getSections().remove(valueIndex);
-			currentStudent.getMatricula(tempPeriod).getCourses().remove(tempCourse);
+			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
+			currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
+		}
+		// save
+		try {
+			tester.db.SaveEverything();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
-	// FIX
-	// TRY ADDING THE REMOVE FUNCTIONALITY IN THE ADD FUNCTIONALITY SO THAT IT'S IN
-	// SEQUENCE, AND NOT GLITCHED OUT
-	@GetMapping("/removeSection")
-	public void removeSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
-			@RequestParam(value = "valueIndex") int valueIndex,
-			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
-			@RequestParam(value = "departmentIndex") int departmentIndex,
-			@RequestParam(value = "matriculaYear") int matriculaYear,
-			@RequestParam(value = "matriculaPeriod") String matriculaPeriod) {
-		if (sourceListIndex == 0) {
-			courseListSwitch(sourceListIndex, departmentIndex).remove(valueIndex);
-		} else {
-			sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod).remove(valueIndex);
-		}
-	}
-
-	@GetMapping("/addCourse")
-	public void addCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+	@GetMapping("/transferCourse")
+	public void transferCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "departmentIndex") int departmentIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex) {
-		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex).get(valueIndex);
-		// add
-		if (!currentStudent.getPriority().contains(tempCourse)) {
-			currentStudent.getPriority().add(tempCourse);
-		}
-		// remove
-		currentStudent.getPriority().remove(priorityCourseIndex);
-	}
+			@RequestParam(value = "matriculaIndex") int matriculaIndex, @RequestParam(value = "user") String user) {
 
-	@GetMapping("/removeCourse")
-	public List<Course> removeCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
-			@RequestParam(value = "valueIndex") int valueIndex,
-			@RequestParam(value = "departmentIndex") int departmentIndex) {
-		courseListSwitch(sourceListIndex, departmentIndex).remove(valueIndex);
-		return courseListSwitch(sourceListIndex, departmentIndex);
+		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex, user).get(valueIndex);
+		if (!currentStudents.get(user).getPriority().contains(tempCourse)) {
+			currentStudents.get(user).getPriority().add(tempCourse);
+		}
+		currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+		// save
+		try {
+			tester.db.SaveEverything();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaYear,
-			String matriculaPeriod) {
+			String matriculaPeriod, String user) {
 		switch (sourceListIndex) {
 			case 0:
-				return currentStudent.getPriority().get(priorityCourseIndex).getSections();
+				return currentStudents.get(user).getPriority().get(priorityCourseIndex).getSections();
 			case 2:
-				return currentStudent.getMatricula(new MatriculaPeriod(matriculaYear, matriculaPeriod)).getSections();
+				return currentStudents.get(user).getMatricula(new MatriculaPeriod(matriculaYear, matriculaPeriod))
+						.getSections();
 			default:
 				return null;
 		}
 	}
 
-	private List<Course> courseListSwitch(int sourceListIndex, int departmentIndex) {
+	private List<Course> courseListSwitch(int sourceListIndex, int departmentIndex, String user) {
 		switch (sourceListIndex) {
 			case 0:
-				return currentStudent.getPriority();
+				return currentStudents.get(user).getPriority();
 			case 1:
 				try {
 					return tester.db.getDepartments().get(departmentIndex).getCourses();

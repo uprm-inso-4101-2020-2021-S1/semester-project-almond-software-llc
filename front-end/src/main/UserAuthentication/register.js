@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import {MuiPickersUtilsProvider,KeyboardDatePicker,} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardDatePicker, } from "@material-ui/pickers";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
   const [selectedDate, handleDateChange] = useState(new Date());
-  
+
   let [props, setProps] = useState(
     {
       firstName: "",
@@ -87,7 +87,7 @@ export default function SignUp() {
     }
     else if (e.target.name === 'lastName') {
       setProps({
-        [e.target.lastName]:e.target.value
+        [e.target.lastName]: e.target.value
       })
     }
   }
@@ -142,6 +142,7 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
@@ -187,6 +188,7 @@ export default function SignUp() {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -200,6 +202,7 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -214,6 +217,7 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -227,23 +231,27 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </Grid>
+
           </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
-          >
+            className={classes.submit}>
+
             <Link href="/" className={classes.registerButton}>
               Register
             </Link>
+
           </Button>
+
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/">{"Already have an account? Login"}</Link>
             </Grid>
           </Grid>
+
         </form>
       </div>
     </Container>
