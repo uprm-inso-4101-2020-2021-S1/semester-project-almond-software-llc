@@ -10,8 +10,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, KeyboardDatePicker, } from "@material-ui/pickers";
-
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,43 +56,36 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  const [selectedDate, handleDateChange] = useState(new Date());
 
-  let [props, setProps] = useState(
-    {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-      ssn: "",
-      birthdate: "",
-      pin: "",
-      studentNumber: "",
-      registrationErrors: "",
-    },
-  );
+  let [newUser, setNewUser] = useState({
+    fullName: "",
+    password: "",
+    departmentCode: "",
+    studentNumber: "",
+  });
 
-  //const { props } = useState();
-
+  let [fullName, setFullName] = useState();
+  let [password, setPassword] = useState();
+  let [departmentCode, setDepartmentCode] = useState();
+  let [studentNumber, setStudentNumber] = useState();
+  let [passwordConfirmation, setPasswordConfirmation] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     //const {{ props: firstName }, { props:lastName }}
-  }
+  };
 
   const handleChange = (e) => {
-    if (e.target.name === 'firstName') {
+    if (e.target.name === "firstName") {
       setProps({
-        [e.target.firstName]: e.target.value,
+        [e.target.firstName]: e.target.onChange,
+      });
+    } else if (e.target.name === "lastName") {
+      setProps({
+        [e.target.lastName]: e.target.onChange,
       });
     }
-    else if (e.target.name === 'lastName') {
-      setProps({
-        [e.target.lastName]: e.target.value
-      })
-    }
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -101,105 +96,45 @@ export default function SignUp() {
           Register
         </Typography>
 
-        <form className={classes.form} onSubmit={handleSubmit}>
+        {/* <form className={classes.form}> */}
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                value={props.firstName}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                value={props.lastName}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="ssn"
-                label="SSN"
-                id="password"
-                value={props.ssn}
-                type="password"
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="pin"
-                label="Pin Number"
-                type="password"
-                id="pin-number"
-                value={props.pin}
-                onChange={handleChange}
-              />
-            </Grid>
-
             <Grid item xs={12}>
               <TextField
+                name="fullName"
                 variant="outlined"
                 required
                 fullWidth
+                id="fullName"
+                label="Full Name"
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
                 name="studentNumber"
                 label="Student Number"
                 id="student-number"
-                value={props.studentNumber}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setStudentNumber(e.target.value);
+                }}
               />
             </Grid>
 
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item xs={12}>
-                <KeyboardDatePicker
-                  autoOk
-                  required
-                  fullWidth
-                  clearable
-                  variant="inline"
-                  inputVariant="outlined"
-                  label="Birth date"
-                  format="MM/dd/yyyy"
-                  placeholder="10/10/2018"
-                  value={(selectedDate, props.birthdate)}
-                  onChange={(date) => handleDateChange(date)}
-                  minDate={new Date()}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
+                name="departmentCode"
                 variant="outlined"
                 required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={props.email}
-                onChange={handleChange}
+                id="departmentCode"
+                label="Department Code"
+                onChange={(e) => {
+                  setDepartmentCode(e.target.value);
+                }}
               />
             </Grid>
 
@@ -213,8 +148,9 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={props.password}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
             </Grid>
 
@@ -226,24 +162,33 @@ export default function SignUp() {
                 name="password confirmation"
                 label="Password confirmation"
                 type="password"
-                id="password"
-                value={props.passwordConfirmation}
-                onChange={handleChange}
+                id="password-confirmation"
+                onChange={(e) => {
+                  setPasswordConfirmation(e.target.value);
+                }}
               />
             </Grid>
-
           </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}>
-
-            <Link href="/" className={classes.registerButton}>
-              Register
-            </Link>
-
+            className={classes.submit}
+            onClick={() => {
+              setNewUser({
+                fullName: fullName,
+                password: password,
+                departmentCode: departmentCode,
+                studentNumber: studentNumber,
+              });
+              console.log(fullName);
+              console.log(password);
+              console.log(departmentCode);
+              console.log(studentNumber);
+            }}
+          >
+            <Typography>Register</Typography>
           </Button>
 
           <Grid container justify="flex-end">
@@ -251,8 +196,7 @@ export default function SignUp() {
               <Link href="/">{"Already have an account? Login"}</Link>
             </Grid>
           </Grid>
-
-        </form>
+        {/* </form> */}
       </div>
     </Container>
   );
