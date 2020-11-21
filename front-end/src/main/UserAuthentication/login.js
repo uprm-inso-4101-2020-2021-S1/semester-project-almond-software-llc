@@ -50,54 +50,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
+
   const classes = useStyles();
 
-  let [isLoggedIn] = useState(false);
+  let history = useHistory();
+  let [user, setUser] = useState(null);
+  let [password, setPassword] = useState(null);
 
-  //const [user, setUser] = useState(null);
-  //const [pass, setPass] = useState(null);
-
-  const history = useHistory();
-
-  let [props, setProps] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-      setProps({
-        [e.target.name]: e.target.value,
-      });
-  };
-
-  const handleSubmit = (e) => {
-    let [user, password] = useState(null);
-    axios.get(
-      "http://localhost:8080/login?" + "user=" + user + "&password=" + password
-    ).then(response => {
-      if (response.data.logged_in) {
-        props.handleSuccessfulAuth(response.data);
-      }
-    }).catch(error => {
-      console.log("error from login", error);
-    })
-    e.preventDefault();
-  };
-  
-
-  // const verifyLogin = () => {
-  //   if (user !== null && pass !== null) {
-  //     axios.get
-  //       ("http://localhost:8080/login?" + "user=" + user + "&password=" + pass
-  //       ).then((res) => {
-  //         if (res.ok) {
-  //           history.push("/home");
-  //           //console.log(props.title);
-  //         }
-  //       });
-  //   }
-  // };
+  const verifyLogin = async () => {
+    await axios.get('http://localhost:8080/login?'
+      + 'user=' + user
+      + '&password=' + password).then(res => {
+        if(res.data){
+          props.setCurrUser(user);
+          history.push("/home");
+        }
+      })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -107,50 +77,42 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="user"
-            label="Email Address"
-            name="user"
-            autoComplete="email"
-            autoFocus
-            value={props.email}
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={props.password}
-            onChange={(e) => handleChange(e)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            //onClick={verifyLogin}
-          >
-            <Typography>Login</Typography>
-          </Button>
-          <Grid container>
-            <Grid item xs></Grid>
-            <Grid item>
-              <Link href="/register">{"Don't have an account? Register"}</Link>
-            </Grid>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="user"
+          label="Email Address"
+          name="user"
+          autoComplete="email"
+          autoFocus
+          onChange={(e) => setUser(e.target.value)} />
+        <TextField
+          variant="outlined" margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          onChange={(e) => setPassword(e.target.value)} />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => verifyLogin()}>
+          <Typography>Login</Typography>
+        </Button>
+        <Grid container>
+          <Grid item xs></Grid>
+          <Grid item>
+            <Link href="/register">{"Don't have an account? Register"}</Link>
           </Grid>
-        </form>
+        </Grid>
       </div>
     </Container>
   );

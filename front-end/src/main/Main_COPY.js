@@ -22,6 +22,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import IconButton from '@material-ui/core/IconButton';
 import axios from 'axios';
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
 
 const drawerWidth = 270;
 
@@ -82,9 +83,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main() {
+export default function Main(props) {
 
   const classes = useStyles();
+
+  let history = useHistory();
+
+  const [userActive, setUserActive] = useState(true);
 
   const [priorities, setPriorities] = useState(null);
 
@@ -112,16 +117,18 @@ export default function Main() {
 
   async function fetchData() {
 
-    // const resultLogin = await axios.get('http://localhost:8080/login?user=testA&password=6969');
+    if (props.currUser === "") {
+      history.push("/");
+    } else {
+      const resultPriorities = await axios.get('http://localhost:8080/priority?' + 'user=' + props.currUser);
+      setPriorities(resultPriorities.data);
 
-    const resultPriorities = await axios.get('http://localhost:8080/priority');
-    setPriorities(resultPriorities.data);
+      const resultDepartments = await axios.get('http://localhost:8080/departments?' + 'user=' + props.currUser);
+      setDepartments(resultDepartments.data);
 
-    const resultDepartments = await axios.get('http://localhost:8080/departments');
-    setDepartments(resultDepartments.data);
-
-    const resultMatriculas = await axios.get('http://localhost:8080/matriculas');
-    setMatriculas(resultMatriculas.data);
+      const resultMatriculas = await axios.get('http://localhost:8080/matriculas?' + 'user=' + props.currUser);
+      setMatriculas(resultMatriculas.data);
+    }
 
   }
 
@@ -145,24 +152,26 @@ export default function Main() {
     setMatriculaIndex(matriculaIndex + 1);
   }
 
-  const addCourse = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex) => {
-    await axios.get('http://localhost:8080/addCourse?'
+  const transferCourse = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/transferCourse?'
       + 'sourceListIndex=' + sourceListIndex
       + '&targetListIndex=' + targetListIndex
       + '&valueIndex=' + valueIndex
       + '&priorityCourseIndex=' + priorityCourseIndex
       + '&departmentIndex=' + departmentIndex
-      + '&matriculaIndex=' + matriculaIndex);
+      + '&matriculaIndex=' + matriculaIndex
+      + '&user=' + props.currUser);
   }
 
-  const addSection = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
-    await axios.get('http://localhost:8080/addSection?'
+  const transferSection = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
+    await axios.get('http://localhost:8080/transferSection?'
       + 'sourceListIndex=' + sourceListIndex
       + '&targetListIndex=' + targetListIndex
       + '&valueIndex=' + valueIndex
       + '&priorityCourseIndex=' + priorityCourseIndex
       + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
-      + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semester);
+      + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semester
+      + '&user=' + props.currUser);
   }
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
@@ -176,10 +185,10 @@ export default function Main() {
     }
   }
 
-  const listSectionSwitch = (listIndex, courseIndex) => {
+  const listSectionSwitch = (listIndex, priorityCourseIndex) => {
     switch (listIndex) {
       case 0:
-        return priorities[courseIndex].sections;
+        return priorities[priorityCourseIndex].sections;
       case 2:
         return matriculas[matriculaIndex].sections;
       default:
@@ -205,15 +214,15 @@ export default function Main() {
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
 
-    if (listType === 0) {
-      console.log('list type: course');
-      console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
-      console.log(listNameSwitch(listType, sourceListIndex));
-    } else {
-      console.log('list type: section');
-      console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
-      console.log(listNameSwitch(listType, sourceListIndex));
-    }
+    // if (listType === 0) {
+    //   console.log('list type: course');
+    //   console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
+    //   console.log(listNameSwitch(listType, sourceListIndex));
+    // } else {
+    //   console.log('list type: section');
+    //   console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
+    //   console.log(listNameSwitch(listType, sourceListIndex));
+    // }
 
     setIsCourseSection(listType);
     setValueIndex(valueIndex);
@@ -231,17 +240,17 @@ export default function Main() {
 
     if (targetListIndex !== sourceListIndex) {
 
-      console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
+      // console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
 
       switch (isCourseSection) {
         case 0:
           if (targetListIndex !== 2) {
-            addCourse(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex);
+            transferCourse(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex, props.currUser);
           }
           break;
         case 1:
           if (targetListIndex !== 1) {
-            addSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex);
+            transferSection(sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex, props.currUser);
           }
           break;
         default:
@@ -333,7 +342,7 @@ export default function Main() {
               color={sections.color}
               time={sections.time}
               population={sections.population}
-              capacity={sections.capacity}/>
+              capacity={sections.capacity} />
           </ListItem>
         ))}
       </List>
@@ -392,7 +401,7 @@ export default function Main() {
                     <Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 
                       <Grid item>
-                        <ScheduleCard currentMatricula={matriculas[matriculaIndex]}/>
+                        <ScheduleCard currentMatricula={matriculas[matriculaIndex]} />
                       </Grid>
 
                       <Grid item>
