@@ -83,9 +83,8 @@ export default function SignIn(props) {
           required
           fullWidth
           id="user"
-          label="Email Address"
+          label="User"
           name="user"
-          autoComplete="email"
           autoFocus
           onChange={(e) => setUser(e.target.value)} />
         <TextField

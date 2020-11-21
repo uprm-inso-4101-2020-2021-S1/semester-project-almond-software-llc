@@ -79,6 +79,8 @@ export default function SignUp() {
   let [studentNumber, setStudentNumber] = useState();
   let [passwordConfirmation, setPasswordConfirmation] = useState();
 
+  //const handleSubmit = (e)
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -89,7 +91,6 @@ export default function SignUp() {
         </Typography>
 
         <Grid container spacing={2}>
-
           <Grid item xs={12}>
             <TextField
               name="fullName"
@@ -120,9 +121,9 @@ export default function SignUp() {
 
           <Grid item xs={12} sm={6}>
             <TextField
+              name="studentNumber"
               variant="outlined"
               required
-              name="studentNumber"
               label="Student Number"
               id="student-number"
               onChange={(e) => {
@@ -146,10 +147,10 @@ export default function SignUp() {
 
           <Grid item xs={12}>
             <TextField
+              name="password"
               variant="outlined"
               required
               fullWidth
-              name="password"
               label="Password"
               type="password"
               id="password"
@@ -162,12 +163,14 @@ export default function SignUp() {
 
           <Grid item xs={12}>
             <TextField
+              name="password confirmation"
               variant="outlined"
               required
               fullWidth
-              name="password confirmation"
               label="Password confirmation"
               type="password"
+              error={password !== passwordConfirmation}
+              helperText={password !== passwordConfirmation ? "Passwords do not match" : ""}
               id="password-confirmation"
               onChange={(e) => {
                 setPasswordConfirmation(e.target.value);
@@ -191,7 +194,6 @@ export default function SignUp() {
             <Link href="/">{"Already have an account? Login"}</Link>
           </Grid>
         </Grid>
-
       </div>
     </Container>
   );
