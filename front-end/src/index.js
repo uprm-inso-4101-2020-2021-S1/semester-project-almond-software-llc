@@ -6,17 +6,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import Main from './main/Main.js';
-import Login from "./main/UserAuthentication/login";
-//import Register from './main/UserAuthentication/register';
-import { BrowserRouter as Router } from "react-router-dom";
-import Main from './main/Main_COPY.js';
-
 
 ReactDOM.render(
-  <Router>
-    <App/>
-  </Router>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

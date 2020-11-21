@@ -1,9 +1,10 @@
 package com.macademia.main;
 
 import com.macademia.main.auth.User;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,10 @@ public class Student extends User {
 	private String Name;
 	private String StudentNumber;
 	private Map<MatriculaPeriod, Matricula> matriculas;
+	private Matricula currentMatricula;
 	private List<Course> priorities;
 	private List<Course> coursesTaken;
+	private Turn turn;
 
 	// -[Constructors]----------------------------------------------------------------------
 
@@ -44,6 +47,7 @@ public class Student extends User {
 		this.matriculas = new Hashtable<MatriculaPeriod, Matricula>(4);
 		this.priorities = new ArrayList<Course>();
 		this.coursesTaken = new ArrayList<Course>();
+		this.currentMatricula = null;
 
 	}
 
@@ -73,8 +77,20 @@ public class Student extends User {
 	/**
 	 * Gets this student's Matriculas
 	 */
-	public Collection<Matricula> getMatriculas() {
-		return matriculas.values();
+	public List<Matricula> getMatriculas() {
+		List<Matricula> result = new ArrayList<Matricula>();
+		for(Matricula m : this.matriculas.values()){
+			result.add(m);
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	/**
+	 * Gets this student's current matricula
+	 */
+	public Matricula getCurrentMatricula() {
+		return currentMatricula;
 	}
 
 	/**
@@ -83,7 +99,11 @@ public class Student extends User {
 	 * @param Mat
 	 */
 	public Matricula getMatricula(MatriculaPeriod Mat) {
-		return matriculas.get(Mat);
+		for (MatriculaPeriod mp : matriculas.keySet()) {
+			if (mp.getMatyear() == Mat.getMatyear() && mp.getSemesterAsString().equals(Mat.getSemesterAsString()))
+				return matriculas.get(mp);
+		}
+		return null;
 	}
 
 	/**
@@ -104,6 +124,24 @@ public class Student extends User {
 		return coursesTaken;
 	}
 
+	/**
+	 * Gets this Student's Matricula Turn
+	 * 
+	 * @return
+	 */
+	public Turn getTurn() {
+		return turn;
+	}
+
+	/**
+	 * Sets this student's matricula turn
+	 * 
+	 * @param turn
+	 */
+	public void SetTurn(Turn turn) {
+		this.turn = turn;
+	}
+
 	// -[Check-Up]----------------------------------------------------------------------
 
 	/**
@@ -115,24 +153,38 @@ public class Student extends User {
 	 * @throws IllegalArgumentException if the course prerequesites aren't met, or
 	 *                                  if the Section doesn't match with the course
 	 */
-	public void addSections(Section e, Course f, MatriculaPeriod m) throws IOException {
-		//Make sure the course and section are the same
-		if(f.getDept()+f.getCode()!=e.getCourseCode()) {throw new IllegalArgumentException("Course doesn't match with section.");}
-		
-		//Make sure the section isn't full
-		if(e.isFull()) {throw new IllegalArgumentException("Section is full!");}
-		
-		//TODO: Make sure the section doesn't conflict with anything already in that matricula
-		
-		
-		//lastly, Verify prereqs and coreqs.
-		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f) || f.getCoreq().isEmpty())) {
-			matriculas.get(m).addSection(e,f);;
-			coursesTaken.add(f); 
-		} else {throw new IllegalArgumentException("Course pre-requisites not met.");}
+	public void addSections(Section e, Course f, MatriculaPeriod m) {
+		// Make sure the course and section are the same
+		if (f.getDept() + f.getCode() != e.getCourseCode()) {
+			throw new IllegalArgumentException("Course doesn't match with section.");
+		}
+
+		// Make sure the section isn't full
+		if (e.isFull()) {
+			throw new IllegalArgumentException("Section is full!");
+		}
+
+		// Make sure the section doesn't conflict with anything already in that
+		// matricula
+		for (Section s : matriculas.get(m).getSections()) {
+			if (e.Conflict(s)) {
+				throw new IllegalArgumentException("Section conflicts with other already in matricula");
+			}
+		}
+
+		// lastly, Verify prereqs and coreqs.
+		if ((verifyPrereqs(f) || f.getPrereq().isEmpty()) && (verifyCoreqs(f, m) || f.getCoreq().isEmpty())) {
+			if (!matriculas.containsKey(m)) {
+				addMatricula(new Matricula(m));
+			} // If the matricula doesn't exist, add it.
+			matriculas.get(m).addSection(e, f);
+		} else {
+			throw new IllegalArgumentException("Course pre-requisites not met.");
+		}
 	}
 
 	public void addMatricula(Matricula e) {
+		this.currentMatricula = e;
 		matriculas.put(e.getPeriod(), e);
 	}
 
@@ -152,10 +204,14 @@ public class Student extends User {
 		return counter == e.getPrereq().size();
 	}
 
-	public boolean verifyCoreqs(Course e) {
+	public boolean verifyCoreqs(Course e, MatriculaPeriod per) {
 		int counter = 0;
+
+		List<Course> allCourses = new ArrayList<Course>(coursesTaken);
+		allCourses.addAll(matriculas.get(per).getCourses()); // AllCourses we will have for Coreqs
+
 		for (int j = 0; j < e.getCoreq().size(); j++) {
-			if (coursesTaken.contains(e.getCoreq().get(j))) {
+			if (allCourses.contains(e.getCoreq().get(j))) {
 				counter++;
 			}
 		}
@@ -209,36 +265,32 @@ public class Student extends User {
 		return false;
 	}
 
-	
+	/**
+	 * Executes a matricula turn for that period, without forcing it.
+	 * 
+	 * @param per
+	 */
 	public void turn(MatriculaPeriod per) {
-		int count = 0;
-		List<Course> allCourses = coursesTaken;
-		
-		//Check for prereqs
-		for (Course c : this.matriculas.get(per).getCourses()) {
-			for (Course prq : c.getPrereq()) {
-				if (allCourses.contains(prq)) continue;
-				else {
-					count++;
-					this.matriculas.get(per).removeCourse(c);
-					break;
-				}
-			}
+		turn(per, false);
+	}
+
+	/**
+	 * EXECUTES A MATRICULA TURN FOR THAT PERIOD
+	 * 
+	 * @param per
+	 */
+	public void turn(MatriculaPeriod per, Boolean force) {
+
+		if (!turn.isTime()) {
+			throw new IllegalStateException("It's not this user's turn to execute their matricula");
 		}
-		
-		//Check for Coreqs
-		for (Course c : this.matriculas.get(per).getCourses()) {
-			for (Course corq : c.getCoreq()) {
-				if (allCourses.contains(corq) || this.matriculas.get(per).getCourses().contains(corq)) continue;
-				else {
-					count++;
-					this.matriculas.get(per).removeCourse(c);
-					break;
-				}
-			}
+		if (!matriculas.containsKey(per)) {
+			throw new IllegalArgumentException("No matricula exists for that period");
 		}
 
-		//Removes it from matricula if its full
+		int count = 0; // Count of classes that we missed
+
+		// Removes it from matricula if its full
 		for (Section s : this.matriculas.get(per).getSections()) {
 			if (s.isFull()) {
 				this.matriculas.get(per).removeSection(s);
@@ -246,36 +298,108 @@ public class Student extends User {
 			}
 		}
 
-		//Removes the last added class that conflicts with an earlier class of the same time.
-		for (int i = 0; i < this.matriculas.get(per).getSections().size(); i++) {
-			for (int j = i + 1; j < this.matriculas.get(per).getSections().size(); j++) {
-				if (this.matriculas.get(per).getSections().get(i).Conflict(this.matriculas.get(per).getSections().get(j))) {
-					if (i > j) {
-						this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(i));
-						count++;
-					}
-					if (j > i) {
-						this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(j));
-						count++;
-					}
-				}
-				else {
+		// Check for prereqs
+		for (Course c : this.matriculas.get(per).getCourses()) {
+			for (Course prq : c.getPrereq()) {
+				if (coursesTaken.contains(prq))
 					continue;
+				else {
+					count++;
+					this.matriculas.get(per).removeCourse(c);
+					break;
 				}
 			}
 		}
-		
-		//Now comes the autoadjust
-		while (count > 0 || !this.priorities.isEmpty()) {
-			//this.matricula.getCoursesTaken().add(this.priorities.remove(0));
-			count--;
+
+		List<Course> allCourses = new ArrayList<Course>(coursesTaken);
+		allCourses.addAll(matriculas.get(per).getCourses()); // AllCourses we will have for Coreqs
+
+		// Check for Coreqs
+		for (Course c : this.matriculas.get(per).getCourses()) {
+			for (Course corq : c.getCoreq()) {
+				if (allCourses.contains(corq) || this.matriculas.get(per).getCourses().contains(corq))
+					continue;
+				else {
+					count++;
+					this.matriculas.get(per).removeCourse(c);
+					allCourses.remove(c);
+					break;
+				}
+			}
 		}
 
-		
+		// THIS ISN'T NECESSARY CONFLICTS ARE CHECKED AT TIME OF ADDITION
+		// //Removes the last added class that conflicts with an earlier class of the
+		// same time.
+		// for (int i = 0; i < this.matriculas.get(per).getSections().size(); i++) {
+		// for (int j = i + 1; j < this.matriculas.get(per).getSections().size(); j++) {
+		// if
+		// (this.matriculas.get(per).getSections().get(i).Conflict(this.matriculas.get(per).getSections().get(j)))
+		// {
+		// if (i > j) {
+		// this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(i));
+		// count++;
+		// }
+		// if (j > i) {
+		// this.matriculas.get(per).removeSection(this.matriculas.get(per).getSections().get(j));
+		// count++;
+		// }
+		// }
+		// else {
+		// continue;
+		// }
+		// }
+		// }
 
+		// Make a copy of the priorities
+		ArrayList<Course> prioritycopy = new ArrayList<Course>(priorities);
 
+		// Now comes the autoadjust
+		for (Course course : prioritycopy) {
+			if (attemptEnrollCourse(course, per)) {
+				count--;
+				priorities.remove(course);
+			}
+			if (count == 0) {
+				break;
+			}
+		}
 
+		// Now that we have ALL THE SECTIONS
+		// Go through each section, increase their population
+		for (Section sect : matriculas.get(per).getSections()) {
+			sect.increasePopulation();
+		}
 
+		// GO through each course and add it to courses taken
+		coursesTaken.addAll(matriculas.get(per).getCourses());
+
+		// AND WE'RE DONE
+
+	}
+
+	/**
+	 * Attempts to enroll a course for this student for a specifed tuition period
+	 * 
+	 * @param f
+	 * @return
+	 */
+	public boolean attemptEnrollCourse(Course f, MatriculaPeriod m) {
+		for (Section e : f.getSections()) {
+			if (attemptEnrollSection(e, f, m)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean attemptEnrollSection(Section e, Course f, MatriculaPeriod m) {
+		try {
+			addSections(e, f, m);
+			return true;
+		} catch (IllegalArgumentException e2) {
+			return false;
+		}
 	}
 
 }

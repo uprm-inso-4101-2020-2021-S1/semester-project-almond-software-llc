@@ -7,7 +7,9 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
     backgroundColor: "green",
     "&:hover": {
-      backgroundColor:"darkgreen",
+      backgroundColor: "darkgreen",
     },
   },
   loginButton: {
@@ -53,6 +55,50 @@ export default function SignIn() {
 
   let [isLoggedIn] = useState(false);
 
+  //const [user, setUser] = useState(null);
+  //const [pass, setPass] = useState(null);
+
+  const history = useHistory();
+
+  let [props, setProps] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+      setProps({
+        [e.target.name]: e.target.value,
+      });
+  };
+
+  const handleSubmit = (e) => {
+    let [user, password] = useState(null);
+    axios.get(
+      "http://localhost:8080/login?" + "user=" + user + "&password=" + password
+    ).then(response => {
+      if (response.data.logged_in) {
+        props.handleSuccessfulAuth(response.data);
+      }
+    }).catch(error => {
+      console.log("error from login", error);
+    })
+    e.preventDefault();
+  };
+  
+
+  // const verifyLogin = () => {
+  //   if (user !== null && pass !== null) {
+  //     axios.get
+  //       ("http://localhost:8080/login?" + "user=" + user + "&password=" + pass
+  //       ).then((res) => {
+  //         if (res.ok) {
+  //           history.push("/home");
+  //           //console.log(props.title);
+  //         }
+  //       });
+  //   }
+  // };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -61,17 +107,19 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="user"
             label="Email Address"
-            name="email"
+            name="user"
             autoComplete="email"
             autoFocus
+            value={props.email}
+            onChange={(e) => handleChange(e)}
           />
           <TextField
             variant="outlined"
@@ -83,6 +131,8 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={props.password}
+            onChange={(e) => handleChange(e)}
           />
           <Button
             type="submit"
@@ -90,10 +140,9 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            //onClick={verifyLogin}
           >
-            <Link href="/home" className={classes.loginButton}>
-              Login
-            </Link>
+            <Typography>Login</Typography>
           </Button>
           <Grid container>
             <Grid item xs></Grid>
