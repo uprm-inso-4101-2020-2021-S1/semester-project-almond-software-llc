@@ -8,12 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,37 +51,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+
   const classes = useStyles();
 
-  let [newUser, setNewUser] = useState({
-    fullName: "",
-    password: "",
-    departmentCode: "",
-    studentNumber: "",
-  });
+  let history = useHistory();
+
+  const verifyRegister = async () => {
+    if (password === passwordConfirmation) {
+      await axios.get('http://localhost:8080/userExists?user=' + user).then(res => {
+        if (!res.data) {
+          axios.post('http://localhost:8080/register?'
+            + 'user=' + user
+            + '&password=' + password
+            + '&fullName=' + fullName
+            + '&departmentCode=' + departmentCode
+            + '&studentNumber=' + studentNumber);
+          history.push("/");
+        }
+      })
+    }
+  }
 
   let [fullName, setFullName] = useState();
+  let [user, setUserName] = useState();
   let [password, setPassword] = useState();
   let [departmentCode, setDepartmentCode] = useState();
   let [studentNumber, setStudentNumber] = useState();
   let [passwordConfirmation, setPasswordConfirmation] = useState();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //const {{ props: firstName }, { props:lastName }}
-  };
-
-  const handleChange = (e) => {
-    if (e.target.name === "firstName") {
-      setProps({
-        [e.target.firstName]: e.target.onChange,
-      });
-    } else if (e.target.name === "lastName") {
-      setProps({
-        [e.target.lastName]: e.target.onChange,
-      });
-    }
-  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,107 +88,110 @@ export default function SignUp() {
           Register
         </Typography>
 
-        {/* <form className={classes.form}> */}
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="fullName"
-                variant="outlined"
-                required
-                fullWidth
-                id="fullName"
-                label="Full Name"
-                onChange={(e) => {
-                  setFullName(e.target.value);
-                }}
-              />
-            </Grid>
+        <Grid container spacing={2}>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                name="studentNumber"
-                label="Student Number"
-                id="student-number"
-                onChange={(e) => {
-                  setStudentNumber(e.target.value);
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="departmentCode"
-                variant="outlined"
-                required
-                id="departmentCode"
-                label="Department Code"
-                onChange={(e) => {
-                  setDepartmentCode(e.target.value);
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password confirmation"
-                label="Password confirmation"
-                type="password"
-                id="password-confirmation"
-                onChange={(e) => {
-                  setPasswordConfirmation(e.target.value);
-                }}
-              />
-            </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="fullName"
+              variant="outlined"
+              required
+              fullWidth
+              id="fullName"
+              label="Full Name"
+              onChange={(e) => {
+                setFullName(e.target.value);
+              }}
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => {
-              setNewUser({
-                fullName: fullName,
-                password: password,
-                departmentCode: departmentCode,
-                studentNumber: studentNumber,
-              });
-              console.log(fullName);
-              console.log(password);
-              console.log(departmentCode);
-              console.log(studentNumber);
-            }}
-          >
-            <Typography>Register</Typography>
-          </Button>
 
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/">{"Already have an account? Login"}</Link>
-            </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="user"
+              variant="outlined"
+              required
+              fullWidth
+              id="user"
+              label="User Name"
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
+            />
           </Grid>
-        {/* </form> */}
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              variant="outlined"
+              required
+              name="studentNumber"
+              label="Student Number"
+              id="student-number"
+              onChange={(e) => {
+                setStudentNumber(e.target.value);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="departmentCode"
+              variant="outlined"
+              required
+              id="departmentCode"
+              label="Department Code"
+              onChange={(e) => {
+                setDepartmentCode(e.target.value);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              name="password confirmation"
+              label="Password confirmation"
+              type="password"
+              id="password-confirmation"
+              onChange={(e) => {
+                setPasswordConfirmation(e.target.value);
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => verifyRegister()}
+        >
+          <Typography>Register</Typography>
+        </Button>
+
+        <Grid container justify="flex-end">
+          <Grid item>
+            <Link href="/">{"Already have an account? Login"}</Link>
+          </Grid>
+        </Grid>
+
       </div>
     </Container>
   );

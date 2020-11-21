@@ -153,7 +153,7 @@ export default function Main(props) {
   }
 
   const transferCourse = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, departmentIndex, matriculaIndex) => {
-    await axios.get('http://localhost:8080/transferCourse?'
+    await axios.post('http://localhost:8080/transferCourse?'
       + 'sourceListIndex=' + sourceListIndex
       + '&targetListIndex=' + targetListIndex
       + '&valueIndex=' + valueIndex
@@ -164,7 +164,7 @@ export default function Main(props) {
   }
 
   const transferSection = async (sourceListIndex, targetListIndex, valueIndex, priorityCourseIndex, matriculaIndex) => {
-    await axios.get('http://localhost:8080/transferSection?'
+    await axios.post('http://localhost:8080/transferSection?'
       + 'sourceListIndex=' + sourceListIndex
       + '&targetListIndex=' + targetListIndex
       + '&valueIndex=' + valueIndex
@@ -291,7 +291,7 @@ export default function Main(props) {
   }
 
   const renderPriorityCourses = (coursesList, title, listIndex) => {
-    return <div onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
+    return <div style={{ minHeight: '20px', minWidth: '20px' }} onDragOver={(e) => { onDragOver(e) }} onDrop={(e) => onDrop(e, listIndex)}>
       <List>
         <Typography className={classes.drawerTypography}>{title}</Typography>
         {coursesList.map((course, coursesIndex) => (
@@ -361,12 +361,11 @@ export default function Main(props) {
 
       <Drawer className={classes.drawer} variant="permanent" classes={{ paper: classes.drawerPaper, }}>
         <Toolbar />
-        {priorities !== null && departments !== null ? (
-          <div className={classes.drawerContainer}>
-            {renderPriorityCourses(priorities, "Priority Courses", 0)}
-            <Divider />
-            {renderDepartments(departments, "Departments", 1)}
-          </div>) : (<div />)}
+        <div className={classes.drawerContainer}>
+          {priorities !== null ? (renderPriorityCourses(priorities, "Priority Courses", 0)) : (<div />)}
+          <Divider />
+          {departments !== null ? (renderDepartments(departments, "Departments", 1)) : (<div />)}
+        </div>
       </Drawer>
 
       <main className={classes.content} style={{ height: '100vh' }}>

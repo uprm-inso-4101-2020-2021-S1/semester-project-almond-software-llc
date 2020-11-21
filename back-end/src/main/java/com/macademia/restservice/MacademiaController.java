@@ -1,28 +1,26 @@
 package com.macademia.restservice;
 
-import java.io.Console;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-//import java.util.concurrent.atomic.AtomicLong;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.macademia.main.*;
+import com.macademia.main.auth.User;
 import com.macademia.main.test.JsonTest;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MacademiaController {
 
-	// private static final String template = "Hello, %s!";
-	// private final AtomicLong counter = new AtomicLong();
 	private JsonTest tester = new JsonTest();
 	private Map<String, Student> currentStudents = new HashMap<String, Student>();
 
@@ -35,9 +33,14 @@ public class MacademiaController {
 	@GetMapping("/login")
 	public boolean login(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password) {
 		try {
-			if (tester.db.getUser(user).checkPassword(password)) {
-				currentStudents.put(user, tester.db.getStudent(tester.db.getUser(user)));
-				return true;
+			// if user exists, continue, else don't do s ;)
+			if (tester.db.UserExists(user)) {
+				if (tester.db.getUser(user).checkPassword(password)) {
+					currentStudents.put(user, tester.db.getStudent(tester.db.getUser(user)));
+					return true;
+				} else {
+					return false;
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -46,8 +49,44 @@ public class MacademiaController {
 		return false;
 	}
 
+	@PostMapping("/register")
+	public void register(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password,
+			@RequestParam(value = "fullName") String fullName,
+			@RequestParam(value = "studentNumber") String studentNumber,
+			@RequestParam(value = "departmentCode") String departmentCode) {
+		try {
+			// initalize & save user
+			User tempUser = new User(user, password);
+			tester.db.SaveUser(tempUser);
+			// initalize & save student
+			Student tempStudent = new Student(tempUser, fullName, studentNumber,
+					tester.db.getDepartment(departmentCode));
+			MatriculaPeriod tempPeriod = new MatriculaPeriod(2022, "FALL"); // default value for now
+			Matricula tempMatricula = new Matricula(new ArrayList<Section>(), tempPeriod);
+			Turn tempTurn = new Turn("1/1/2023 12:00-1/1/2023 12:30");
+			tempStudent.addMatricula(tempMatricula);
+			tempStudent.SetTurn(tempTurn);
+			tester.db.SaveStudent(tempStudent);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@GetMapping("/userExists")
+	public boolean userExists(@RequestParam(value = "user") String user) {
+		try {
+			return tester.db.UserExists(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	@GetMapping("/userActive")
-	public boolean login(@RequestParam(value = "user") String user) {
+	public boolean userActive(@RequestParam(value = "user") String user) {
 		return currentStudents.containsKey(user);
 	}
 
@@ -66,7 +105,7 @@ public class MacademiaController {
 		return currentStudents.get(user).getMatriculas();
 	}
 
-	@GetMapping("/transferSection")
+	@PostMapping("/transferSection")
 	public void transferSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
@@ -104,29 +143,36 @@ public class MacademiaController {
 		}
 		// save
 		try {
-			tester.db.SaveEverything();
+			tester.db.SaveUser(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	@GetMapping("/transferCourse")
+	@PostMapping("/transferCourse")
 	public void transferCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "departmentIndex") int departmentIndex,
 			@RequestParam(value = "matriculaIndex") int matriculaIndex, @RequestParam(value = "user") String user) {
-
 		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex, user).get(valueIndex);
-		if (!currentStudents.get(user).getPriority().contains(tempCourse)) {
-			currentStudents.get(user).getPriority().add(tempCourse);
+		// add
+		if (targetListIndex == 0) {
+			if ((!currentStudents.get(user).getPriority().contains(tempCourse)
+					|| currentStudents.get(user).getPriority().isEmpty())
+					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)) {
+				currentStudents.get(user).getPriority().add(tempCourse);
+			}
 		}
-		currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+		// remove
+		if (sourceListIndex == 0) {
+			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+		}
 		// save
 		try {
-			tester.db.SaveEverything();
+			tester.db.SaveUser(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

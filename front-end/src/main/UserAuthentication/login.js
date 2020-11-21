@@ -62,7 +62,7 @@ export default function SignIn(props) {
     await axios.get('http://localhost:8080/login?'
       + 'user=' + user
       + '&password=' + password).then(res => {
-        if(res.data){
+        if (res.data) {
           props.setCurrUser(user);
           history.push("/home");
         }
@@ -104,7 +104,7 @@ export default function SignIn(props) {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={() => verifyLogin()}>
+          onClick={() => { verifyLogin() }}>
           <Typography>Login</Typography>
         </Button>
         <Grid container>
