@@ -97,8 +97,6 @@ export default function Main(props) {
 
   let history = useHistory();
 
-  const [userActive, setUserActive] = useState(true);
-
   const [priorities, setPriorities] = useState(null);
 
   const [departments, setDepartments] = useState(null);
@@ -253,24 +251,9 @@ export default function Main(props) {
 
   const onDragOver = (e) => {
     e.preventDefault();
-  };
+  }
 
-  const onDragStart = (
-    e,
-    listType,
-    valueIndex,
-    sourceListIndex,
-    mainListIndex
-  ) => {
-    // if (listType === 0) {
-    //   console.log('list type: course');
-    //   console.log(listCourseSwitch(sourceListIndex, mainListIndex)[valueIndex]);
-    //   console.log(listNameSwitch(listType, sourceListIndex));
-    // } else {
-    //   console.log('list type: section');
-    //   console.log(listSectionSwitch(sourceListIndex, mainListIndex)[valueIndex])
-    //   console.log(listNameSwitch(listType, sourceListIndex));
-    // }
+  const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
 
     setIsCourseSection(listType);
     setValueIndex(valueIndex);
@@ -285,7 +268,6 @@ export default function Main(props) {
     let sourceListIndex = tempSourceListIndex;
 
     if (targetListIndex !== sourceListIndex) {
-      // console.log('from ' + sourceListIndex + ' to ' + targetListIndex);
 
       switch (isCourseSection) {
         case 0:
@@ -489,9 +471,8 @@ export default function Main(props) {
         </div>
       </Drawer>
 
-      <main className={classes.content} style={{ height: "100vh" }}>
+      <main className={classes.content} style={{ height: '100vh' }}>
         <Toolbar />
-
         <div className={classes.centerContent}>
           <div
             style={{ display: "flex", alignItems: "center", padding: "50px" }}

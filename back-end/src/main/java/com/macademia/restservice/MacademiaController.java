@@ -67,7 +67,6 @@ public class MacademiaController {
 			tempStudent.addMatricula(tempMatricula);
 			tempStudent.SetTurn(tempTurn);
 			tester.db.SaveStudent(tempStudent);
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,12 +112,10 @@ public class MacademiaController {
 			@RequestParam(value = "matriculaYear") int matriculaYear,
 			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
 			@RequestParam(value = "user") String user) {
-
 		Section tempSection = sectionListSwitch(sourceListIndex, priorityCourseIndex, matriculaYear, matriculaPeriod,
 				user).get(valueIndex);
 		Course tempCourse = null;
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
-
 		try {
 			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
 		} catch (SQLException e) {
