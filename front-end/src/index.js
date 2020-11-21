@@ -1,4 +1,5 @@
 import React from 'react';
+import "date-fns";
 import ReactDOM from 'react-dom';
 import 'bootstrap';
 import './index.css';
