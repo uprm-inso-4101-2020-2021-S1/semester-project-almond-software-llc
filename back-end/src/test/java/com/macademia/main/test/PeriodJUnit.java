@@ -19,6 +19,8 @@ class PeriodJUnit {
 	private static String StandardTimeString="3:00 PM-3:30 PM";
 	private static String ConflictTime=      "15:15-16:00";
 	private static String NonConflictTime=   "12:00-12:30";
+	private static String MinuteTime=        "1:30-2:30";
+	private static String NoNoTime=          "3:30-2:30";
 	
 	@Test
 	void CreatePeriodFromMilitaryTime() {
@@ -54,4 +56,20 @@ class PeriodJUnit {
 		assertFalse(Per2.Conflict(Per1)); //Assert Period 2 doesn't conflict with period 1
 	}
 
+	@Test
+	void MinutesTest() {
+		Period Per = Period.timetoPeriod(MinuteTime);
+		assertEquals(Per.getStartMinutes(), 90);
+		assertEquals(Per.getEndMinutes(), 150);
+	}
+	
+	@Test
+	void BeforeStartTest() {
+		try {
+			Period Per = Period.timetoPeriod(NoNoTime);
+			fail("Exception not thrown");
+		} catch (IllegalArgumentException e) {
+			//OK it worked.
+		}
+	}
 }

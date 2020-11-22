@@ -108,7 +108,7 @@ export default function Main(props) {
 
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
-  let [courseExpands, setCourseExpands] = useState([index]);
+  let [courseExpands, setCourseExpands] = useState([0]);
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
 
