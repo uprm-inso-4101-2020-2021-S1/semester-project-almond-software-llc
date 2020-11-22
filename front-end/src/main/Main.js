@@ -5,11 +5,12 @@ import Toolbar from "@material-ui/core/Toolbar";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
+import ListSubheader from '@material-ui/core/ListSubheader';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/CourseCard";
+import CourseCard from "../coursecard/CourseCard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     // textShadow: "1px 1px 2px green",
     fontFamily: "Roboto",
+    padding: '10px'
   },
   cardLists: {
     alignContent: "center",
@@ -215,6 +217,14 @@ export default function Main(props) {
     );
   };
 
+  const logout = async () => {
+    await axios.post('http://localhost:8080/logout?user=' + props.currUser).then(res => {
+      if (res) {
+        history.push("/");
+      }
+    })
+  }
+
   const listCourseSwitch = (listIndex, departmentIndex) => {
     switch (listIndex) {
       case 0:
@@ -254,11 +264,9 @@ export default function Main(props) {
   }
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
-
     setIsCourseSection(listType);
     setValueIndex(valueIndex);
     setSourceListIndex(sourceListIndex);
-    e.cursor="grabbing";
     setPriorityCourseIndex(mainListIndex);
     setDepartmentIndex(mainListIndex);
   };
@@ -305,12 +313,7 @@ export default function Main(props) {
 
   const renderDepartments = (departmentsList, title, listIndex) => {
     return (
-      <div
-        onDragOver={(e) => {
-          onDragOver(e);
-        }}
-        onDrop={(e) => onDrop(e, listIndex)}
-      >
+      <div>
         <List>
           <Typography className={classes.drawerTypography}>{title}</Typography>
           {departmentsList.map((department, departmentsIndex) => (
@@ -321,11 +324,16 @@ export default function Main(props) {
               <List>
                 {department.courses.map((course, coursesIndex) => (
                   <ListItem
-                    draggable={true}
+                    style={{ cursor: 'pointer' }}
                     key={coursesIndex}
+                    draggable={true}
                     onDragStart={(e) =>
                       onDragStart(e, 0, coursesIndex, 1, departmentsIndex)
                     }
+                    onClick={() => {
+                      onDragStart(null, 0, coursesIndex, 1, departmentIndex);
+                      onDrop(null, 0);
+                    }}
                   >
                     <CourseCard
                       courseCode={course.courseCode}
@@ -352,11 +360,12 @@ export default function Main(props) {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List>
+        <List style={{ alignItems: 'center' }}>
           <Typography className={classes.drawerTypography}>{title}</Typography>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>
               <ListItem
+                style={{ cursor: 'pointer' }}
                 draggable={true}
                 key={coursesIndex}
                 onDragStart={(e) =>
@@ -373,6 +382,7 @@ export default function Main(props) {
               <List>
                 {course.sections.map((section, sectionsIndex) => (
                   <ListItem
+                    style={{ cursor: 'pointer' }}
                     draggable={true}
                     key={sectionsIndex}
                     onDragStart={(e) =>
@@ -404,16 +414,17 @@ export default function Main(props) {
   const renderMatricula = (matriculaList, title, listIndex) => {
     return (
       <div
+        style={{ overflowY: 'scroll', height: '550px', width: '250px' }}
         onDragOver={(e) => {
           onDragOver(e);
-          e.target.cursor = "pointer";
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List>
+        <List style={{ alignItems: 'center' }}>
           <Typography className={classes.drawerTypography}>{title}</Typography>
           {matriculaList.map((sections, sectionsIndex) => (
             <ListItem
+              style={{ cursor: 'pointer' }}
               draggable={matriculaIndex === 0}
               key={sectionsIndex}
               onDragStart={(e) =>
@@ -447,7 +458,7 @@ export default function Main(props) {
           <Typography variant="h6" className={classes.title}>
             Macademia
           </Typography>
-          <Button className={classes.logoutButton} style={{ outline: 0 }}>
+          <Button className={classes.logoutButton} style={{outline: 0}} onClick={() => logout()}>
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>

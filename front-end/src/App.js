@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import "date-fns";
 //import Main from './main/Main.js';
-import Main from './main/Main_COPY.js';
+import Main from './main/Main.js';
 import './App.css';
 import Login from './main/userauthentication/Login';
-import Register from "./main/userauthentication/register";
+import Register from './main/userauthentication/Register';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
 
