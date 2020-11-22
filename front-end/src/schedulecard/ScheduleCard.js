@@ -26,23 +26,44 @@ export default function ScheduleCard(props) {
             <Grid container style={{ display: 'inline-block', height: '92%', width: '100%', float: 'left' }}>
                 <Grid container style={{ height: "100%", borderTop: 'dotted 1px silver' }}>
                     <Grid container style={{ width: '14.2857%', height: '100%', borderLeft: 'dotted 1px silver', position: 'relative', backgroundColor: 'lightgray' }}>
-                        <Grid item style={{ textAlign: 'center', height: '25%', width: '100%' }}>6AM</Grid>
-                        <Grid item style={{ textAlign: 'center', height: '25%', width: '100%', borderTop: 'dotted 1px white' }}>10AM</Grid>
-                        <Grid item style={{ textAlign: 'center', height: '25%', width: '100%', borderTop: 'dotted 1px white' }}>2PM</Grid>
-                        <Grid item style={{ textAlign: 'center', height: '25%', width: '100%', borderTop: 'dotted 1px white' }}>6PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%' }}>6AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>7AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>8AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>9AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>10AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>11AM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>12PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>1PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>2PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>3PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>4PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>5PM</Grid>
+                        <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px white' }}>6PM</Grid>
                     </Grid>
                     {props.currentMatricula.sectionsByDay.map((day, i) => (
-                        <Grid item style={{ width: '14.2857%', height: '100%', borderLeft: 'dotted 1px silver', position: 'relative' }}>
+                        <Grid container style={{ width: '14.2857%', height: '100%', borderLeft: 'dotted 1px silver', position: 'relative' }}>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
+                            <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
                             {day.map((section, i) => (
 
-                                <Card style={{ backgroundColor: section.color, width: '100%', color: 'white', height: (section.period.end - section.period.start)*0.3 + 'px', top: (section.period.start - 600) * 0.17 + 'px', position: 'absolute' }}>
-
-                                    <Typography style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center' }}>
-                                        {section.courseCode}
-                                    </Typography>
-
+                                <Card style={{ backgroundColor: section.color, width: '100%', color: 'white', height: (section.period.endMinutes - section.period.startMinutes) * 0.355 + 'px', top: (section.period.startMinutes - 360) * 0.355 + 'px', position: 'absolute', flex: 1 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, height: '100%' }}>
+                                        <Typography style={{ fontSize: '12px', fontWeight: 'bold'}}>
+                                            {section.courseCode}
+                                        </Typography>
+                                    </div>
                                 </Card>
-
                             ))}
                         </Grid>
                     ))}

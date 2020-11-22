@@ -1,48 +1,46 @@
 package com.macademia.main;
 
 /**
- * Holds two integers representing two times for sections using ints to store military time.
- * 
- * IE, if a period is from 3:15 PM - 3:30 PM, it's stored as START 1515, END 1530.
- * 
+ * Holds two integers representing two times for sections using ints to store military time.<br><br>
+ * IE, if a period is from 3:15 PM - 3:30 PM, it's stored as START 1515, END 1530.<br><br>
  * Comments and more human understandable conflict function by IGTAMPE
  * @author Josue, Igtampe
  *
  */
 public class Period {
+	
+	//-[Fields]-------------------------------------------------------------------------
     private int start;
     private int end;
+    private int startMinutes;
+    private int endMinutes;
 
+    //-[Raw Getters]------------------------------------------------------------------------
     public int getStart() {return start;}
     public int getEnd() {return end;}
+    public int getStartMinutes() {return startMinutes;}
+    public int getEndMinutes() {return endMinutes;}
 
-    public void setStart(int start) {this.start = start;}
-    public void setEnd(int end) {this.start = end;}
-
-    public Period(int start, int end) {
-        this.start = start;
-        this.end = end;
-        if(end<start) {throw new IllegalArgumentException("Period cannot start after it ends, or end before it starts");}
+    //-[Raw Setters]------------------------------------------------------------------------
+    public void setStart(int start) {
+    	this.start = start;
+    	this.startMinutes=timeToMinutes(start);
     }
-    /**
-     * Checks if this period, and another period conflict.
-     * @param per Period to compare
-     * @return TRUE if the other period starts or ends between this period's start or end.
-     */
-    public boolean Conflict(Period per){return (this.start<per.start && per.start<this.end)||(this.start<per.end && per.end<this.end);}
     
-    /**
-     * Turns this preiod into a standard time string
-     * @return IE 3:00 PM - 3:30 PM
-     */
-    public String toStandardTimeString() {return intToStandardTime(start) + "-" + intToStandardTime(end);}
-    
-    /**
-     * Turns this period into a Military Time String
-     * @return IE 15:00 - 15:30
-     */
-    public String toMilitaryTimeString() {return intToMilitaryTime(start) + "-" + intToMilitaryTime(end);}
+    public void setEnd(int end) {
+    	this.end = end;
+    	this.endMinutes=timeToMinutes(end);
+    }
 
+    //-[Constructor]------------------------------------------------------------------------
+    public Period(int start, int end) {
+        setStart(start);
+        setEnd(end);
+        if(end<start) {throw new IllegalArgumentException("Period cannot start after it ends, or end before it starts");} //Verify this makes sense
+    }
+    
+    //-[Static Functions]------------------------------------------------------------------------
+    
     /**
      * Turns a Period Stored Time to Standard Time
      * @param Time
@@ -50,18 +48,29 @@ public class Period {
      */
     public static String intToStandardTime(int Time) {
     	boolean PM=false;
-    	if(Time>=1200) {PM=true;}
-    	if(Time>=1300) {Time-=1200;}
+    	if(Time>=1200) {PM=true;} //If it's greater than 1200, we're in the PM
+    	if(Time>=1300) {Time-=1200;} //If it's greater than 1300 (IE 1:00 PM), subtract 1200
     	
-    	String TimeString = intToMilitaryTime(Time);
+    	String TimeString = intToMilitaryTime(Time); //Use IntToMilitaryTime to convert it into a time
     	
-    	if(PM) {return TimeString+" PM";}
+    	if(PM) {return TimeString+" PM";} //Append AM or PM accordingly
     	else   {return TimeString+" AM";}
     	
     }
+
+    /**
+     * Turns a period stored time to Military Time
+     * @param Time
+     * @return
+     */
+    public static String intToMilitaryTime(int Time) {
+    	String TimeString = Time + ""; //Use its size to determine the correct position of the :
+    	if(Time<1000) {return TimeString.substring(0,1) + ":" + TimeString.substring(1);}
+    	else          {return TimeString.substring(0,2) + ":" + TimeString.substring(2);}
+    }
+    
     /**
      * Turns a time into a period
-     * 
      * @param time
      * @return
      */
@@ -74,6 +83,11 @@ public class Period {
         return new Period(TimeToInt(TwoTimes[0]), TimeToInt(TwoTimes[1]));
     }
 
+    /**
+     * Turns a time to a Period Int (IE 12:00 PM --> 1200)
+     * @param Time
+     * @return
+     */
     private static int TimeToInt(String Time) {
     	boolean PM=false; //Flag to save if the time ended with PM
     	Time=Time.toUpperCase(); //Flag to handle lowercase AMs and PMs
@@ -92,17 +106,41 @@ public class Period {
     	if(PM && TimeAsInt<1200) {TimeAsInt+=1200;}
     	return TimeAsInt;
     }
-    
+
     /**
-     * Turns a period stored time to Military Time
+     * Turns a TimeInt to the minutes
      * @param Time
      * @return
      */
-    public static String intToMilitaryTime(int Time) {
-    	String TimeString = Time + "";
-    	if(Time<1000) {return TimeString.substring(0,1) + ":" + TimeString.substring(1);}
-    	else          {return TimeString.substring(0,2) + ":" + TimeString.substring(2);}
+    public static int timeToMinutes(int Time) {
+    	//Use intToMilitaryTime to split hours and minutes
+    	String[] TimeasString=intToMilitaryTime(Time).split(":");
+    	//Add Minutes to 60*Hours
+    	int[] HoursAndMinutes = {Integer.parseInt(TimeasString[0]),Integer.parseInt(TimeasString[1])};
+    	return (HoursAndMinutes[0]*60)+HoursAndMinutes[1];
     }
+    
+    
+    //-[Functions]------------------------------------------------------------------------
+    
+    /**
+     * Checks if this period, and another period conflict.
+     * @param per Period to compare
+     * @return TRUE if the other period starts or ends between this period's start or end.
+     */
+    public boolean Conflict(Period per){return (this.start<per.start && per.start<this.end)||(this.start<per.end && per.end<this.end);}
+    
+    /**
+     * Turns this preiod into a standard time string
+     * @return IE 3:00 PM - 3:30 PM
+     */
+    public String toStandardTimeString() {return intToStandardTime(start) + "-" + intToStandardTime(end);}
+    
+    /**
+     * Turns this period into a Military Time String
+     * @return IE 15:00 - 15:30
+     */
+    public String toMilitaryTimeString() {return intToMilitaryTime(start) + "-" + intToMilitaryTime(end);}
     
     /**
      * Returns toStandardTimeString()
