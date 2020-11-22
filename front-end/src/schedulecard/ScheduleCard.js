@@ -59,8 +59,8 @@ export default function ScheduleCard(props) {
 
                                 <Card style={{ backgroundColor: section.color, width: '100%', color: 'white', height: (section.period.endMinutes - section.period.startMinutes) * 0.355 + 'px', top: (section.period.startMinutes - 360) * 0.355 + 'px', position: 'absolute', flex: 1 }}>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, height: '100%' }}>
-                                        <Typography style={{ fontSize: '12px', fontWeight: 'bold'}}>
-                                            {section.courseCode}
+                                        <Typography style={{ fontSize: '12px', fontWeight: 'bold' }}>
+                                            {section.courseCode} {section.period.endMinutes}
                                         </Typography>
                                     </div>
                                 </Card>

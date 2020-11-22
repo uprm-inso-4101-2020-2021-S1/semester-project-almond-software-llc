@@ -402,6 +402,8 @@ export default function Main(props) {
                       time={section.time}
                       population={section.population}
                       capacity={section.capacity}
+                      day={section.day}
+                      period={section.period}
                     />
                   </ListItem>
                 ))}
@@ -443,6 +445,8 @@ export default function Main(props) {
                 time={sections.time}
                 population={sections.population}
                 capacity={sections.capacity}
+                day={sections.day}
+                period={sections.period}
               />
             </ListItem>
           ))}
