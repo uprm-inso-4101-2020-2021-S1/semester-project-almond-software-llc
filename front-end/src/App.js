@@ -19,7 +19,7 @@ function App() {
           <Login currUser={currUser} setCurrUser={setCurrUser} />
         </Route>
         <Route path="/home" exact>
-          <Main currUser={currUser} />
+          <Main currUser={currUser} setCurrUser={setCurrUser} />
         </Route>
         <Route path="/register" exact>
           <Register />
