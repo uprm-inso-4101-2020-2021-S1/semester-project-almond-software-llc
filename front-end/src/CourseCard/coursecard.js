@@ -16,7 +16,7 @@ export default function CourseCard(props) {
                             <Typography style={{ fontSize: 15, fontWeight: "bold" }}>{props.courseCode}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.courseName}</Typography>
+                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.courseName.length > 22 ? props.courseName.substring(0,20)+ '...' : props.courseName}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.credits} credits</Typography>

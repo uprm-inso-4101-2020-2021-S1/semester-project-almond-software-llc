@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -23,6 +20,7 @@ import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 
 const drawerWidth = 270;
@@ -107,6 +105,8 @@ export default function Main(props) {
 
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
+  let [courseExpands, setCourseExpands] = useState({ [0]: false });
+
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
 
   let [departmentIndex, setDepartmentIndex] = useState(0);
@@ -144,9 +144,29 @@ export default function Main(props) {
     }
   }
 
+  async function setExpands() {
+    const resultPriorities = await axios.get(
+      "http://localhost:8080/priority?" + "user=" + props.currUser
+    );
+    resultPriorities.data.map((course, coursesIndex) => {
+      courseExpands[coursesIndex] = false;
+    })
+  }
+
+  useEffect(() => {
+    setExpands();
+  }, []);
+
   useEffect(() => {
     fetchData();
   }, [elTicko]);
+
+  const handleCourseExpand = (courseIndex) => {
+    courseExpands[courseIndex] = !courseExpands[courseIndex];
+    setCourseExpands(courseExpands);
+    forceUpdate();
+    console.log(courseExpands);
+  }
 
   const forceUpdate = () => {
     setElTicko(!elTicko);
@@ -220,6 +240,7 @@ export default function Main(props) {
   const logout = async () => {
     await axios.post('http://localhost:8080/logout?user=' + props.currUser).then(res => {
       if (res) {
+        props.setCurrUser("");
         history.push("/");
       }
     })
@@ -326,13 +347,9 @@ export default function Main(props) {
                   <ListItem
                     style={{ cursor: 'pointer' }}
                     key={coursesIndex}
-                    draggable={true}
-                    onDragStart={(e) =>
-                      onDragStart(e, 0, coursesIndex, 1, departmentsIndex)
-                    }
-                    onClick={() => {
-                      onDragStart(null, 0, coursesIndex, 1, departmentIndex);
-                      onDrop(null, 0);
+                    onClick={(e) => {
+                      onDragStart(e, 0, coursesIndex, 1, departmentsIndex);
+                      onDrop(e, 0);
                     }}
                   >
                     <CourseCard
@@ -354,7 +371,6 @@ export default function Main(props) {
   const renderPriorityCourses = (coursesList, title, listIndex) => {
     return (
       <div
-        style={{ minHeight: "20px", minWidth: "20px" }}
         onDragOver={(e) => {
           onDragOver(e);
         }}
@@ -371,6 +387,7 @@ export default function Main(props) {
                 onDragStart={(e) =>
                   onDragStart(e, 0, coursesIndex, 0, coursesIndex)
                 }
+                onClick={() => handleCourseExpand(coursesIndex)}
               >
                 <CourseCard
                   courseCode={course.courseCode}
@@ -379,31 +396,34 @@ export default function Main(props) {
                   color={course.color}
                 />
               </ListItem>
-              <List>
-                {course.sections.map((section, sectionsIndex) => (
-                  <ListItem
-                    style={{ cursor: 'pointer' }}
-                    draggable={true}
-                    key={sectionsIndex}
-                    onDragStart={(e) =>
-                      onDragStart(e, 1, sectionsIndex, 0, coursesIndex)
-                    }
-                  >
-                    <SectionCard
-                      courseCode={section.courseCode}
-                      section={section.secNum}
-                      courseName={section.courseName}
-                      professor={section.professor}
-                      credits={section.credits}
-                      color={section.color}
-                      time={section.time}
-                      population={section.population}
-                      capacity={section.capacity}
-                      day={section.day}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              <Collapse in={courseExpands[coursesIndex]} timeout="auto" unmountOnExit>
+                <List>
+                  {course.sections.map((section, sectionsIndex) => (
+                    <ListItem
+                      style={{ cursor: 'pointer' }}
+                      draggable={true}
+                      key={sectionsIndex}
+                      onDragStart={(e) =>
+                        onDragStart(e, 1, sectionsIndex, 0, coursesIndex)
+                      }
+                    >
+                      <SectionCard
+                        courseCode={section.courseCode}
+                        section={section.secNum}
+                        courseName={section.courseName}
+                        professor={section.professor}
+                        credits={section.credits}
+                        color={section.color}
+                        time={section.time}
+                        population={section.population}
+                        capacity={section.capacity}
+                        day={section.day}
+                        period={section.period}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
             </div>
           ))}
         </List>
@@ -442,6 +462,7 @@ export default function Main(props) {
                 population={sections.population}
                 capacity={sections.capacity}
                 day={sections.day}
+                period={sections.period}
               />
             </ListItem>
           ))}
@@ -458,7 +479,7 @@ export default function Main(props) {
           <Typography variant="h6" className={classes.title}>
             Macademia
           </Typography>
-          <Button className={classes.logoutButton} style={{outline: 0}} onClick={() => logout()}>
+          <Button className={classes.logoutButton} style={{ outline: 0 }} onClick={() => logout()}>
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>
