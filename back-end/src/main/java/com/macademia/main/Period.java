@@ -59,7 +59,6 @@ public class Period {
     	else   {return TimeString+" AM";}
     	
     }
-    
     /**
      * Turns a time into a period
      * 

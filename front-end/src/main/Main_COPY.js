@@ -258,7 +258,7 @@ export default function Main(props) {
     setIsCourseSection(listType);
     setValueIndex(valueIndex);
     setSourceListIndex(sourceListIndex);
-
+    e.cursor="grabbing";
     setPriorityCourseIndex(mainListIndex);
     setDepartmentIndex(mainListIndex);
   };
@@ -349,7 +349,6 @@ export default function Main(props) {
         style={{ minHeight: "20px", minWidth: "20px" }}
         onDragOver={(e) => {
           onDragOver(e);
-          e.target.style.cursor  = "pointer";
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
@@ -390,6 +389,7 @@ export default function Main(props) {
                       time={section.time}
                       population={section.population}
                       capacity={section.capacity}
+                      day={section.day}
                     />
                   </ListItem>
                 ))}
@@ -406,6 +406,7 @@ export default function Main(props) {
       <div
         onDragOver={(e) => {
           onDragOver(e);
+          e.target.cursor = "pointer";
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
@@ -429,6 +430,7 @@ export default function Main(props) {
                 time={sections.time}
                 population={sections.population}
                 capacity={sections.capacity}
+                day={sections.day}
               />
             </ListItem>
           ))}

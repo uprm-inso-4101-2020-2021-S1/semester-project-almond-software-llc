@@ -32,7 +32,7 @@ const DialogTitle = withStyles(styles)((props) => {
         <MuiDialogTitle disableTypography className={classes.root} {...other}>
             <Typography variant="h6">{children}</Typography>
             {onClose ? (
-                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose} style={{ outline: 0, cursor: 'pointer' }}>
+                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose} style={{ outline: 0}}>
                     <CloseIcon />
                 </IconButton>
             ) : null}
@@ -58,7 +58,8 @@ export default function CourseCard(props) {
     };
 
     return (
-        <Card elevation={2} style={{ width: '200px', height: '100px', cursor: "grab" }}>
+        <Card elevation={2} id='sc' style={{ width: '200px', height: '100px', cursor: "grab"}}>
+            
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <CardContent >
@@ -68,7 +69,7 @@ export default function CourseCard(props) {
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}> - {props.section}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.time}</Typography>
+                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.time}, {props.day}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.professor}</Typography>
