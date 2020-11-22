@@ -49,6 +49,16 @@ public class MacademiaController {
 		return false;
 	}
 
+	@PostMapping("/logout")
+	public boolean logout(@RequestParam(value = "user") String user) {
+		if (currentStudents.containsKey(user)) {
+			currentStudents.remove(user);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@PostMapping("/register")
 	public void register(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password,
 			@RequestParam(value = "fullName") String fullName,
