@@ -23,7 +23,6 @@ public class Student extends User {
 	private String Name;
 	private String StudentNumber;
 	private Map<MatriculaPeriod, Matricula> matriculas;
-	private Matricula currentMatricula;
 	private List<Course> priorities;
 	private List<Course> coursesTaken;
 	private Turn turn;
@@ -47,7 +46,6 @@ public class Student extends User {
 		this.matriculas = new Hashtable<MatriculaPeriod, Matricula>(4);
 		this.priorities = new ArrayList<Course>();
 		this.coursesTaken = new ArrayList<Course>();
-		this.currentMatricula = null;
 
 	}
 
@@ -85,14 +83,7 @@ public class Student extends User {
 		Collections.sort(result);
 		return result;
 	}
-
-	/**
-	 * Gets this student's current matricula
-	 */
-	public Matricula getCurrentMatricula() {
-		return currentMatricula;
-	}
-
+	
 	/**
 	 * Gets this student's matricula for a specified matricula period
 	 * 

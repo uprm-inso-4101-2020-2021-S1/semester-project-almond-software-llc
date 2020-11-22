@@ -32,7 +32,7 @@ const DialogTitle = withStyles(styles)((props) => {
         <MuiDialogTitle disableTypography className={classes.root} {...other}>
             <Typography variant="h6">{children}</Typography>
             {onClose ? (
-                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose} style={{ outline: 0}}>
                     <CloseIcon />
                 </IconButton>
             ) : null}
@@ -58,7 +58,8 @@ export default function CourseCard(props) {
     };
 
     return (
-        <Card elevation={2} style={{ width: '200px', height: '100px' }}>
+        <Card elevation={2} id='sc' style={{ width: '200px', height: '100px', cursor: "grab"}}>
+            
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <CardContent >
@@ -68,7 +69,7 @@ export default function CourseCard(props) {
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}> - {props.section}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.time}</Typography>
+                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.time}, {props.day}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.professor}</Typography>
@@ -79,7 +80,7 @@ export default function CourseCard(props) {
                     </Grid>
                 </CardContent>
                 <div>
-                    <IconButton onClick={handleClickOpen}>
+                    <IconButton onClick={handleClickOpen} style={{ outline: 0 }}>
                         <ErrorOutlineIcon style={{ width: '15px', height: '15px' }}></ErrorOutlineIcon>
                     </IconButton>
                     <Typography style={{ fontSize: 13, color: '#7f7f7f', position: 'relative', top: '33px', left: '5px' }}>
