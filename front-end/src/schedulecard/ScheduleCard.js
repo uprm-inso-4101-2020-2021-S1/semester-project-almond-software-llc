@@ -24,7 +24,16 @@ export default function ScheduleCard(props) {
                         <Grid container style={{ width: '16.666%', height: '100%', borderLeft: 'dotted 1px silver' }}>
                             {day.map((section, i) => (
                                 <Grid item>
-                                    <Typography>{section.courseCode}</Typography>
+                                    <Card style={{backgroundColor: section.color, color: 'white' }}>
+                                        <Grid container>
+                                            <Grid item>
+                                                <Typography style={{ fontSize: '14px', fontWeight: 'bold'}}>{section.courseCode}</Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography style={{ fontSize: '12px'}}>{section.time}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Card>
                                 </Grid>
                             ))}
                         </Grid>

@@ -172,20 +172,20 @@ export default function Main(props) {
   ) => {
     await axios.post(
       "http://localhost:8080/transferCourse?" +
-        "sourceListIndex=" +
-        sourceListIndex +
-        "&targetListIndex=" +
-        targetListIndex +
-        "&valueIndex=" +
-        valueIndex +
-        "&priorityCourseIndex=" +
-        priorityCourseIndex +
-        "&departmentIndex=" +
-        departmentIndex +
-        "&matriculaIndex=" +
-        matriculaIndex +
-        "&user=" +
-        props.currUser
+      "sourceListIndex=" +
+      sourceListIndex +
+      "&targetListIndex=" +
+      targetListIndex +
+      "&valueIndex=" +
+      valueIndex +
+      "&priorityCourseIndex=" +
+      priorityCourseIndex +
+      "&departmentIndex=" +
+      departmentIndex +
+      "&matriculaIndex=" +
+      matriculaIndex +
+      "&user=" +
+      props.currUser
     );
   };
 
@@ -198,20 +198,20 @@ export default function Main(props) {
   ) => {
     await axios.post(
       "http://localhost:8080/transferSection?" +
-        "sourceListIndex=" +
-        sourceListIndex +
-        "&targetListIndex=" +
-        targetListIndex +
-        "&valueIndex=" +
-        valueIndex +
-        "&priorityCourseIndex=" +
-        priorityCourseIndex +
-        "&matriculaYear=" +
-        matriculas[matriculaIndex].period.matyear +
-        "&matriculaPeriod=" +
-        matriculas[matriculaIndex].period.semester +
-        "&user=" +
-        props.currUser
+      "sourceListIndex=" +
+      sourceListIndex +
+      "&targetListIndex=" +
+      targetListIndex +
+      "&valueIndex=" +
+      valueIndex +
+      "&priorityCourseIndex=" +
+      priorityCourseIndex +
+      "&matriculaYear=" +
+      matriculas[matriculaIndex].period.matyear +
+      "&matriculaPeriod=" +
+      matriculas[matriculaIndex].period.semester +
+      "&user=" +
+      props.currUser
     );
   };
 
@@ -349,6 +349,7 @@ export default function Main(props) {
         style={{ minHeight: "20px", minWidth: "20px" }}
         onDragOver={(e) => {
           onDragOver(e);
+          e.target.style.cursor  = "pointer";
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
@@ -444,7 +445,7 @@ export default function Main(props) {
           <Typography variant="h6" className={classes.title}>
             Macademia
           </Typography>
-          <Button className={classes.logoutButton}>
+          <Button className={classes.logoutButton} style={{ outline: 0 }}>
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>
@@ -460,14 +461,14 @@ export default function Main(props) {
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
           ) : (
-            <div />
-          )}
+              <div />
+            )}
           <Divider />
           {departments !== null ? (
             renderDepartments(departments, "Departments", 1)
           ) : (
-            <div />
-          )}
+              <div />
+            )}
         </div>
       </Drawer>
 
@@ -528,8 +529,8 @@ export default function Main(props) {
                 </Grid>
               </CardContent>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
 
           <div
