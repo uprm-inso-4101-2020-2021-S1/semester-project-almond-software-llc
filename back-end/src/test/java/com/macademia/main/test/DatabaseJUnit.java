@@ -55,6 +55,24 @@ class DatabaseJUnit {
 		ActingIII.addPrereq(ActingII);
 		ActingIV.addPrereq(ActingIII);
 		StudentBeforeSave.addPriority(MagicLab);
+
+		ActingI.setDescription("Introduction to acting");
+		ActingI.setAvailability("Every year, First Semester");
+		
+		ActingII.setDescription("Advanced Acting Techniques. The art of Crying on Command");
+		ActingII.setAvailability("Every year, Second Semester");
+		
+		ActingIII.setDescription("Acting like A gender you're not. Love scenes");
+		ActingIII.setAvailability("Every year, First Semester");
+		
+		ActingIV.setDescription("Unnatural Acting");
+		ActingIV.setAvailability("Every year, Second Semester");
+		
+		Magic.setDescription("Hocus Pocus One o One-us");
+		Magic.setAvailability("Even Years, First Semester");
+		
+		MagicLab.setDescription("This is where you do things the college will be sued for");
+		MagicLab.setAvailability("Even Years, First Semester");
 		
 		StudentBeforeSave.SetTurn(new Turn("1/1/2001 1:00-2/2/2002 2:00"));
 	}
@@ -186,6 +204,8 @@ class DatabaseJUnit {
 		}
 		
 		assertEquals(CourseBeforeSaving.getColor(), CourseAfterSaving.getColor());
+		assertEquals(CourseBeforeSaving.getDescription(), CourseAfterSaving.getDescription());
+		assertEquals(CourseBeforeSaving.getAvailability(), CourseAfterSaving.getAvailability());
 		
 	}
 	
