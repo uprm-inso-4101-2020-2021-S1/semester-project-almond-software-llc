@@ -95,7 +95,7 @@ export default function CourseCard(props) {
 
                                 <Grid container direction="column" justify="space-evenly" alignItems="center">
                                     <Grid item>
-                                        <Typography style={{ float: 'left' }}>Available on: {props.availability} semester</Typography>
+                                        <Typography style={{ float: 'left' }}>Available on: {props.availability}</Typography>
                                     </Grid>
                                     <Grid item>
                                         <Typography style={{ float: 'left' }}>Pre-requisites: N/A </Typography>

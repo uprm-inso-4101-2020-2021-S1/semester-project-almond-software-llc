@@ -22,19 +22,19 @@ public class Course {
 	private final List<Section> sections;
 	private String Description;
 	private String Availability;
-
 	// -[Constructor]-----------------------------------------
 
-	public Course(String name, Department dept, String code, int credits) {
-		this(name, dept, code, credits, null, null);
+	public Course(String name, Department dept, String code, int credits, String Availability) {
+		this(name, dept, code, credits, null, null, Availability);
 	}
 
-	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq) {
+	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq, String Availability) {
 		this.name = name;
 		this.dept = dept.getShortName();
 		this.code = code;
 		this.courseCode = dept.getShortName() + code;
 		this.credits = credits;
+		this.Availability = Availability;
 		if (prereq == null) {this.prereq = new ArrayList<Course>();} else {this.prereq = prereq;} // If there isn't a specified list, create the list
 		if (coreq == null) {this.coreq = new ArrayList<Course>();} else {this.coreq = coreq;}
 		this.sections = new ArrayList<Section>(); // Create the list for later.
@@ -86,7 +86,7 @@ public class Course {
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
 	public void setDescription(String Description) {this.Description=Description;}
-	public void setAvailability(String Availability) {this.Availability=Availability;}
+	public void setAvailability(String Availability) {this.Availability = Availability;}
 
 	/**
 	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.

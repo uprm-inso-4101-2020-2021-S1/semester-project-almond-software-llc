@@ -445,7 +445,7 @@ public class DBHandler {
 		
 		RS.close(); //We never closed thank god I came back around and fixed that
 		
-		Course TheCourse = new Course(CourseName, dep, CourseID, CourseCredits);
+		Course TheCourse = new Course(CourseName, dep, CourseID, CourseCredits, Availability);
 
 		// Load Prerequesites
 		for (String prereq : Prereq) {

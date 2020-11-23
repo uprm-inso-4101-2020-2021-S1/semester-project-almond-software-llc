@@ -100,17 +100,23 @@ public class MacademiaController {
 	}
 
 	@GetMapping("/departments")
-	public List<Department> department() throws SQLException {
-		return tester.db.getDepartments();
+	public List<Department> department() {
+		try {
+			return tester.db.getDepartments();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@GetMapping("/priority")
-	public List<Course> priority(@RequestParam(value = "user") String user) throws SQLException {
+	public List<Course> priority(@RequestParam(value = "user") String user) {
 		return currentStudents.get(user).getPriority();
 	}
 
 	@GetMapping("/matriculas")
-	public Collection<Matricula> matriculas(@RequestParam(value = "user") String user) throws SQLException {
+	public Collection<Matricula> matriculas(@RequestParam(value = "user") String user) {
 		return currentStudents.get(user).getMatriculas();
 	}
 
@@ -181,13 +187,16 @@ public class MacademiaController {
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "departmentIndex") int departmentIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex, @RequestParam(value = "user") String user) {
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
+			@RequestParam(value = "user") String user) {
 		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex, user).get(valueIndex);
+		
 		// add
 		if (targetListIndex == 0) {
 			if ((!currentStudents.get(user).getPriority().contains(tempCourse)
 					|| currentStudents.get(user).getPriority().isEmpty())
-					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)) {
+					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)
+					&& isAvailable(matriculaPeriod, tempCourse)) {
 				currentStudents.get(user).getPriority().add(tempCourse);
 			}
 		}
@@ -202,6 +211,18 @@ public class MacademiaController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private boolean isAvailable(String period, Course c){
+		switch(period){
+			case "FALL": 
+			return c.getAvailability().contains("FALL");
+			case "SPRING":
+			return c.getAvailability().contains("SPRING");
+			case "SUMMER":
+			return c.getAvailability().contains("SUMMER");
+		}
+		return false;
 	}
 
 	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaYear,

@@ -307,7 +307,7 @@ export default function Main(props) {
               valueIndex,
               priorityCourseIndex,
               departmentIndex,
-              matriculaIndex,
+              matriculas[matriculaIndex].period.semesterAsString,
               props.currUser
             );
           }
@@ -419,6 +419,7 @@ export default function Main(props) {
                         capacity={section.capacity}
                         day={section.day}
                         period={section.period}
+                        availability={section.availability}
                       />
                     </ListItem>
                   ))}
@@ -463,6 +464,7 @@ export default function Main(props) {
                 capacity={sections.capacity}
                 day={sections.day}
                 period={sections.period}
+                availability={sections.availability}
               />
             </ListItem>
           ))}

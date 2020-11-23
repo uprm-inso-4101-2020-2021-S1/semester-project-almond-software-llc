@@ -33,40 +33,40 @@ public class JsonTest {
     public User testUserA = new User("testA", "6969");
     public Student testStudentA = new Student(testUserA, "Test McTesterson", "420-77-6969", testDepartmentA);
 
-    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testPrereqDepartment, "4001", 1);
-    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testPrereqDepartment, "3002", 2);
-    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testPrereqDepartment, "2003", 3);
-    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testPrereqDepartment, "1004", 4);
+    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testPrereqDepartment, "4001", 1, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testPrereqDepartment, "3002", 2, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testPrereqDepartment, "2003", 3, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testPrereqDepartment, "1004", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testCoreqDepartment, "4004", 1);
-    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testCoreqDepartment, "3003", 2);
-    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testCoreqDepartment, "2002", 3);
-    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testCoreqDepartment, "1001", 4);
+    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testCoreqDepartment, "4004", 1, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testCoreqDepartment, "3003", 2, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testCoreqDepartment, "2002", 3, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testCoreqDepartment, "1001", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCourseTakenA = new Course("Test Course Taken A", testCoursesTakenDepartment, "7001", 3);
-    public Course testCourseTakenB = new Course("Test Course Taken B", testCoursesTakenDepartment, "7002", 3);
-    public Course testCourseTakenC = new Course("Test Course Taken C", testCoursesTakenDepartment, "7003", 3);
-    public Course testCourseTakenD = new Course("Test Course Taken D", testCoursesTakenDepartment, "7004", 3);
+    public Course testCourseTakenA = new Course("Test Course Taken A", testCoursesTakenDepartment, "7001", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenB = new Course("Test Course Taken B", testCoursesTakenDepartment, "7002", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenC = new Course("Test Course Taken C", testCoursesTakenDepartment, "7003", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenD = new Course("Test Course Taken D", testCoursesTakenDepartment, "7004", 3, "FALL-SPRING-SUMMER");
 
-    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4023", 1);
-    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3024", 2);
-    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2025", 3);
-    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1026", 4);
+    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4023", 1, "FALL-SPRING-SUMMER");
+    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3024", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2025", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1026", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCourseE = new Course("Test Course E", testDepartmentD, "8100", 4);
-    public Course testCourseF = new Course("Test Course F", testDepartmentD, "7100", 3);
-    public Course testCourseG = new Course("Test Course G", testDepartmentD, "6100", 2);
-    public Course testCourseH = new Course("Test Course H", testDepartmentD, "5100", 1);
+    public Course testCourseE = new Course("Test Course E", testDepartmentD, "8100", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseF = new Course("Test Course F", testDepartmentD, "7100", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseG = new Course("Test Course G", testDepartmentD, "6100", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseH = new Course("Test Course H", testDepartmentD, "5100", 1, "FALL-SPRING-SUMMER");
 
-    public Course testCourseI = new Course("Test Course I", testDepartmentB, "5110", 4);
-    public Course testCourseJ = new Course("Test Course J", testDepartmentB, "6130", 3);
-    public Course testCourseK = new Course("Test Course K", testDepartmentB, "7140", 2);
-    public Course testCourseL = new Course("Test Course L", testDepartmentB, "8125", 1);
+    public Course testCourseI = new Course("Test Course I", testDepartmentB, "5110", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseJ = new Course("Test Course J", testDepartmentB, "6130", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseK = new Course("Test Course K", testDepartmentB, "7140", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseL = new Course("Test Course L", testDepartmentB, "8125", 1, "FALL-SPRING-SUMMER");
 
-    public Course testCourseM = new Course("Test Course M", testDepartmentC, "8123", 4);
-    public Course testCourseN = new Course("Test Course N", testDepartmentC, "7142", 3);
-    public Course testCourseO = new Course("Test Course O", testDepartmentC, "6131", 2);
-    public Course testCourseP = new Course("Test Course P", testDepartmentC, "5115", 1);
+    public Course testCourseM = new Course("Test Course M", testDepartmentC, "8123", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseN = new Course("Test Course N", testDepartmentC, "7142", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseO = new Course("Test Course O", testDepartmentC, "6131", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseP = new Course("Test Course P", testDepartmentC, "5115", 1, "FALL-SPRING-SUMMER");
 
     public Section testSectionA01 = new Section("01", "LWV", "7:00AM-7:50AM", "Dr. Juan N. Onlee", "S424", testCourseA, 1, 50);
     public Section testSectionA02 = new Section("02", "LWV", "8:30AM-9:20AM", "Dr. Juan N. Onlee", "S423", testCourseA, 1, 50);
@@ -171,33 +171,33 @@ public class JsonTest {
 
     //---[Courses]---------------------------------------------------------------------------------------------------------------
 
-    public Course testCourse1A = new Course("Intro. to Programming", testDepartment1, "3015", 3);
-    public Course testCourse1B = new Course("Intro. to Programming Lab.", testDepartment1, "3015L", 1);
-    public Course testCourse1C = new Course("Foundations of Computing", testDepartment1, "3075", 3);
-    public Course testCourse1D = new Course("Advanced Programming", testDepartment1, "4010", 4);
-    public Course testCourse1E = new Course("Advanced Programming Lab.", testDepartment1, "4010L", 0);
-    public Course testCourse1F = new Course("Data Structures", testDepartment1, "4020", 4);
-    public Course testCourse1G = new Course("Data Structures Lab.", testDepartment1, "4020L", 0);
-    public Course testCourse1H = new Course("Programming Languages", testDepartment1, "4030", 3);
-    public Course testCourse1I = new Course("Operating Systems", testDepartment1, "4050", 4);
-    public Course testCourse1J = new Course("Operating Systems Lab.", testDepartment1, "4050L", 0);
-    public Course testCourse1K = new Course("Database Systems", testDepartment1, "4060", 3);
-    public Course testCourse1L = new Course("Computer Networks", testDepartment1, "4070", 3);
-    public Course testCourse1M = new Course("Computer Architecture I", testDepartment1, "3081", 3);
-    public Course testCourse1N = new Course("Computer Architecture II", testDepartment1, "4082", 3);
+    public Course testCourse1A = new Course("Intro. to Programming", testDepartment1, "3015", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse1B = new Course("Intro. to Programming Lab.", testDepartment1, "3015L", 1, "FALL, SPRING, SUMMER");
+    public Course testCourse1C = new Course("Foundations of Computing", testDepartment1, "3075", 3, "FALL, SPRING");
+    public Course testCourse1D = new Course("Advanced Programming", testDepartment1, "4010", 4, "FALL, SPRING");
+    public Course testCourse1E = new Course("Advanced Programming Lab.", testDepartment1, "4010L", 0, "FALL, SPRING");
+    public Course testCourse1F = new Course("Data Structures", testDepartment1, "4020", 4, "FALL, SPRING");
+    public Course testCourse1G = new Course("Data Structures Lab.", testDepartment1, "4020L", 0, "FALL, SPRING");
+    public Course testCourse1H = new Course("Programming Languages", testDepartment1, "4030", 3, "FALL, SPRING");
+    public Course testCourse1I = new Course("Operating Systems", testDepartment1, "4050", 4, "FALL, SPRING");
+    public Course testCourse1J = new Course("Operating Systems Lab.", testDepartment1, "4050L", 0, "FALL, SPRING");
+    public Course testCourse1K = new Course("Database Systems", testDepartment1, "4060", 3, "SPRING");
+    public Course testCourse1L = new Course("Computer Networks", testDepartment1, "4070", 3, "SPRING");
+    public Course testCourse1M = new Course("Computer Architecture I", testDepartment1, "3081", 3, "FALL");
+    public Course testCourse1N = new Course("Computer Architecture II", testDepartment1, "4082", 3, "SPRING");
 
-    public Course testCourse2A = new Course("Intro. to Software Engineering",          testDepartment2, "4101", 3);
-    public Course testCourse2B = new Course("Software Requirements",                   testDepartment2, "4115", 3);
-    public Course testCourse2C = new Course("Software Design",                         testDepartment2, "4116", 3);
-    public Course testCourse2D = new Course("Software Testing",                        testDepartment2, "4117", 3);
-    public Course testCourse2E = new Course("Software Engineering Project (Capstone)", testDepartment2, "4151", 3);
+    public Course testCourse2A = new Course("Intro. to Software Engineering",          testDepartment2, "4101", 3, "FALL, SPRING");
+    public Course testCourse2B = new Course("Software Requirements",                   testDepartment2, "4115", 3, "SPRING");
+    public Course testCourse2C = new Course("Software Design",                         testDepartment2, "4116", 3, "FALL");
+    public Course testCourse2D = new Course("Software Testing",                        testDepartment2, "4117", 3, "SPRING");
+    public Course testCourse2E = new Course("Software Engineering Project (Capstone)", testDepartment2, "4151", 3, "FALL, SPRING");
 
-    public Course testCourse3A  = new Course("Engineering Graphics",             testDepartment3, "3011", 4);
-    public Course testCourse3B = new Course("Engineering Mechanics",            testDepartment3, "3035", 3);
-    public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2);
+    public Course testCourse3A  = new Course("Engineering Graphics",             testDepartment3, "3011", 4, "FALL, SPRING");
+    public Course testCourse3B = new Course("Engineering Mechanics",            testDepartment3, "3035", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2, "FALL, SPRING");
 
-    public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4);
-    public Course testCourse4B = new Course("Engineering Economics",                  testDepartment4, "4015", 3);
+    public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4, "FALL, SPRING, SUMMER");
+    public Course testCourse4B = new Course("Engineering Economics",                  testDepartment4, "4015", 3, "FALL, SPRING, SUMMER");
 
     //---[Sections]--------------------------------------------------------------------------------------------------------------
 
