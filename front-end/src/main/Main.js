@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/coursecard.js";
+import CourseCard from "../coursecard/CourseCard";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -170,6 +170,12 @@ export default function Main() {
     fetchData();
   }, [elTicko]);
 
+  const logout = async () => {
+    Cookies.set("user", "");
+    history.push("/");
+    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
+  };
+
   const handleCourseExpand = (courseIndex) => {
     courseExpands[courseIndex] = !courseExpands[courseIndex];
     setCourseExpands(courseExpands);
@@ -199,7 +205,7 @@ export default function Main() {
     valueIndex,
     priorityCourseIndex,
     departmentIndex,
-    matriculaIndex
+    matriculaPeriod
   ) => {
     await axios.post(
       "http://localhost:8080/transferCourse?" +
@@ -213,12 +219,20 @@ export default function Main() {
       priorityCourseIndex +
       "&departmentIndex=" +
       departmentIndex +
-      "&matriculaIndex=" +
-      matriculaIndex +
+      "&matriculaPeriod=" +
+      matriculaPeriod +
       "&user=" +
       Cookies.get("user")
     );
   };
+
+  const removeCourse = async (sourceListIndex) => {
+    if (sourceListIndex === 0) {
+      await axios.post('http://localhost:8080/removeCourse?'
+        + 'valueIndex=' + tempValueIndex
+        + '&user=' + Cookies.get("user"));
+    }
+  }
 
   const transferSection = async (
     sourceListIndex,
@@ -246,11 +260,15 @@ export default function Main() {
     );
   };
 
-  const logout = async () => {
-    Cookies.set("user", "");
-    history.push("/");
-    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
-  };
+  const removeSection = async (sourceListIndex) => {
+    if (sourceListIndex === 2) {
+      await axios.post('http://localhost:8080/removeSection?'
+        + 'valueIndex=' + tempValueIndex
+        + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
+        + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semesterAsString
+        + '&user=' + Cookies.get("user"));
+    }
+  }
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
     switch (listIndex) {
@@ -313,7 +331,7 @@ export default function Main() {
               valueIndex,
               priorityCourseIndex,
               departmentIndex,
-              matriculaIndex,
+              matriculas[matriculaIndex].period.semesterAsString,
               Cookies.get("user")
             );
           }
@@ -386,7 +404,7 @@ export default function Main() {
           container
           style={{
             display: "flex",
-            alignContent: "center",
+            alignItems: "center",
             justifyContent: "center",
             paddingTop: '1rem',
           }}
@@ -397,7 +415,12 @@ export default function Main() {
             </Typography>
           </Grid>
           <Grid item>
-            <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+            <div onDrop={() => {
+              removeCourse(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+            </div>
           </Grid>
         </Grid>
 
@@ -469,23 +492,34 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <Grid container style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: '1rem',
+          }}
+        >
           <Grid item>
             <Typography className={classes.drawerTypography}>
               {title}
             </Typography>
           </Grid>
           <Grid item>
-            <DeleteForeverIcon
-              style={{ height: "2rem", width: "2rem" }}
-            />
+            <div onDrop={() => {
+              removeSection(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+            </div>
           </Grid>
         </Grid>
-        <div style={{ overflowY: "scroll", height: "550px", width: "250px" }}>
-          <List style={{ alignItems: "center" }}>
+        <div style={{ overflowY: 'scroll', height: '400px' }}>
+          <List style={{ alignItems: 'center' }}>
             {matriculaList.map((sections, sectionsIndex) => (
               <ListItem
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
                 draggable={matriculaIndex === 0}
                 key={sectionsIndex}
                 onDragStart={(e) =>
@@ -539,7 +573,6 @@ export default function Main() {
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
-
           ) : (
               <div />
             )}

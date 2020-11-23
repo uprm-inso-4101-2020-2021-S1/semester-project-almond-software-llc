@@ -20,19 +20,22 @@ public class Course {
 	private List<Course> prereq;
 	private List<Course> coreq;
 	private final List<Section> sections;
-
+	private String Description;
+	private String Availability;
 	// -[Constructor]-----------------------------------------
 
-	public Course(String name, Department dept, String code, int credits) {
-		this(name, dept, code, credits, null, null);
+	public Course(String name, Department dept, String code, int credits, String Availability) {
+		this(name, dept, code, credits, null, null, Availability, "lorem ipsum");
 	}
 
-	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq) {
+	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq, String Availability, String Description) {
 		this.name = name;
 		this.dept = dept.getShortName();
 		this.code = code;
 		this.courseCode = dept.getShortName() + code;
 		this.credits = credits;
+		this.Availability = Availability;
+		this.Description = Description;
 		if (prereq == null) {this.prereq = new ArrayList<Course>();} else {this.prereq = prereq;} // If there isn't a specified list, create the list
 		if (coreq == null) {this.coreq = new ArrayList<Course>();} else {this.coreq = coreq;}
 		this.sections = new ArrayList<Section>(); // Create the list for later.
@@ -70,7 +73,9 @@ public class Course {
 	public List<Course> getCoreq() {return prereq;}
 	public List<Section> getSections() {return sections;}
 	public String getColor() {return Color;}
-
+	public String getDescription() {return Description;}
+	public String getAvailability() {return Availability;}
+	
 	// -[Setters]---------------------------------------------
 
 	public void setName(String name) {this.name = name; UpdateSections();}
@@ -81,6 +86,8 @@ public class Course {
 	public void setCredits(int credits) {this.credits = credits; UpdateSections();}
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
+	public void setDescription(String Description) {this.Description=Description;}
+	public void setAvailability(String Availability) {this.Availability = Availability;}
 
 	/**
 	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.

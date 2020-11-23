@@ -440,8 +440,12 @@ public class DBHandler {
 		int CourseCredits = RS.getInt("Credits");
 		String[] Prereq = RS.getString("Prereq").split(",");
 		String[] Coreq = RS.getString("Coreq").split(",");
-
-		Course TheCourse = new Course(CourseName, dep, CourseID, CourseCredits);
+		String Description = RS.getString("Description");
+		String Availability = RS.getString("Availability");
+		
+		RS.close(); //We never closed thank god I came back around and fixed that
+		
+		Course TheCourse = new Course(CourseName, dep, CourseID, CourseCredits, Availability);
 
 		// Load Prerequesites
 		for (String prereq : Prereq) {
@@ -462,7 +466,10 @@ public class DBHandler {
 				} // make sure we found the coreq
 			} // If because empty prereqs still returns ""
 		}
-
+		
+		TheCourse.setDescription(Description);
+		TheCourse.setAvailability(Availability);
+				
 		return TheCourse;
 	}
 
@@ -723,15 +730,12 @@ public class DBHandler {
 
 		// Prepare coreqs
 		String Coreqs = ListOfCoursesToString(course.getCoreq());
-
-		// Save the course
-		if (CourseExists(CourseID)) {
-			UpdateCourses(CourseID.substring(0, 8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);
-		} else {
-			InsertIntoCourses(CourseID.substring(0, 8), L, course.getName(), course.getCredits(), Prereqs, Coreqs);
-		}
-
-		// Save changes to memory
+				
+		//Save the course
+		if(CourseExists(CourseID)) {UpdateCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs, course.getDescription(), course.getAvailability());}
+		else {InsertIntoCourses(CourseID.substring(0,8), L, course.getName(), course.getCredits(), Prereqs, Coreqs, course.getDescription(),course.getAvailability());}
+		
+		//Save changes to memory
 		DepartmentMap.get(course.getDept()).getCatalog().put(course.getCode(), course);
 
 		// Save each section
@@ -1127,20 +1131,21 @@ public class DBHandler {
 	 *                DRAM3003, ENGL3003)
 	 * @throws SQLException
 	 */
-	private void InsertIntoCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs)
-			throws SQLException {
-		String SQLString = "INSERT INTO Courses(ID, L, Name, Credits, Prereq, Coreq) VALUES(?,?,?,?,?,?)";
-		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
-		pstmt.setString(1, ID); // ID
-		pstmt.setBoolean(2, L); // Lab
-		pstmt.setString(3, Name); // Name
-		pstmt.setInt(4, Credits); // Credits
-		pstmt.setString(5, Prereqs); // Prereqs
-		pstmt.setString(6, Coreqs); // Coreqs
-		pstmt.executeUpdate();
-		pstmt.close();
+	private void InsertIntoCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs, String Description, String Availability) throws SQLException {
+    	String SQLString = "INSERT INTO Courses(ID, L, Name, Credits, Prereq, Coreq, Description, Availability) VALUES(?,?,?,?,?,?,?,?)";
+    	PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
+        pstmt.setString(1, ID); //ID
+        pstmt.setBoolean(2, L); //Lab
+        pstmt.setString(3, Name); //Name
+        pstmt.setInt(4, Credits); //Credits
+        pstmt.setString(5, Prereqs); //Prereqs
+        pstmt.setString(6, Coreqs); //Coreqs
+        pstmt.setString(7, Description); //Description
+        pstmt.setString(8, Availability); //Availability
+        pstmt.executeUpdate();
+        pstmt.close();
 	}
-
+	
 	/**
 	 * INSERTS into Sections
 	 * 
@@ -1285,9 +1290,8 @@ public class DBHandler {
 	 *                DRAM3003, ENGL3003)
 	 * @throws SQLException
 	 */
-	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs)
-			throws SQLException {
-		String SQLString = "UPDATE Courses SET Name = ?, Credits = ?, PreReq = ?, CoReq = ? WHERE ID = ? AND L = ?;";
+	private void UpdateCourses(String ID, boolean L, String Name, int Credits, String Prereqs, String Coreqs, String Description, String Availability) throws SQLException {
+		String SQLString = "UPDATE Courses SET Name = ?, Credits = ?, PreReq = ?, CoReq = ?, Description = ?, Availability = ? WHERE ID = ? AND L = ?;";
 		PreparedStatement pstmt = SQLConn.prepareStatement(SQLString);
 
 		// Set the things
@@ -1295,9 +1299,11 @@ public class DBHandler {
 		pstmt.setInt(2, Credits);
 		pstmt.setString(3, Prereqs);
 		pstmt.setString(4, Coreqs);
-		pstmt.setString(5, ID);
-		pstmt.setBoolean(6, L);
-
+		pstmt.setString(5, Description);
+		pstmt.setString(6, Availability);
+		pstmt.setString(7, ID);
+		pstmt.setBoolean(8, L);
+		
 		pstmt.executeUpdate();
 		pstmt.close();
 	}

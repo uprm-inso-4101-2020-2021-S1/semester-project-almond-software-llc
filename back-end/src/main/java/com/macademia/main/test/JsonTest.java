@@ -33,40 +33,40 @@ public class JsonTest {
     public User testUserA = new User("testA", "6969");
     public Student testStudentA = new Student(testUserA, "Test McTesterson", "420-77-6969", testDepartmentA);
 
-    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testPrereqDepartment, "4001", 1);
-    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testPrereqDepartment, "3002", 2);
-    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testPrereqDepartment, "2003", 3);
-    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testPrereqDepartment, "1004", 4);
+    public Course testPrereqCourseA = new Course("Test Prerequisite Course A", testPrereqDepartment, "4001", 1, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseB = new Course("Test Prerequisite Course B", testPrereqDepartment, "3002", 2, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseC = new Course("Test Prerequisite Course C", testPrereqDepartment, "2003", 3, "FALL-SPRING-SUMMER");
+    public Course testPrereqCourseD = new Course("Test Prerequisite Course D", testPrereqDepartment, "1004", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testCoreqDepartment, "4004", 1);
-    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testCoreqDepartment, "3003", 2);
-    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testCoreqDepartment, "2002", 3);
-    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testCoreqDepartment, "1001", 4);
+    public Course testCoreqCourseA = new Course("Test Corequisite Course A", testCoreqDepartment, "4004", 1, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseB = new Course("Test Corequisite Course B", testCoreqDepartment, "3003", 2, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseC = new Course("Test Corequisite Course C", testCoreqDepartment, "2002", 3, "FALL-SPRING-SUMMER");
+    public Course testCoreqCourseD = new Course("Test Corequisite Course D", testCoreqDepartment, "1001", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCourseTakenA = new Course("Test Course Taken A", testCoursesTakenDepartment, "7001", 3);
-    public Course testCourseTakenB = new Course("Test Course Taken B", testCoursesTakenDepartment, "7002", 3);
-    public Course testCourseTakenC = new Course("Test Course Taken C", testCoursesTakenDepartment, "7003", 3);
-    public Course testCourseTakenD = new Course("Test Course Taken D", testCoursesTakenDepartment, "7004", 3);
+    public Course testCourseTakenA = new Course("Test Course Taken A", testCoursesTakenDepartment, "7001", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenB = new Course("Test Course Taken B", testCoursesTakenDepartment, "7002", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenC = new Course("Test Course Taken C", testCoursesTakenDepartment, "7003", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseTakenD = new Course("Test Course Taken D", testCoursesTakenDepartment, "7004", 3, "FALL-SPRING-SUMMER");
 
-    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4023", 1);
-    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3024", 2);
-    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2025", 3);
-    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1026", 4);
+    public Course testCourseA = new Course("Test Course A", testDepartmentA, "4023", 1, "FALL-SPRING-SUMMER");
+    public Course testCourseB = new Course("Test Course B", testDepartmentA, "3024", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseC = new Course("Test Course C", testDepartmentA, "2025", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseD = new Course("Test Course D", testDepartmentA, "1026", 4, "FALL-SPRING-SUMMER");
 
-    public Course testCourseE = new Course("Test Course E", testDepartmentD, "8100", 4);
-    public Course testCourseF = new Course("Test Course F", testDepartmentD, "7100", 3);
-    public Course testCourseG = new Course("Test Course G", testDepartmentD, "6100", 2);
-    public Course testCourseH = new Course("Test Course H", testDepartmentD, "5100", 1);
+    public Course testCourseE = new Course("Test Course E", testDepartmentD, "8100", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseF = new Course("Test Course F", testDepartmentD, "7100", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseG = new Course("Test Course G", testDepartmentD, "6100", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseH = new Course("Test Course H", testDepartmentD, "5100", 1, "FALL-SPRING-SUMMER");
 
-    public Course testCourseI = new Course("Test Course I", testDepartmentB, "5110", 4);
-    public Course testCourseJ = new Course("Test Course J", testDepartmentB, "6130", 3);
-    public Course testCourseK = new Course("Test Course K", testDepartmentB, "7140", 2);
-    public Course testCourseL = new Course("Test Course L", testDepartmentB, "8125", 1);
+    public Course testCourseI = new Course("Test Course I", testDepartmentB, "5110", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseJ = new Course("Test Course J", testDepartmentB, "6130", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseK = new Course("Test Course K", testDepartmentB, "7140", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseL = new Course("Test Course L", testDepartmentB, "8125", 1, "FALL-SPRING-SUMMER");
 
-    public Course testCourseM = new Course("Test Course M", testDepartmentC, "8123", 4);
-    public Course testCourseN = new Course("Test Course N", testDepartmentC, "7142", 3);
-    public Course testCourseO = new Course("Test Course O", testDepartmentC, "6131", 2);
-    public Course testCourseP = new Course("Test Course P", testDepartmentC, "5115", 1);
+    public Course testCourseM = new Course("Test Course M", testDepartmentC, "8123", 4, "FALL-SPRING-SUMMER");
+    public Course testCourseN = new Course("Test Course N", testDepartmentC, "7142", 3, "FALL-SPRING-SUMMER");
+    public Course testCourseO = new Course("Test Course O", testDepartmentC, "6131", 2, "FALL-SPRING-SUMMER");
+    public Course testCourseP = new Course("Test Course P", testDepartmentC, "5115", 1, "FALL-SPRING-SUMMER");
 
     public Section testSectionA01 = new Section("01", "LWV", "7:00AM-7:50AM", "Dr. Juan N. Onlee", "S424", testCourseA, 1, 50);
     public Section testSectionA02 = new Section("02", "LWV", "8:30AM-9:20AM", "Dr. Juan N. Onlee", "S423", testCourseA, 1, 50);
@@ -163,7 +163,7 @@ public class JsonTest {
     public Department testDepartment2 = new Department("Department of Software Engineering", "INSO", "#85c1e9");
     public Department testDepartment3 = new Department("Department of Engineering", "INGE", "#f1948a");
     public Department testDepartment4 = new Department("Department of Industrial Engineering", "ININ", "#f4d03f");
-    public Department testDepartment5 = new Department("Department of English", "INGL", "#c3aed6");
+    public Department testDepartment5 = new Department("Department of English", "INGL", "#ffd5cd");
 
     //---[User Info]-------------------------------------------------------------------------------------------------------------
 
@@ -172,48 +172,42 @@ public class JsonTest {
 
     //---[Courses]---------------------------------------------------------------------------------------------------------------
 
-    public Course testCourse1A = new Course("Intro. to Programming", testDepartment1, "3015", 3);
-    public Course testCourse1B = new Course("Intro. to Programming Lab.", testDepartment1, "3015L", 1);
-    public Course testCourse1C = new Course("Foundations of Computing", testDepartment1, "3075", 3);
-    public Course testCourse1D = new Course("Advanced Programming", testDepartment1, "4010", 4);
-    public Course testCourse1E = new Course("Advanced Programming Lab.", testDepartment1, "4010L", 0);
-    public Course testCourse1F = new Course("Data Structures", testDepartment1, "4020", 4);
-    public Course testCourse1G = new Course("Data Structures Lab.", testDepartment1, "4020L", 0);
-    public Course testCourse1H = new Course("Programming Languages", testDepartment1, "4030", 3);
-    public Course testCourse1I = new Course("Operating Systems", testDepartment1, "4050", 4);
-    public Course testCourse1J = new Course("Operating Systems Lab.", testDepartment1, "4050L", 0);
-    public Course testCourse1K = new Course("Database Systems", testDepartment1, "4060", 3);
-    public Course testCourse1L = new Course("Computer Networks", testDepartment1, "4070", 3);
-    public Course testCourse1M = new Course("Computer Architecture I", testDepartment1, "3081", 3);
-    public Course testCourse1N = new Course("Computer Architecture II", testDepartment1, "4082", 3);
+    public Course testCourse1A = new Course("Intro. to Programming", testDepartment1, "3015", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse1B = new Course("Intro. to Programming Lab.", testDepartment1, "3015L", 1, "FALL, SPRING, SUMMER");
+    public Course testCourse1C = new Course("Foundations of Computing", testDepartment1, "3075", 3, "FALL, SPRING");
+    public Course testCourse1D = new Course("Advanced Programming", testDepartment1, "4010", 4, "FALL, SPRING");
+    public Course testCourse1E = new Course("Advanced Programming Lab.", testDepartment1, "4010L", 0, "FALL, SPRING");
+    public Course testCourse1F = new Course("Data Structures", testDepartment1, "4020", 4, "FALL, SPRING");
+    public Course testCourse1G = new Course("Data Structures Lab.", testDepartment1, "4020L", 0, "FALL, SPRING");
+    public Course testCourse1H = new Course("Programming Languages", testDepartment1, "4030", 3, "FALL, SPRING");
+    public Course testCourse1I = new Course("Operating Systems", testDepartment1, "4050", 4, "FALL, SPRING");
+    public Course testCourse1J = new Course("Operating Systems Lab.", testDepartment1, "4050L", 0, "FALL, SPRING");
+    public Course testCourse1K = new Course("Database Systems", testDepartment1, "4060", 3, "SPRING");
+    public Course testCourse1L = new Course("Computer Networks", testDepartment1, "4070", 3, "SPRING");
+    public Course testCourse1M = new Course("Computer Architecture I", testDepartment1, "3081", 3, "FALL");
+    public Course testCourse1N = new Course("Computer Architecture II", testDepartment1, "4082", 3, "SPRING");
 
-    public Course testCourse2A = new Course("Intro. to Software Engineering",          testDepartment2, "4101", 3);
-    public Course testCourse2B = new Course("Software Requirements",                   testDepartment2, "4115", 3);
-    public Course testCourse2C = new Course("Software Design",                         testDepartment2, "4116", 3);
-    public Course testCourse2D = new Course("Software Testing",                        testDepartment2, "4117", 3);
-    public Course testCourse2E = new Course("Software Engineering Project (Capstone)", testDepartment2, "4151", 3);
+    public Course testCourse2A = new Course("Intro. to Software Engineering",          testDepartment2, "4101", 3, "FALL, SPRING");
+    public Course testCourse2B = new Course("Software Requirements",                   testDepartment2, "4115", 3, "SPRING");
+    public Course testCourse2C = new Course("Software Design",                         testDepartment2, "4116", 3, "FALL");
+    public Course testCourse2D = new Course("Software Testing",                        testDepartment2, "4117", 3, "SPRING");
+    public Course testCourse2E = new Course("Software Engineering Project (Capstone)", testDepartment2, "4151", 3, "FALL, SPRING");
 
-    public Course testCourse3A  = new Course("Engineering Graphics",             testDepartment3, "3011", 4);
-    public Course testCourse3B = new Course("Engineering Mechanics",            testDepartment3, "3035", 3);
-    public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2);
+    public Course testCourse3A  = new Course("Engineering Graphics",             testDepartment3, "3011", 4, "FALL, SPRING");
+    public Course testCourse3B = new Course("Engineering Mechanics",            testDepartment3, "3035", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2, "FALL, SPRING");
 
-    public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4);
-    public Course testCourse4B = new Course("Engineering Economics", testDepartment4, "4015", 3);
+    public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4, "FALL, SPRING, SUMMER");
+    public Course testCourse4B = new Course("Engineering Economics",                  testDepartment4, "4015", 3, "FALL, SPRING, SUMMER");
 
-    public Course testCourse5A = new Course("Advanced English 1", testDepartment5, "3211", 3);
-    public Course testCourse5B = new Course("Advanced English 2", testDepartment5, "3212", 3);
-    public Course testCourse5C = new Course("Basic English 1", testDepartment5, "3101", 3);
-    public Course testCourse5D = new Course("Basic English 2", testDepartment5, "3102", 3);
-    public Course testCourse5E = new Course("Intermediate English 1", testDepartment5, "3103", 3);
-    public Course testCourse5F = new Course("Intermediate English 2", testDepartment5, "3014", 3);
-    public Course testCourse5G = new Course("Conversational English", testDepartment5, "3289", 3);
-    public Course testCourse5H = new Course("Movie Themes", testDepartment5, "3345", 3);
-    
-    
-    
-
-    
-
+    public Course testCourse5A = new Course("Advanced English 1", testDepartment5, "3211", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5B = new Course("Advanced English 2", testDepartment5, "3212", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5C = new Course("Basic English 1", testDepartment5, "3101", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5D = new Course("Basic English 2", testDepartment5, "3102", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5E = new Course("Intermediate English 1", testDepartment5, "3103", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5F = new Course("Intermediate English 2", testDepartment5, "3014", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5G = new Course("Conversational English", testDepartment5, "3289", 3, "FALL, SPRING, SUMMER");
+    public Course testCourse5H = new Course("Movie Themes", testDepartment5, "3345", 3, "FALL, SPRING, SUMMER");
     //---[Sections]--------------------------------------------------------------------------------------------------------------
 
     public Section testSection1A1 = new Section("096", "MJ", "3:30PM-4:45PM", "Heidy Sierra Gil", "S424",   testCourse1A, 1, 100);
@@ -294,118 +288,60 @@ public class JsonTest {
     
     public Section testSection5A1 = new Section("066", "MJ", "12:30PM-1:45PM", "Maria C. Quintero", "CH-224", testCourse5A, 1, 33);
     public Section testSection5A2 = new Section("086", "MJ", "2:00PM-3:15PM",  "Maria C. Quintero", "CH-005",testCourse5A, 1, 32);
-    public Section testSection5A3 = new Section("096", "MJ", "3:30PM-4:45PM",   "Lawrence Chott", "CH-005", 
-            testCourse5A, 1, 31);
-    public Section testSection5A4 = new Section("100", "LW", "4:30PM-5:45PM",   "Stephania Uwakweh Evuleocha", "CH-319", 
-            testCourse5A, 1, 30);
-    public Section testSection5A5 = new Section("101", "LW", "4:30PM-5:45PM",   "Lawrence Chott", "CH-125", 
-            testCourse5A, 1, 32);
-    public Section testSection5A6 = new Section("116", "MJ", "5:00PM-6:15PM", "Lawrence Chott", "CH-005", 
-            testCourse5A, 1,31);
-    public Section testSection5A7 = new Section("120", "LW", "6:00PM-7:15PM", "Lawrence Chott", "CH-125", 
-            testCourse5A,1, 32);
+    public Section testSection5A3 = new Section("096", "MJ", "3:30PM-4:45PM",   "Lawrence Chott", "CH-005", testCourse5A, 1, 31);
+    public Section testSection5A4 = new Section("100", "LW", "4:30PM-5:45PM",   "Stephania Uwakweh Evuleocha", "CH-319", testCourse5A, 1, 30);
+    public Section testSection5A5 = new Section("101", "LW", "4:30PM-5:45PM",   "Lawrence Chott", "CH-125", testCourse5A, 1, 32);
+    public Section testSection5A6 = new Section("116", "MJ", "5:00PM-6:15PM", "Lawrence Chott", "CH-005", testCourse5A, 1,31);
+    public Section testSection5A7 = new Section("120", "LW", "6:00PM-7:15PM", "Lawrence Chott", "CH-125", testCourse5A,1, 32);
     
-    
-    public Section testSection5B1 = new Section("120", "LW", "6:00PM-7:15PM", "Stephania Uwakweh Evuleocha", "CH-325",
-            testCourse5B, 1, 31);
-   
-    
+    public Section testSection5B1 = new Section("120", "LW", "6:00PM-7:15PM", "Stephania Uwakweh Evuleocha", "CH-325", testCourse5B, 1, 31);
 
-    public Section testSection5C1 = new Section("010", "LMV", "7:30AM-8:20AM", "Laura Buitrago Garcia", "CH-224",
-            testCourse5C, 1, 30);
-    public Section testSection5C2 = new Section("016", "MJ", "7:30AM-8:20AM", "Myrna Rivera Montijo", "CH-318",
-            testCourse5C, 1, 30);
-    public Section testSection5C3 = new Section("017", "MJ", "7:30AM-8:20AM", "Waleska Morciglio Quintana", "CH-221", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C4 = new Section("018", "MJ", "7:30AM-8:20AM", "Iris Toro Manzano", "CH-123",
-            testCourse5C, 1, 30);
-    public Section testSection5C5 = new Section("020", "LWV", "8:30AM-9:20AM", "Laura Buitrago Garcia", "CH-224", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C6 = new Section("030", "LWV", "9:30AM-10:20AM", "Maria Orejarena Torres", "CH-224", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C7 = new Section("036", "MJ", "9:00AM-10:15AM", "Myrna Rivera Montijo", "CH-318", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C8 = new Section("037", "MJ", "9:00AM-10:15AM", "Waleska Morciglio Quintana", "CH-221",
-            testCourse5C, 1, 30);
-    public Section testSection5C9 = new Section("038", "MJ", "9:00AM-10:15AM", "Iris Toro Manzano", "CH-123",
-            testCourse5C, 1, 30);
-    public Section testSection5C10 = new Section("040", "LWV", "10:30AM-11:20AM", "Maria Orejarena Torres", "CH-224", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C11 = new Section("041", "LWV", "10:30AM-11:20AM", "Rosita Rivera", "CH-324",
-            testCourse5C, 1, 30);
-    public Section testSection5C12 = new Section("050", "LWV", "11:30AM-12:20PM", "William Carrero Vale", "CH-224", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C13 = new Section("051", "LWV", "11:30AM-12:20PM", "Rosita Rivera", "CH-324", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C14 = new Section("060", "LWV", "12:30PM-1:20PM", "William Carrero Vale", "CH-224", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C15 = new Section("061", "LWV", "12:30PM-1:20PM", "Ambar Rivera Beede", "CH-324",
-            testCourse1E, 1, 30);
-    public Section testSection5C16 = new Section("070", "LWV", "1:30PM-2:20PM", "Ambar Rivera Beede", "CH-224",
-            testCourse1E, 1, 30);
-    public Section testSection5C17 = new Section("086", "MJ", "2:00PM-3:15PM", "Myrna Rivera Montijo", "CH-318", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C18 = new Section("096", "MJ", "3:30PM-4:45PM", "Myrna Rivera Montijo", "CH-318",
-            testCourse5C, 1, 30);
-    public Section testSection5C19 = new Section("100", "LW", "4:30PM-5:45PM", "Iris Toro Manzano", "CH-221", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C20 = new Section("100L", "V", "4:30PM-5:20PM", "Rosita Rivera", "CH-325", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C21 = new Section("116", "MJ", "5:00PM-6:15PM", "Iris Toro Manzano", "CH-222", 
-            testCourse5C,
-            1, 30);
-    public Section testSection5C22 = new Section("117", "MJ", "5:00PM-6:15PM", "Javier I Fabre Quiñones", "CH-223",
-            testCourse5C, 1, 30);
-    public Section testSection5C23 = new Section("120", "LW", "6:00PM-7:15PM", "Javier I Fabre Quiñones", "CH-221",
-            testCourse5C, 1, 30);
-    public Section testSection5C24 = new Section("130L", "V", "7:30PM-8:20PM", "Rosita Rivera", "CH-221", 
-            testCourse5C,
-            1, 30);
+    public Section testSection5C1 = new Section("010", "LMV", "7:30AM-8:20AM", "Laura Buitrago Garcia", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C2 = new Section("016", "MJ", "7:30AM-8:20AM", "Myrna Rivera Montijo", "CH-318", testCourse5C, 1, 30);
+    public Section testSection5C3 = new Section("017", "MJ", "7:30AM-8:20AM", "Waleska Morciglio Quintana", "CH-221", testCourse5C, 1, 30);
+    public Section testSection5C4 = new Section("018", "MJ", "7:30AM-8:20AM", "Iris Toro Manzano", "CH-123", testCourse5C, 1, 30);
+    public Section testSection5C5 = new Section("020", "LWV", "8:30AM-9:20AM", "Laura Buitrago Garcia", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C6 = new Section("030", "LWV", "9:30AM-10:20AM", "Maria Orejarena Torres", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C7 = new Section("036", "MJ", "9:00AM-10:15AM", "Myrna Rivera Montijo", "CH-318", testCourse5C, 1, 30);
+    public Section testSection5C8 = new Section("037", "MJ", "9:00AM-10:15AM", "Waleska Morciglio Quintana", "CH-221", testCourse5C, 1, 30);
+    public Section testSection5C9 = new Section("038", "MJ", "9:00AM-10:15AM", "Iris Toro Manzano", "CH-123", testCourse5C, 1, 30);
+    public Section testSection5C10 = new Section("040", "LWV", "10:30AM-11:20AM", "Maria Orejarena Torres", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C11 = new Section("041", "LWV", "10:30AM-11:20AM", "Rosita Rivera", "CH-324", testCourse5C, 1, 30);
+    public Section testSection5C12 = new Section("050", "LWV", "11:30AM-12:20PM", "William Carrero Vale", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C13 = new Section("051", "LWV", "11:30AM-12:20PM", "Rosita Rivera", "CH-324", testCourse5C, 1, 30);
+    public Section testSection5C14 = new Section("060", "LWV", "12:30PM-1:20PM", "William Carrero Vale", "CH-224", testCourse5C, 1, 30);
+    public Section testSection5C15 = new Section("061", "LWV", "12:30PM-1:20PM", "Ambar Rivera Beede", "CH-324", testCourse1E, 1, 30);
+    public Section testSection5C16 = new Section("070", "LWV", "1:30PM-2:20PM", "Ambar Rivera Beede", "CH-224", testCourse1E, 1, 30);
+    public Section testSection5C17 = new Section("086", "MJ", "2:00PM-3:15PM", "Myrna Rivera Montijo", "CH-318", testCourse5C, 1, 30);
+    public Section testSection5C18 = new Section("096", "MJ", "3:30PM-4:45PM", "Myrna Rivera Montijo", "CH-318", testCourse5C, 1, 30);
+    public Section testSection5C19 = new Section("100", "LW", "4:30PM-5:45PM", "Iris Toro Manzano", "CH-221", testCourse5C, 1, 30);
+    public Section testSection5C20 = new Section("100L", "V", "4:30PM-5:20PM", "Rosita Rivera", "CH-325", testCourse5C, 1, 30);
+    public Section testSection5C21 = new Section("116", "MJ", "5:00PM-6:15PM", "Iris Toro Manzano", "CH-222", testCourse5C, 1, 30);
+    public Section testSection5C22 = new Section("117", "MJ", "5:00PM-6:15PM", "Javier I Fabre Quiñones", "CH-223", testCourse5C, 1, 30);
+    public Section testSection5C23 = new Section("120", "LW", "6:00PM-7:15PM", "Javier I Fabre Quiñones", "CH-221", testCourse5C, 1, 30);
+    public Section testSection5C24 = new Section("130L", "V", "7:30PM-8:20PM", "Rosita Rivera", "CH-221", testCourse5C, 1, 30);
 
 
-    public Section testSection5D1 = new Section("010", "LWV", "12:30PM-1:45PM", "Javier I Fabre Quiñones", "CH-223",
-            testCourse5D, 1, 30);
-    public Section testSection5D2 = new Section("020", "LWV", "2:00PM-3:15PM", "Javier I Fabre Quiñones", "CH-221",
-            testCourse5D, 1, 30);
-    public Section testSection5D3 = new Section("060", "V", "3:30PM-4:45PM", "Rosita Rivera", "CH-221", testCourse5D,
-            1, 60);
+    public Section testSection5D1 = new Section("010", "LWV", "12:30PM-1:45PM", "Javier I Fabre Quiñones", "CH-223", testCourse5D, 1, 30);
+    public Section testSection5D2 = new Section("020", "LWV", "2:00PM-3:15PM", "Javier I Fabre Quiñones", "CH-221", testCourse5D, 1, 30);
+    public Section testSection5D3 = new Section("060", "V", "3:30PM-4:45PM", "Rosita Rivera", "CH-221", testCourse5D, 1, 60);
 
 
-    public Section testSection5F1 = new Section("020", "LWV", "8:30AM-9:20AM", "Diego Zaragoza Padilla", "CH-222",
-            testCourse5F, 1, 31);
-    public Section testSection5F2 = new Section("030", "LWV", "9:30AM-10:20AM", "Diego Zaragoza Padilla", "CH-222", testCourse5F, 1,
-            30);
+    public Section testSection5F1 = new Section("020", "LWV", "8:30AM-9:20AM", "Diego Zaragoza Padilla", "CH-222", testCourse5F, 1, 31);
+    public Section testSection5F2 = new Section("030", "LWV", "9:30AM-10:20AM", "Diego Zaragoza Padilla", "CH-222", testCourse5F, 1, 30);
 
 
 
-    public Section testSection5G1 = new Section("070", "LWV", "1:30PM-2:20PM", "Dariana Alicea Torres", "CH-324",
-            testCourse5G, 1, 30);
-    public Section testSection5G2 = new Section("096", "MJ", "3:30PM-4:45PM", "Dariana Alicea Torres", "CH-319",
-            testCourse5G, 1, 30);
+    public Section testSection5G1 = new Section("070", "LWV", "1:30PM-2:20PM", "Dariana Alicea Torres", "CH-324", testCourse5G, 1, 30);
+    public Section testSection5G2 = new Section("096", "MJ", "3:30PM-4:45PM", "Dariana Alicea Torres", "CH-319", testCourse5G, 1, 30);
 
 
 
-    public Section testSection5H1 = new Section("070", "LWV", "1:30PM-2:20PM", "Gabriel E. Romaguera Rodriguez", "CH-005",
-            testCourse5H, 1, 31);
-    public Section testSection5H2 = new Section("080", "LWV", "2:30PM-3:20PM", "Nicholas Haydock", "CH-005",
-            testCourse5H, 1, 30);
-    public Section testSection5H3 = new Section("100", "LW", "4:30PM-5:45PM", "Linda Rodriguez", "CH-124",
-            testCourse5H, 1, 66);
-    public Section testSection5H4 = new Section("116", "MJ", "5:00PM-6:15PM", "Gabriel E. Romaguera Rodriguez", "CH-324",
-            testCourse5H, 1, 45);
-    public Section testSection5H5 = new Section("120", "LW", "6:00PM-7:15PM", "Linda Rodriguez", "CH-124",
-            testCourse5H, 1, 64);
+    public Section testSection5H1 = new Section("070", "LWV", "1:30PM-2:20PM", "Gabriel E. Romaguera Rodriguez", "CH-005", testCourse5H, 1, 31);
+    public Section testSection5H2 = new Section("080", "LWV", "2:30PM-3:20PM", "Nicholas Haydock", "CH-005", testCourse5H, 1, 30);
+    public Section testSection5H3 = new Section("100", "LW", "4:30PM-5:45PM", "Linda Rodriguez", "CH-124", testCourse5H, 1, 66);
+    public Section testSection5H4 = new Section("116", "MJ", "5:00PM-6:15PM", "Gabriel E. Romaguera Rodriguez", "CH-324", testCourse5H, 1, 45);
+    public Section testSection5H5 = new Section("120", "LW", "6:00PM-7:15PM", "Linda Rodriguez", "CH-124", testCourse5H, 1, 64);
         
 
     public JsonTest() {
@@ -419,7 +355,7 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseB);
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
-  
+
         testList.add(testSectionA04);
         testList.add(testSectionB03);
         testList.add(testSectionC02);
@@ -483,6 +419,7 @@ public class JsonTest {
             db.SaveDepartment(testDepartment2);
             db.SaveDepartment(testDepartment3);
             db.SaveDepartment(testDepartment4);
+            db.SaveDepartment(testDepartment5);
             
             db.SaveUser(testUser1);
             db.SaveStudent(testStudent1);
