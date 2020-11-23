@@ -100,17 +100,23 @@ public class MacademiaController {
 	}
 
 	@GetMapping("/departments")
-	public List<Department> department() throws SQLException {
-		return tester.db.getDepartments();
+	public List<Department> department() {
+		try {
+			return tester.db.getDepartments();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@GetMapping("/priority")
-	public List<Course> priority(@RequestParam(value = "user") String user) throws SQLException {
+	public List<Course> priority(@RequestParam(value = "user") String user) {
 		return currentStudents.get(user).getPriority();
 	}
 
 	@GetMapping("/matriculas")
-	public Collection<Matricula> matriculas(@RequestParam(value = "user") String user) throws SQLException {
+	public Collection<Matricula> matriculas(@RequestParam(value = "user") String user) {
 		return currentStudents.get(user).getMatriculas();
 	}
 
@@ -126,6 +132,8 @@ public class MacademiaController {
 				user).get(valueIndex);
 		Course tempCourse = null;
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
+		Boolean conflict = checkConflicts(tempSection,
+				currentStudents.get(user).getMatricula(tempPeriod).getSections());
 		try {
 			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
 		} catch (SQLException e) {
@@ -137,13 +145,15 @@ public class MacademiaController {
 			if (!currentStudents.get(user).getPriority().contains(tempCourse))
 				currentStudents.get(user).getPriority().add(tempCourse);
 		} else {
-			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
+			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse) && !conflict) {
+
 				currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
 			}
 		}
 		// remove
 		if (sourceListIndex == 0) {
-			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+			if (!conflict)
+				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
 		} else {
 			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
 			currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
@@ -157,19 +167,36 @@ public class MacademiaController {
 		}
 	}
 
+	public boolean checkConflicts(Section s, List<Section> l) {
+		// if s start <= temp end && s end >= temp end, if temp start <= s end && temp
+		// end >= s edn, false
+		for (Section temp : l) {
+			if ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
+					&& s.getPeriod().getEndMinutes() >= temp.getPeriod().getEndMinutes())
+					|| (temp.getPeriod().getStartMinutes() <= s.getPeriod().getEndMinutes()
+							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@PostMapping("/transferCourse")
 	public void transferCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
 			@RequestParam(value = "departmentIndex") int departmentIndex,
-			@RequestParam(value = "matriculaIndex") int matriculaIndex, @RequestParam(value = "user") String user) {
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
+			@RequestParam(value = "user") String user) {
 		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex, user).get(valueIndex);
+		
 		// add
 		if (targetListIndex == 0) {
 			if ((!currentStudents.get(user).getPriority().contains(tempCourse)
 					|| currentStudents.get(user).getPriority().isEmpty())
-					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)) {
+					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)
+					&& isAvailable(matriculaPeriod, tempCourse)) {
 				currentStudents.get(user).getPriority().add(tempCourse);
 			}
 		}
@@ -184,6 +211,21 @@ public class MacademiaController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private boolean isAvailable(String period, Course c){
+		switch(period){
+			case "FALL": 
+			System.out.println(c.getAvailability().contains("FALL"));
+			return c.getAvailability().contains("FALL");
+			case "SPRING":
+			System.out.println(c.getAvailability().contains("SPRING"));
+			return c.getAvailability().contains("SPRING");
+			case "SUMMER":
+			System.out.println(c.getAvailability().contains("SUMMER"));
+			return c.getAvailability().contains("SUMMER");
+		}
+		return false;
 	}
 
 	private List<Section> sectionListSwitch(int sourceListIndex, int priorityCourseIndex, int matriculaYear,

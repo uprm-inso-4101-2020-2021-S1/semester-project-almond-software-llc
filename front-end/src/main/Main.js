@@ -202,7 +202,7 @@ export default function Main() {
     valueIndex,
     priorityCourseIndex,
     departmentIndex,
-    matriculaIndex
+    matriculaPeriod
   ) => {
     await axios.post(
       "http://localhost:8080/transferCourse?" +
@@ -216,8 +216,8 @@ export default function Main() {
       priorityCourseIndex +
       "&departmentIndex=" +
       departmentIndex +
-      "&matriculaIndex=" +
-      matriculaIndex +
+      "&matriculaPeriod=" +
+      matriculaPeriod +
       "&user=" +
       Cookies.get("user")
     );
@@ -317,7 +317,7 @@ export default function Main() {
               valueIndex,
               priorityCourseIndex,
               departmentIndex,
-              matriculaIndex,
+              matriculas[matriculaIndex].period.semesterAsString,
               Cookies.get("user")
             );
           }
@@ -451,6 +451,8 @@ export default function Main() {
                         capacity={section.capacity}
                         day={section.day}
                         period={section.period}
+                        availability={course.availability}
+                        description={course.description}
                       />
                     </ListItem>
                   ))}
@@ -471,46 +473,35 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <Grid container style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
-          <Grid item>
-            <Typography className={classes.drawerTypography}>
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <DeleteForeverIcon
-              style={{ height: "2rem", width: "2rem"}}
-            />
-          </Grid>
-        </Grid>
-        <div style={{ overflowY: "scroll", height: "550px", width: "250px" }}>
-          <List style={{ alignItems: "center" }}>
-            {matriculaList.map((sections, sectionsIndex) => (
-              <ListItem
-                style={{ cursor: "pointer" }}
-                draggable={matriculaIndex === 0}
-                key={sectionsIndex}
-                onDragStart={(e) =>
-                  onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
-                }
-              >
-                <SectionCard
-                  courseCode={sections.courseCode}
-                  section={sections.secNum}
-                  courseName={sections.courseName}
-                  professor={sections.professor}
-                  credits={sections.credits}
-                  color={sections.color}
-                  time={sections.time}
-                  population={sections.population}
-                  capacity={sections.capacity}
-                  day={sections.day}
-                  period={sections.period}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </div>
+        <List style={{ alignItems: 'center' }}>
+          <Typography className={classes.drawerTypography}>{title}</Typography>
+          {matriculaList.map((sections, sectionsIndex) => (
+            <ListItem
+              style={{ cursor: 'pointer' }}
+              draggable={matriculaIndex === 0}
+              key={sectionsIndex}
+              onDragStart={(e) =>
+                onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
+              }
+            >
+              <SectionCard
+                courseCode={sections.courseCode}
+                section={sections.secNum}
+                courseName={sections.courseName}
+                professor={sections.professor}
+                credits={sections.credits}
+                color={sections.color}
+                time={sections.time}
+                population={sections.population}
+                capacity={sections.capacity}
+                day={sections.day}
+                period={sections.period}
+                availability={matriculas[matriculaIndex].courses[sectionsIndex].availability}
+                description={matriculas[matriculaIndex].courses[sectionsIndex].description}
+              />
+            </ListItem>
+          ))}
+        </List>
       </div>
     );
   };

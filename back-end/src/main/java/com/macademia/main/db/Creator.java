@@ -74,8 +74,10 @@ public class Creator {
              * CREDITS (3), 
              * PREREQ (Comma separated list of class IDs), 
              * COREQ (See Prereq)
+             * DESCRIPTION (Description of the course)
+             * AVAILABILITY (Semesters/Years this course is available during)
              */
-            State.execute("CREATE TABLE IF NOT EXISTS Courses (ID Char(8), L bool , Name VarChar(75), Credits int, Prereq VarChar(" + Integer.MAX_VALUE + "), CoReq VarChar(" + Integer.MAX_VALUE + "));");
+            State.execute("CREATE TABLE IF NOT EXISTS Courses (ID Char(8), L bool , Name VarChar(75), Credits int, Prereq VarChar(" + Integer.MAX_VALUE + "), CoReq VarChar(" + Integer.MAX_VALUE + "), Description VarChar(" + Integer.MAX_VALUE + "), Availability VarChar(" + Integer.MAX_VALUE + "));");
             
             System.out.println("Creating Sections Table.");
             /*
