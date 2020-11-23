@@ -288,7 +288,7 @@ public class JsonTest {
         testCourseA.addCoreq(testCoreqCourseB);
         testCourseA.addCoreq(testCoreqCourseC);
         testCourseA.addCoreq(testCoreqCourseD);
-  
+
         testList.add(testSectionA04);
         testList.add(testSectionB03);
         testList.add(testSectionC02);

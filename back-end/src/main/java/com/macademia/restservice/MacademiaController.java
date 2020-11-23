@@ -126,6 +126,8 @@ public class MacademiaController {
 				user).get(valueIndex);
 		Course tempCourse = null;
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
+		Boolean conflict = checkConflicts(tempSection,
+				currentStudents.get(user).getMatricula(tempPeriod).getSections());
 		try {
 			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
 		} catch (SQLException e) {
@@ -137,13 +139,15 @@ public class MacademiaController {
 			if (!currentStudents.get(user).getPriority().contains(tempCourse))
 				currentStudents.get(user).getPriority().add(tempCourse);
 		} else {
-			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
+			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse) && !conflict) {
+
 				currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
 			}
 		}
 		// remove
 		if (sourceListIndex == 0) {
-			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+			if (!conflict)
+				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
 		} else {
 			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
 			currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
@@ -155,6 +159,20 @@ public class MacademiaController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean checkConflicts(Section s, List<Section> l) {
+		// if s start <= temp end && s end >= temp end, if temp start <= s end && temp
+		// end >= s edn, false
+		for (Section temp : l) {
+			if ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
+					&& s.getPeriod().getEndMinutes() >= temp.getPeriod().getEndMinutes())
+					|| (temp.getPeriod().getStartMinutes() <= s.getPeriod().getEndMinutes()
+							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@PostMapping("/transferCourse")

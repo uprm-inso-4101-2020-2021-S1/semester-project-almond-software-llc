@@ -20,6 +20,8 @@ public class Course {
 	private List<Course> prereq;
 	private List<Course> coreq;
 	private final List<Section> sections;
+	private String Description;
+	private String Availability;
 
 	// -[Constructor]-----------------------------------------
 
@@ -70,7 +72,9 @@ public class Course {
 	public List<Course> getCoreq() {return prereq;}
 	public List<Section> getSections() {return sections;}
 	public String getColor() {return Color;}
-
+	public String getDescription() {return Description;}
+	public String getAvailability() {return Availability;}
+	
 	// -[Setters]---------------------------------------------
 
 	public void setName(String name) {this.name = name; UpdateSections();}
@@ -81,6 +85,8 @@ public class Course {
 	public void setCredits(int credits) {this.credits = credits; UpdateSections();}
 	public void setPrereq(List<Course> prereq) {this.prereq = prereq;}
 	public void setCoreq(List<Course> coreq) {this.coreq = coreq;}
+	public void setDescription(String Description) {this.Description=Description;}
+	public void setAvailability(String Availability) {this.Availability=Availability;}
 
 	/**
 	 * Sets this Course's department color. THIS SHOULD ONLY BE RUN FROM THE DEPARTMENT CLASS.

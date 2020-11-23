@@ -66,7 +66,7 @@ class PeriodJUnit {
 	@Test
 	void BeforeStartTest() {
 		try {
-			Period Per = Period.timetoPeriod(NoNoTime);
+			Period.timetoPeriod(NoNoTime);
 			fail("Exception not thrown");
 		} catch (IllegalArgumentException e) {
 			//OK it worked.
