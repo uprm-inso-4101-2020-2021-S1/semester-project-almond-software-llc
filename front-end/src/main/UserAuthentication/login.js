@@ -66,7 +66,6 @@ export default function Login() {
       + 'user=' + user
       + '&password=' + password).then(res => {
         if (res.data) {
-          Cookies.set("userActive", true);
           Cookies.set("user", user);
           history.push("/home");
         }

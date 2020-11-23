@@ -141,14 +141,12 @@ export default function Main() {
       );
       setMatriculas(resultMatriculas.data);
     } else {
-      console.log('if userActive false in fetchData():', Cookies.get("userActive"));
       history.push("/");
     }
   };
 
   async function setExpands() {
     if (Cookies.get("user") !== "") {
-      console.log('if userActive true in setExpands():', Cookies.get("userActive"));
       const resultPriorities = await axios.get(
         "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
       );
@@ -156,7 +154,6 @@ export default function Main() {
         courseExpands[coursesIndex] = false;
       });
     } else {
-      console.log('if userActive false in setExpands():', Cookies.get("userActive"));
       history.push("/");
     }
   };
@@ -246,7 +243,6 @@ export default function Main() {
   };
 
   const logout = async () => {
-    Cookies.set("userActive", false);
     Cookies.set("user", "");
     history.push("/");
     await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
