@@ -386,12 +386,30 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignContent: "center",
+            justifyContent: "center",
+            paddingTop:'1rem',
+          }}
+        >
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+          </Grid>
+        </Grid>
+
+        <List style={{ alignItems: "center" }}>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>
               <ListItem
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 draggable={true}
                 key={coursesIndex}
                 onDragStart={(e) =>
@@ -406,11 +424,15 @@ export default function Main() {
                   color={course.color}
                 />
               </ListItem>
-              <Collapse in={courseExpands[coursesIndex]} timeout="auto" unmountOnExit>
+              <Collapse
+                in={courseExpands[coursesIndex]}
+                timeout="auto"
+                unmountOnExit
+              >
                 <List>
                   {course.sections.map((section, sectionsIndex) => (
                     <ListItem
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: "pointer" }}
                       draggable={true}
                       key={sectionsIndex}
                       onDragStart={(e) =>
@@ -513,11 +535,11 @@ export default function Main() {
         variant="permanent"
         classes={{ paper: classes.drawerPaper }}
       >
-        
         <Toolbar />
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
+             
           ) : (
             <div />
           )}
@@ -542,7 +564,7 @@ export default function Main() {
             </IconButton>
           </div>
 
-          <Card elevation={3} style={{ width: "70%" }}>
+          <Card elevation={3} style={{ width: "70%"}}>
             {matriculas !== null ? (
               <CardContent>
                 <Grid item style={{ textAlign: "center" }}>
