@@ -3,8 +3,6 @@ package com.macademia.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import sun.security.krb5.internal.crypto.Des;
-
 /*
  * Contains information for a Course
  * @author Kurcell
