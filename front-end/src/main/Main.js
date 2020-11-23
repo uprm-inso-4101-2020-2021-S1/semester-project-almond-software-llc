@@ -22,6 +22,7 @@ import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const drawerWidth = 270;
 
@@ -92,7 +93,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main(props) {
+export default function Main() {
+
   const classes = useStyles();
 
   let history = useHistory();
@@ -124,34 +126,40 @@ export default function Main(props) {
   let [elTicko, setElTicko] = useState(false);
 
   async function fetchData() {
-    if (props.currUser === "") {
-      history.push("/");
-    } else {
+    if (Cookies.get("user") !== "") {
+      console.log('if userActive true in fetchData():', Cookies.get("userActive"));
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + props.currUser
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
       );
       setPriorities(resultPriorities.data);
-
       const resultDepartments = await axios.get(
-        "http://localhost:8080/departments?" + "user=" + props.currUser
+        "http://localhost:8080/departments?" + "user=" + Cookies.get("user")
       );
       setDepartments(resultDepartments.data);
-
       const resultMatriculas = await axios.get(
-        "http://localhost:8080/matriculas?" + "user=" + props.currUser
+        "http://localhost:8080/matriculas?" + "user=" + Cookies.get("user")
       );
       setMatriculas(resultMatriculas.data);
+    } else {
+      console.log('if userActive false in fetchData():', Cookies.get("userActive"));
+      history.push("/");
     }
-  }
+  };
 
   async function setExpands() {
-    const resultPriorities = await axios.get(
-      "http://localhost:8080/priority?" + "user=" + props.currUser
-    );
-    resultPriorities.data.map((course, coursesIndex) => {
-      courseExpands[coursesIndex] = false;
-    })
-  }
+    if (Cookies.get("user") !== "") {
+      console.log('if userActive true in setExpands():', Cookies.get("userActive"));
+      const resultPriorities = await axios.get(
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+      );
+      resultPriorities.data.map((course, coursesIndex) => {
+        courseExpands[coursesIndex] = false;
+      });
+    } else {
+      console.log('if userActive false in setExpands():', Cookies.get("userActive"));
+      history.push("/");
+    }
+  };
 
   useEffect(() => {
     setExpands();
@@ -207,7 +215,7 @@ export default function Main(props) {
       "&matriculaIndex=" +
       matriculaIndex +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
   };
 
@@ -233,18 +241,16 @@ export default function Main(props) {
       "&matriculaPeriod=" +
       matriculas[matriculaIndex].period.semester +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
   };
 
   const logout = async () => {
-    await axios.post('http://localhost:8080/logout?user=' + props.currUser).then(res => {
-      if (res) {
-        props.setCurrUser("");
-        history.push("/");
-      }
-    })
-  }
+    Cookies.set("userActive", false);
+    Cookies.set("user", "");
+    history.push("/");
+    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
+  };
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
     switch (listIndex) {
@@ -282,7 +288,7 @@ export default function Main(props) {
 
   const onDragOver = (e) => {
     e.preventDefault();
-  }
+  };
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
     setIsCourseSection(listType);
@@ -308,7 +314,7 @@ export default function Main(props) {
               priorityCourseIndex,
               departmentIndex,
               matriculaIndex,
-              props.currUser
+              Cookies.get("user")
             );
           }
           break;
@@ -320,7 +326,7 @@ export default function Main(props) {
               valueIndex,
               priorityCourseIndex,
               matriculaIndex,
-              props.currUser
+              Cookies.get("user")
             );
           }
           break;
