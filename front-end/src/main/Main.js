@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/CourseCard.js";
+import CourseCard from "../coursecard/coursecard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -22,6 +22,8 @@ import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import Cookies from 'js-cookie';
+import MacademiaTitle from './Macademia_title.png';
 
 const drawerWidth = 270;
 
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   image: {
-    width: 60,
+    width: '15rem',
     height: 60,
   },
   root: {
@@ -42,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
     // width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
     backgroundColor: "#1e8449",
+    display: 'flex',
+    justifyContent:'space-between',
   },
   drawer: {
     width: drawerWidth,
@@ -55,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     // textShadow: "1px 1px 2px green",
     fontFamily: "Roboto",
-    padding: '10px'
+    padding: '10px',
+    //fontWeight:'700',
   },
   cardLists: {
     alignContent: "center",
@@ -92,7 +97,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main(props) {
+export default function Main() {
+
   const classes = useStyles();
 
   let history = useHistory();
@@ -124,34 +130,40 @@ export default function Main(props) {
   let [elTicko, setElTicko] = useState(false);
 
   async function fetchData() {
-    if (props.currUser === "") {
-      history.push("/");
-    } else {
+    if (Cookies.get("user") !== "") {
+      console.log('if userActive true in fetchData():', Cookies.get("userActive"));
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + props.currUser
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
       );
       setPriorities(resultPriorities.data);
-
       const resultDepartments = await axios.get(
-        "http://localhost:8080/departments?" + "user=" + props.currUser
+        "http://localhost:8080/departments?" + "user=" + Cookies.get("user")
       );
       setDepartments(resultDepartments.data);
-
       const resultMatriculas = await axios.get(
-        "http://localhost:8080/matriculas?" + "user=" + props.currUser
+        "http://localhost:8080/matriculas?" + "user=" + Cookies.get("user")
       );
       setMatriculas(resultMatriculas.data);
+    } else {
+      console.log('if userActive false in fetchData():', Cookies.get("userActive"));
+      history.push("/");
     }
-  }
+  };
 
   async function setExpands() {
-    const resultPriorities = await axios.get(
-      "http://localhost:8080/priority?" + "user=" + props.currUser
-    );
-    resultPriorities.data.map((course, coursesIndex) => {
-      courseExpands[coursesIndex] = false;
-    })
-  }
+    if (Cookies.get("user") !== "") {
+      console.log('if userActive true in setExpands():', Cookies.get("userActive"));
+      const resultPriorities = await axios.get(
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+      );
+      resultPriorities.data.map((course, coursesIndex) => {
+        courseExpands[coursesIndex] = false;
+      });
+    } else {
+      console.log('if userActive false in setExpands():', Cookies.get("userActive"));
+      history.push("/");
+    }
+  };
 
   useEffect(() => {
     setExpands();
@@ -207,7 +219,7 @@ export default function Main(props) {
       "&matriculaIndex=" +
       matriculaIndex +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
   };
 
@@ -233,18 +245,16 @@ export default function Main(props) {
       "&matriculaPeriod=" +
       matriculas[matriculaIndex].period.semester +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
   };
 
   const logout = async () => {
-    await axios.post('http://localhost:8080/logout?user=' + props.currUser).then(res => {
-      if (res) {
-        props.setCurrUser("");
-        history.push("/");
-      }
-    })
-  }
+    Cookies.set("userActive", false);
+    Cookies.set("user", "");
+    history.push("/");
+    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
+  };
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
     switch (listIndex) {
@@ -282,7 +292,7 @@ export default function Main(props) {
 
   const onDragOver = (e) => {
     e.preventDefault();
-  }
+  };
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
     setIsCourseSection(listType);
@@ -308,7 +318,7 @@ export default function Main(props) {
               priorityCourseIndex,
               departmentIndex,
               matriculaIndex,
-              props.currUser
+              Cookies.get("user")
             );
           }
           break;
@@ -320,7 +330,7 @@ export default function Main(props) {
               valueIndex,
               priorityCourseIndex,
               matriculaIndex,
-              props.currUser
+              Cookies.get("user")
             );
           }
           break;
@@ -340,7 +350,7 @@ export default function Main(props) {
           {departmentsList.map((department, departmentsIndex) => (
             <div key={departmentsIndex}>
               <ListItem>
-                <Typography>{department.name}</Typography>
+                <Typography style={{fontWeight:'800'}}>{department.name}</Typography>
               </ListItem>
               <List>
                 {department.courses.map((course, coursesIndex) => (
@@ -434,39 +444,51 @@ export default function Main(props) {
   const renderMatricula = (matriculaList, title, listIndex) => {
     return (
       <div
-        style={{ overflowY: 'scroll', height: '550px', width: '250px' }}
         onDragOver={(e) => {
           onDragOver(e);
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
-          {matriculaList.map((sections, sectionsIndex) => (
-            <ListItem
-              style={{ cursor: 'pointer' }}
-              draggable={matriculaIndex === 0}
-              key={sectionsIndex}
-              onDragStart={(e) =>
-                onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
-              }
-            >
-              <SectionCard
-                courseCode={sections.courseCode}
-                section={sections.secNum}
-                courseName={sections.courseName}
-                professor={sections.professor}
-                credits={sections.credits}
-                color={sections.color}
-                time={sections.time}
-                population={sections.population}
-                capacity={sections.capacity}
-                day={sections.day}
-                period={sections.period}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <Grid container style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <DeleteForeverIcon
+              style={{ height: "2rem", width: "2rem"}}
+            />
+          </Grid>
+        </Grid>
+        <div style={{ overflowY: "scroll", height: "550px", width: "250px" }}>
+          <List style={{ alignItems: "center" }}>
+            {matriculaList.map((sections, sectionsIndex) => (
+              <ListItem
+                style={{ cursor: "pointer" }}
+                draggable={matriculaIndex === 0}
+                key={sectionsIndex}
+                onDragStart={(e) =>
+                  onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
+                }
+              >
+                <SectionCard
+                  courseCode={sections.courseCode}
+                  section={sections.secNum}
+                  courseName={sections.courseName}
+                  professor={sections.professor}
+                  credits={sections.credits}
+                  color={sections.color}
+                  time={sections.time}
+                  population={sections.population}
+                  capacity={sections.capacity}
+                  day={sections.day}
+                  period={sections.period}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
     );
   };
@@ -475,11 +497,12 @@ export default function Main(props) {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <img src={Macademia} className={classes.image} />
-          <Typography variant="h6" className={classes.title}>
-            Macademia
-          </Typography>
-          <Button className={classes.logoutButton} style={{ outline: 0 }} onClick={() => logout()}>
+          <img src={MacademiaTitle} className={classes.image} />
+          <Button
+            className={classes.logoutButton}
+            style={{ outline: 0 }}
+            onClick={() => logout()}
+          >
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>
@@ -490,23 +513,25 @@ export default function Main(props) {
         variant="permanent"
         classes={{ paper: classes.drawerPaper }}
       >
+        
         <Toolbar />
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
           ) : (
-              <div />
-            )}
+            <div />
+          )}
           <Divider />
           {departments !== null ? (
             renderDepartments(departments, "Departments", 1)
           ) : (
-              <div />
-            )}
+            <div />
+          )}
+          <Divider />
         </div>
       </Drawer>
 
-      <main className={classes.content} style={{ height: '100vh' }}>
+      <main className={classes.content} style={{ height: "100vh" }}>
         <Toolbar />
         <div className={classes.centerContent}>
           <div
@@ -563,8 +588,8 @@ export default function Main(props) {
                 </Grid>
               </CardContent>
             ) : (
-                <div />
-              )}
+              <div />
+            )}
           </Card>
 
           <div
