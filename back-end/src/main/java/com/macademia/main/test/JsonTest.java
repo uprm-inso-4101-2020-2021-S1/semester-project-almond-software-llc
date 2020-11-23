@@ -163,6 +163,7 @@ public class JsonTest {
     public Department testDepartment2 = new Department("Department of Software Engineering", "INSO", "#85c1e9");
     public Department testDepartment3 = new Department("Department of Engineering", "INGE", "#f1948a");
     public Department testDepartment4 = new Department("Department of Industrial Engineering", "ININ", "#f4d03f");
+    public Department testDepartment5 = new Department("Department of English", "INGL", "#c3aed6");
 
     //---[User Info]-------------------------------------------------------------------------------------------------------------
 
@@ -197,7 +198,21 @@ public class JsonTest {
     public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2);
 
     public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4);
-    public Course testCourse4B = new Course("Engineering Economics",                  testDepartment4, "4015", 3);
+    public Course testCourse4B = new Course("Engineering Economics", testDepartment4, "4015", 3);
+
+    public Course testCourse5A = new Course("Advanced English 1", testDepartment5, "3211", 3);
+    public Course testCourse5B = new Course("Advanced English 2", testDepartment5, "3212", 3);
+    public Course testCourse5C = new Course("Basic English 1", testDepartment5, "3101", 3);
+    public Course testCourse5D = new Course("Basic English 2", testDepartment5, "3102", 3);
+    public Course testCourse5E = new Course("Intermediate English 1", testDepartment5, "3103", 3);
+    public Course testCourse5F = new Course("Intermediate English 2", testDepartment5, "3014", 3);
+    public Course testCourse5G = new Course("Conversational English", testDepartment5, "3289", 3);
+    public Course testCourse5H = new Course("Movie Themes", testDepartment5, "3345", 3);
+    
+    
+    
+
+    
 
     //---[Sections]--------------------------------------------------------------------------------------------------------------
 
@@ -274,8 +289,124 @@ public class JsonTest {
     public Section testSection4B3 = new Section("030", "LWV", "9:30AM-10:20AM", "Griselle Toro", "II-201",   testCourse4B, 1, 35);
     public Section testSection4B4 = new Section("036", "MJ", "9:00AM-10:15AM", "Mayra Mendez", "II-201",   testCourse4B, 1, 35);
     public Section testSection4B5 = new Section("040", "LWV", "10:30AM-11:20AM", "Nancy Mendez", "II-201",   testCourse4B, 1, 35);
-    public Section testSection4B6 = new Section("070", "LWV", "1:30PM-2:30PM", "Griselle Toro", "II-201",   testCourse4B, 1, 35);
+    public Section testSection4B6 = new Section("070", "LWV", "1:30PM-2:30PM", "Griselle Toro", "II-201", testCourse4B,1, 35);
 
+    
+    public Section testSection5A1 = new Section("066", "MJ", "12:30PM-1:45PM", "Maria C. Quintero", "CH-224", testCourse5A, 1, 33);
+    public Section testSection5A2 = new Section("086", "MJ", "2:00PM-3:15PM",  "Maria C. Quintero", "CH-005",testCourse5A, 1, 32);
+    public Section testSection5A3 = new Section("096", "MJ", "3:30PM-4:45PM",   "Lawrence Chott", "CH-005", 
+            testCourse5A, 1, 31);
+    public Section testSection5A4 = new Section("100", "LW", "4:30PM-5:45PM",   "Stephania Uwakweh Evuleocha", "CH-319", 
+            testCourse5A, 1, 30);
+    public Section testSection5A5 = new Section("101", "LW", "4:30PM-5:45PM",   "Lawrence Chott", "CH-125", 
+            testCourse5A, 1, 32);
+    public Section testSection5A6 = new Section("116", "MJ", "5:00PM-6:15PM", "Lawrence Chott", "CH-005", 
+            testCourse5A, 1,31);
+    public Section testSection5A7 = new Section("120", "LW", "6:00PM-7:15PM", "Lawrence Chott", "CH-125", 
+            testCourse5A,1, 32);
+    
+    
+    public Section testSection5B1 = new Section("120", "LW", "6:00PM-7:15PM", "Stephania Uwakweh Evuleocha", "CH-325",
+            testCourse5B, 1, 31);
+   
+    
+
+    public Section testSection5C1 = new Section("010", "LMV", "7:30AM-8:20AM", "Laura Buitrago Garcia", "CH-224",
+            testCourse5C, 1, 30);
+    public Section testSection5C2 = new Section("016", "MJ", "7:30AM-8:20AM", "Myrna Rivera Montijo", "CH-318",
+            testCourse5C, 1, 30);
+    public Section testSection5C3 = new Section("017", "MJ", "7:30AM-8:20AM", "Waleska Morciglio Quintana", "CH-221", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C4 = new Section("018", "MJ", "7:30AM-8:20AM", "Iris Toro Manzano", "CH-123",
+            testCourse5C, 1, 30);
+    public Section testSection5C5 = new Section("020", "LWV", "8:30AM-9:20AM", "Laura Buitrago Garcia", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C6 = new Section("030", "LWV", "9:30AM-10:20AM", "Maria Orejarena Torres", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C7 = new Section("036", "MJ", "9:00AM-10:15AM", "Myrna Rivera Montijo", "CH-318", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C8 = new Section("037", "MJ", "9:00AM-10:15AM", "Waleska Morciglio Quintana", "CH-221",
+            testCourse5C, 1, 30);
+    public Section testSection5C9 = new Section("038", "MJ", "9:00AM-10:15AM", "Iris Toro Manzano", "CH-123",
+            testCourse5C, 1, 30);
+    public Section testSection5C10 = new Section("040", "LWV", "10:30AM-11:20AM", "Maria Orejarena Torres", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C11 = new Section("041", "LWV", "10:30AM-11:20AM", "Rosita Rivera", "CH-324",
+            testCourse5C, 1, 30);
+    public Section testSection5C12 = new Section("050", "LWV", "11:30AM-12:20PM", "William Carrero Vale", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C13 = new Section("051", "LWV", "11:30AM-12:20PM", "Rosita Rivera", "CH-324", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C14 = new Section("060", "LWV", "12:30PM-1:20PM", "William Carrero Vale", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C15 = new Section("061", "LWV", "12:30PM-1:20PM", "Ambar Rivera Beede", "CH-324",
+            testCourse1E, 1, 30);
+    public Section testSection5C16 = new Section("070", "LWV", "1:30PM-2:20PM", "Ambar Rivera Beede", "CH-224",
+            testCourse1E, 1, 30);
+    public Section testSection5C17 = new Section("086", "MJ", "2:00PM-3:15PM", "Myrna Rivera Montijo", "CH-318", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C18 = new Section("096", "MJ", "3:30PM-4:45PM", "Myrna Rivera Montijo", "CH-318",
+            testCourse5C, 1, 30);
+    public Section testSection5C19 = new Section("100", "LW", "4:30PM-5:45PM", "Iris Toro Manzano", "CH-221", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C20 = new Section("100L", "V", "4:30PM-5:20PM", "Rosita Rivera", "CH-325", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C21 = new Section("116", "MJ", "5:00PM-6:15PM", "Iris Toro Manzano", "CH-222", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C22 = new Section("117", "MJ", "5:00PM-6:15PM", "Javier I Fabre Quiñones", "CH-223",
+            testCourse5C, 1, 30);
+    public Section testSection5C23 = new Section("120", "LW", "6:00PM-7:15PM", "Javier I Fabre Quiñones", "CH-221",
+            testCourse5C, 1, 30);
+    public Section testSection5C24 = new Section("130L", "V", "7:30PM-8:20PM", "Rosita Rivera", "CH-221", 
+            testCourse5C,
+            1, 30);
+
+
+    public Section testSection5D1 = new Section("010", "LWV", "12:30PM-1:45PM", "Javier I Fabre Quiñones", "CH-223",
+            testCourse5D, 1, 30);
+    public Section testSection5D2 = new Section("020", "LWV", "2:00PM-3:15PM", "Javier I Fabre Quiñones", "CH-221",
+            testCourse5D, 1, 30);
+    public Section testSection5D3 = new Section("060", "V", "3:30PM-4:45PM", "Rosita Rivera", "CH-221", testCourse5D,
+            1, 60);
+
+
+    public Section testSection5F1 = new Section("020", "LWV", "8:30AM-9:20AM", "Diego Zaragoza Padilla", "CH-222",
+            testCourse5F, 1, 31);
+    public Section testSection5F2 = new Section("030", "LWV", "9:30AM-10:20AM", "Diego Zaragoza Padilla", "CH-222", testCourse5F, 1,
+            30);
+
+
+
+    public Section testSection5G1 = new Section("070", "LWV", "1:30PM-2:20PM", "Dariana Alicea Torres", "CH-324",
+            testCourse5G, 1, 30);
+    public Section testSection5G2 = new Section("096", "MJ", "3:30PM-4:45PM", "Dariana Alicea Torres", "CH-319",
+            testCourse5G, 1, 30);
+
+
+
+    public Section testSection5H1 = new Section("070", "LWV", "1:30PM-2:20PM", "Gabriel E. Romaguera Rodriguez", "CH-005",
+            testCourse5H, 1, 31);
+    public Section testSection5H2 = new Section("080", "LWV", "2:30PM-3:20PM", "Nicholas Haydock", "CH-005",
+            testCourse5H, 1, 30);
+    public Section testSection5H3 = new Section("100", "LW", "4:30PM-5:45PM", "Linda Rodriguez", "CH-124",
+            testCourse5H, 1, 66);
+    public Section testSection5H4 = new Section("116", "MJ", "5:00PM-6:15PM", "Gabriel E. Romaguera Rodriguez", "CH-324",
+            testCourse5H, 1, 45);
+    public Section testSection5H5 = new Section("120", "LW", "6:00PM-7:15PM", "Linda Rodriguez", "CH-124",
+            testCourse5H, 1, 64);
+        
 
     public JsonTest() {
 
