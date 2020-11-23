@@ -148,7 +148,7 @@ public class JsonTest {
     public Section testSectionP03 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Brock O. Lee", "ADEM779", testCourseP, 1, 50);
     public Section testSectionP04 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Brock O. Lee", "ADEM775", testCourseP, 1, 50);
 
-    // Real values
+    //--[Real Value]---------------------------------------------------------------------------------------------------------------
 
     public MatriculaPeriod testPeriod1 = new MatriculaPeriod(2021, "FALL");
     public MatriculaPeriod testPeriod2 = new MatriculaPeriod(2021, "SPRING");
@@ -157,113 +157,256 @@ public class JsonTest {
     public Matricula testMatricula2 = new Matricula(testPeriod2);
     public Matricula testMatricula3 = new Matricula(testPeriod3);
 
-    public Department testDepartment1 = new Department("Department of Computer Science and Engineering", "CIIC", "Green");
-    public Department testDepartment2 = new Department("Department of Software Engineering", "INSO", "Purple");
-    public Department testDepartment3 = new Department("Department of Engineering", "INGE", "Red");
-    public Department testDepartment4 = new Department("Department of Humanities", "TSTD", "Blue");
+    //---[Departments]-----------------------------------------------------------------------------------------------------------
+
+    public Department testDepartment1 = new Department("Department of Computer Science and Engineering", "CIIC", "#bb8fce ");
+    public Department testDepartment2 = new Department("Department of Software Engineering", "INSO", "#85c1e9");
+    public Department testDepartment3 = new Department("Department of Engineering", "INGE", "#f1948a");
+    public Department testDepartment4 = new Department("Department of Industrial Engineering", "ININ", "#f4d03f");
+    public Department testDepartment5 = new Department("Department of English", "INGL", "#c3aed6");
+
+    //---[User Info]-------------------------------------------------------------------------------------------------------------
 
     public User testUser1 = new User("JohnSmitch82", "JS841178204");
     public Student testStudent1 = new Student(testUser1, "John Smitch", "841-17-8204", testDepartment1);
 
-    public Course testCourse1 = new Course("Test Course A", testDepartment1, "3015", 1);
-    public Course testCourse2 = new Course("Test Course B", testDepartment1, "3015L", 2);
-    public Course testCourse3 = new Course("Test Course C", testDepartment1, "2025", 3);
-    public Course testCourse4 = new Course("Test Course D", testDepartment1, "1026", 4);
+    //---[Courses]---------------------------------------------------------------------------------------------------------------
 
-    public Course testCourse5 = new Course("Test Course 5", testDepartment4, "9999", 4);
-    public Course testCourse6 = new Course("Test Course 6", testDepartment4, "7100", 3);
-    public Course testCourse7 = new Course("Test Course 7", testDepartment4, "6100", 2);
-    public Course testCourse8 = new Course("Test Course 8", testDepartment4, "5100", 1);
+    public Course testCourse1A = new Course("Intro. to Programming", testDepartment1, "3015", 3);
+    public Course testCourse1B = new Course("Intro. to Programming Lab.", testDepartment1, "3015L", 1);
+    public Course testCourse1C = new Course("Foundations of Computing", testDepartment1, "3075", 3);
+    public Course testCourse1D = new Course("Advanced Programming", testDepartment1, "4010", 4);
+    public Course testCourse1E = new Course("Advanced Programming Lab.", testDepartment1, "4010L", 0);
+    public Course testCourse1F = new Course("Data Structures", testDepartment1, "4020", 4);
+    public Course testCourse1G = new Course("Data Structures Lab.", testDepartment1, "4020L", 0);
+    public Course testCourse1H = new Course("Programming Languages", testDepartment1, "4030", 3);
+    public Course testCourse1I = new Course("Operating Systems", testDepartment1, "4050", 4);
+    public Course testCourse1J = new Course("Operating Systems Lab.", testDepartment1, "4050L", 0);
+    public Course testCourse1K = new Course("Database Systems", testDepartment1, "4060", 3);
+    public Course testCourse1L = new Course("Computer Networks", testDepartment1, "4070", 3);
+    public Course testCourse1M = new Course("Computer Architecture I", testDepartment1, "3081", 3);
+    public Course testCourse1N = new Course("Computer Architecture II", testDepartment1, "4082", 3);
 
-    public Course testCourse9 = new Course("Test Course I", testDepartment2, "5110", 4);
-    public Course testCourse10 = new Course("Test Course J", testDepartment2, "6130", 3);
-    public Course testCourse11= new Course("Test Course K", testDepartment2, "7140", 2);
-    public Course testCourse12= new Course("Test Course L", testDepartment2, "8125", 1);
+    public Course testCourse2A = new Course("Intro. to Software Engineering",          testDepartment2, "4101", 3);
+    public Course testCourse2B = new Course("Software Requirements",                   testDepartment2, "4115", 3);
+    public Course testCourse2C = new Course("Software Design",                         testDepartment2, "4116", 3);
+    public Course testCourse2D = new Course("Software Testing",                        testDepartment2, "4117", 3);
+    public Course testCourse2E = new Course("Software Engineering Project (Capstone)", testDepartment2, "4151", 3);
 
-    public Course testCourse13= new Course("Test Course M", testDepartment3, "8123", 4);
-    public Course testCourse14= new Course("Test Course N", testDepartment3, "7142", 3);
-    public Course testCourse15= new Course("Test Course O", testDepartment3, "6131", 2);
-    public Course testCourse16= new Course("Test Course P", testDepartment3, "5115", 1);
+    public Course testCourse3A  = new Course("Engineering Graphics",             testDepartment3, "3011", 4);
+    public Course testCourse3B = new Course("Engineering Mechanics",            testDepartment3, "3035", 3);
+    public Course testCourse3C = new Course("Electrical Engineering Materials", testDepartment3, "3045", 2);
 
-    public Section testSectionA1 = new Section("01", "LWV", "7:00AM-7:50AM", "Dr. Juan N. Onlee", "S424", testCourse1, 1, 50);
-    public Section testSectionA2 = new Section("02", "LWV", "8:30AM-9:20AM", "Dr. Juan N. Onlee", "S423", testCourse1, 1, 50);
-    public Section testSectionA3 = new Section("03", "LWV", "9:00AM-9:50AM", "Dr. Juan N. Onlee", "S422", testCourse1, 1, 50);
-    public Section testSectionA4 = new Section("04", "LWV", "10:30AM-11:20AM", "Dr. Juan N. Onlee", "S421", testCourse1, 1, 50);
+    public Course testCourse4A = new Course("Engineering Probability and Statistics", testDepartment4, "4010", 4);
+    public Course testCourse4B = new Course("Engineering Economics", testDepartment4, "4015", 3);
 
-    public Section testSectionB1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Late", "SH321", testCourse2, 1, 50);
-    public Section testSectionB2 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Too Late", "SH322", testCourse2, 1, 50);
-    public Section testSectionB3 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Too Late", "SH323", testCourse2, 1, 50);
-    public Section testSectionB4 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Too Late", "SH324", testCourse2, 1, 50);
+    public Course testCourse5A = new Course("Advanced English 1", testDepartment5, "3211", 3);
+    public Course testCourse5B = new Course("Advanced English 2", testDepartment5, "3212", 3);
+    public Course testCourse5C = new Course("Basic English 1", testDepartment5, "3101", 3);
+    public Course testCourse5D = new Course("Basic English 2", testDepartment5, "3102", 3);
+    public Course testCourse5E = new Course("Intermediate English 1", testDepartment5, "3103", 3);
+    public Course testCourse5F = new Course("Intermediate English 2", testDepartment5, "3014", 3);
+    public Course testCourse5G = new Course("Conversational English", testDepartment5, "3289", 3);
+    public Course testCourse5H = new Course("Movie Themes", testDepartment5, "3345", 3);
+    
+    
+    
 
-    public Section testSectionC1 = new Section("01", "LWV", "12:00PM-1:20PM", "Dr. Hugh Mungus", "Ch691", testCourse3, 1, 50);
-    public Section testSectionC2 = new Section("02", "LWV", "12:30PM-1:20PM", "Dr. Hugh Mungus", "Ch692", testCourse3, 1, 50);
-    public Section testSectionC3 = new Section("03", "LWV", "1:00PM-1:50PM", "Dr. Hugh Mungus", "Ch693", testCourse3, 1, 50);
-    public Section testSectionC4 = new Section("04", "LWV", "1:30PM-2:20PM", "Dr. Hugh Mungus", "Ch694", testCourse3, 1, 50);
+    
 
-    public Section testSectionD1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourse4, 1, 50);
-    public Section testSectionD2 = new Section("02", "MJ", "12:30PM-1:20PM", "Dr. Brock O. Lee", "ADEM778", testCourse4, 1, 50);
-    public Section testSectionD3 = new Section("03", "MJ", "1:00PM-1:50PM", "Dr. Brock O. Lee", "ADEM779", testCourse4, 1, 50);
-    public Section testSectionD4 = new Section("04", "MJ", "1:30PM-2:20PM", "Dr. Brock O. Lee", "ADEM775", testCourse4, 1, 50);
+    //---[Sections]--------------------------------------------------------------------------------------------------------------
 
-    public Section testSectionE1 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourse5, 1, 50);
-    public Section testSectionE2 = new Section("02", "LWV", "12:30PM-1:20PM",  "Dr. Juan N. Onlee", "S423", testCourse5, 1, 50);
-    public Section testSectionE3 = new Section("03", "LWV", "1:00PM-1:50PM",   "Dr. Juan N. Onlee", "S422", testCourse5, 1, 50);
-    public Section testSectionE4 = new Section("04", "LWV", "1:30PM-2:20PM",   "Dr. Juan N. Onlee", "S421", testCourse5, 1, 50);
+    public Section testSection1A1 = new Section("096", "MJ", "3:30PM-4:45PM", "Heidy Sierra Gil", "S424",   testCourse1A, 1, 100);
 
-    public Section testSectionF1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Mai", "SH321", testCourse6, 1, 50);
-    public Section testSectionF2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Too Mai", "SH322", testCourse6, 1, 50);
-    public Section testSectionF3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Too Mai", "SH323", testCourse6, 1, 50);
-    public Section testSectionF4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Too Mai", "SH324", testCourse6, 1, 50);
+    public Section testSection1B1 = new Section("070", "W", "1:30PM-3:20PM", "Estefania Alfaro", "S-121",   testCourse1B, 1, 28);
+    public Section testSection1B2 = new Section("071", "W", "1:30PM-3:20PM", "Maria Ramos", "S-105c",   testCourse1B, 1, 28);
+    public Section testSection1B3 = new Section("090", "W", "3:30PM-5:20PM", "Estefania Alfaro", "S-121", testCourse1B, 1, 28);
+    public Section testSection1B4 = new Section("091", "LWV", "3:30PM-5:20PM", "Maria Ramos", "S-105c", testCourse1B, 1, 28);
 
-    public Section testSectionG1 = new Section("01", "LWV", "7:30AM-9:20AM",  "Dr. Hugh Mungus", "Ch691", testCourse7, 1, 50);
-    public Section testSectionG2 = new Section("02", "LWV", "9:30AM-11:20AM", "Dr. Hugh Mungus", "Ch692", testCourse7, 1, 50);
-    public Section testSectionG3 = new Section("03", "LWV", "11:30AM-1:20PM", "Dr. Hugh Mungus", "Ch693", testCourse7, 1, 50);
-    public Section testSectionG4 = new Section("04", "LWV", "1:30PM-3:20PM",  "Dr. Hugh Mungus", "Ch694", testCourse7, 1, 50);
+    public Section testSection1C1 = new Section("030", "LWV", "9:30AM-10:20AM", "Kejie Lu", "S-114a", testCourse1C, 1, 15);
+    public Section testSection1C2 = new Section("040", "LWV", "10:30AM-11:20AM", "Kejie Lu", "S-113", testCourse1C, 1, 15);
+    public Section testSection1C3 = new Section("050", "LWV", "11:30AM-12:20PM", "Kejie Lu", "S-114a",  testCourse1C, 1, 15);
+    public Section testSection1C4 = new Section("070", "LWV", "1:30PM-2:20PM", "Kejie Lu", "S-114a",  testCourse1C, 1, 15);
+    public Section testSection1C5 = new Section("100", "LW", "4:30PM-5:45PM", "Dong Wang", "S-114a",  testCourse1C, 1, 15);
 
-    public Section testSectionH1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourse8, 1, 50);
-    public Section testSectionH2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Brock O. Lee", "ADEM778", testCourse8, 1, 50);
-    public Section testSectionH3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Brock O. Lee", "ADEM779", testCourse8, 1, 50);
-    public Section testSectionH4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Brock O. Lee", "ADEM775", testCourse8, 1, 50);
+    public Section testSection1D1 = new Section("100", "LW", "4:30PM-5:45PM", "Jose Cruz", "S-113", testCourse1D, 1, 50);
+    public Section testSection1D2 = new Section("100H", "LW", "4:30PM-5:45PM", "Jose Cruz", "S-113",  testCourse1D, 1, 50);
 
-    public Section testSectionI1 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourse9, 1, 50);
-    public Section testSectionI2 = new Section("02", "LWV", "12:30PM-1:20PM",  "Dr. Juan N. Onlee", "S423", testCourse9, 1, 50);
-    public Section testSectionI3 = new Section("03", "LWV", "1:00PM-1:50PM",   "Dr. Juan N. Onlee", "S422", testCourse9, 1, 50);
-    public Section testSectionI4 = new Section("04", "LWV", "1:30PM-2:20PM",   "Dr. Juan N. Onlee", "S421", testCourse9, 1, 50);
+    public Section testSection1E1 = new Section("030L", "V", "9:30AM-11:20AM", "Jose Cruz", "S-121", testCourse1E, 1, 16);
+    public Section testSection1E2 = new Section("031L", "V", "9:30AM-11:20AM",  "Jose Cruz", "S-105c", testCourse1E, 1, 16);
+    public Section testSection1E3 = new Section("050L", "V", "11:30AM-1:20PM",   "Jose Cruz", "S-121", testCourse1E, 1, 16);
+    public Section testSection1E4 = new Section("051L", "V", "11:30AM-1:20PM",   "Jose Cruz", "S-105c", testCourse1E, 1, 16);
+    public Section testSection1E5 = new Section("070L", "V", "1:30PM-3:20PM",   "Jose Cruz", "S-121", testCourse1E, 1, 16);
+    public Section testSection1E6 = new Section("070L", "V", "1:30PM-3:20PM",   "Jose Cruz", "S-105c", testCourse1E, 1, 16);
 
-    public Section testSectionJ1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Mai", "SH321", testCourse10, 1, 50);
-    public Section testSectionJ2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Too Mai", "SH322", testCourse10, 1, 50);
-    public Section testSectionJ3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Too Mai", "SH323", testCourse10, 1, 50);
-    public Section testSectionJ4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Too Mai", "SH324", testCourse10, 1, 50);
+    public Section testSection1F1 = new Section("01", "MJ", "5:00PM-6:15PM", "Manuel Rodriguez", "S-113", testCourse1F, 1, 70);
 
-    public Section testSectionK1 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Hugh Mungus", "Ch691", testCourse11, 1, 50);
-    public Section testSectionK2 = new Section("02", "LWV", "12:30PM-1:20PM",  "Dr. Hugh Mungus", "Ch692", testCourse11, 1, 50);
-    public Section testSectionK3 = new Section("03", "LWV", "1:00PM-1:50PM",   "Dr. Hugh Mungus", "Ch693", testCourse11, 1, 50);
-    public Section testSectionK4 = new Section("04", "LWV", "1:30PM-2:20PM",   "Dr. Hugh Mungus", "Ch694", testCourse11, 1, 50);
+    public Section testSection1G1 = new Section("030L", "L", "9:30AM-11:20AM",  "Chhaya Katiyar", "S-121", testCourse1G, 1, 16);
+    public Section testSection1G2 = new Section("050L", "L", "11:30AM-1:20PM", "Manuel Rodriguez", "S-121", testCourse1G, 1, 16);
+    public Section testSection1G3 = new Section("051L", "L", "11:30AM-1:20PM", "Chhaya Katiyar", "S-121", testCourse1G, 1, 16);
+    public Section testSection1G5 = new Section("070L", "L", "1:30PM-3:20PM",  "Gretchen Bonilla", "S-121", testCourse1G, 1, 16);
+    public Section testSection1G6 = new Section("071L", "L", "1:30PM-3:20PM",  "Manuel Rodriguez", "S-105c", testCourse1G, 1, 16);
 
-    public Section testSectionL1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourse12, 1, 50);
-    public Section testSectionL2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Brock O. Lee", "ADEM778", testCourse12, 1, 50);
-    public Section testSectionL3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Brock O. Lee", "ADEM779", testCourse12, 1, 50);
-    public Section testSectionL4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Brock O. Lee", "ADEM775", testCourse12, 1, 50);
+    public Section testSection1H1 = new Section("036", "MJ", "9:00AM-10:15AM", "Wilson Rivera", "S-113", testCourse1H, 1, 60);
+    
+    public Section testSection1I1 = new Section("086", "MJ", "2:00PM-3:15PM", "Emmanuel Arzuaga", "S-113", testCourse1I, 1, 60);
+   
+    public Section testSection1J1 = new Section("010L", "W", "7:30AM-10:20AM", "David Tatis", "S-121", testCourse1J, 1, 16);
+    public Section testSection1J2 = new Section("011L", "W", "7:30AM-10:20AM",  "Carlos Velez", "S-105c", testCourse1J, 1, 16);
+    public Section testSection1J3 = new Section("040L", "W", "10:30AM-1:20PM",   "David Tatis", "S-121", testCourse1J, 1, 16);
+    public Section testSection1J4 = new Section("041L", "W", "10:30AM-1:20PM",   "Carlos Velez", "S-105c", testCourse1J, 1, 16);
+    
+    public Section testSection1M1 = new Section("096", "MJ", "3:30PM-4:45PM", "Jose Navarro", "S-114a", testCourse1M, 1, 70);
+    
+    public Section testSection2A1 = new Section("080", "LWV", "2:30PM-3:20PM", "Marko Schutz", "S-113",   testCourse2A, 1, 80);
 
-    public Section testSectionM1 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Juan N. Onlee", "S424", testCourse13, 1, 50);
-    public Section testSectionM2 = new Section("02", "LWV", "12:30PM-1:20PM",  "Dr. Juan N. Onlee", "S423", testCourse13, 1, 50);
-    public Section testSectionM3 = new Section("03", "LWV", "1:00PM-1:50PM",   "Dr. Juan N. Onlee", "S422", testCourse13, 1, 50);
-    public Section testSectionM4 = new Section("04", "LWV", "1:30PM-2:20PM",   "Dr. Juan N. Onlee", "S421", testCourse13, 1, 50);
+    public Section testSection2C1 = new Section("070", "LWV", "1:30PM-2:20PM", "Marko Schutz", "S-113", testCourse2C, 1, 80);
+    
+    public Section testSection3A1 = new Section("030H", "LW", "9:30AM-11:20AM", "Carmen Castaneyra", "S-316",   testCourse3A, 1, 30);
+    public Section testSection3A2 = new Section("050H", "LW", "11:30AM-1:20PM", "Beatriz Camacho", "S-316",   testCourse3A, 1, 30);
+    public Section testSection3A3 = new Section("090H", "LW", "3:30PM-5:20PM", "Carmen Castaneyra", "S-316",   testCourse3A, 1, 30);
 
-    public Section testSectionN1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Too Mai", "SH321", testCourse14, 1, 50);
-    public Section testSectionN2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Too Mai", "SH322", testCourse14, 1, 50);
-    public Section testSectionN3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Too Mai", "SH323", testCourse14, 1, 50);
-    public Section testSectionN4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Too Mai", "SH324", testCourse14, 1, 50);
+    public Section testSection3B1 = new Section("010", "LWV", "7:30AM-8:20AM", "Marek Rysz", "S-308", testCourse3B, 1, 30);
+    public Section testSection3B2 = new Section("020", "LWV", "8:30AM-9:20AM", "Marek Rysz", "S-308",  testCourse3B, 1, 30);
+    public Section testSection3B3 = new Section("060", "LWV", "12:30PM-1:20PM", "Marek Rysz", "S-308",   testCourse3B, 1, 30);
+    public Section testSection3B4 = new Section("070", "LWV", "1:30PM-2:20PM", "Marek Rysz", "S-308",   testCourse3B, 1, 30);
 
-    public Section testSectionO1 = new Section("01", "LWV", "12:00PM-12:50PM", "Dr. Hugh Mungus", "Ch691", testCourse15, 1, 50);
-    public Section testSectionO2 = new Section("02", "LWV", "12:30PM-1:20PM",  "Dr. Hugh Mungus", "Ch692", testCourse15, 1, 50);
-    public Section testSectionO3 = new Section("03", "LWV", "1:00PM-1:50PM",   "Dr. Hugh Mungus", "Ch693", testCourse15, 1, 50);
-    public Section testSectionO4 = new Section("04", "LWV", "1:30PM-2:20PM",   "Dr. Hugh Mungus", "Ch694", testCourse15, 1, 50);
+    public Section testSection3C1 = new Section("030H", "LWV", "9:30AM-10:20AM", "Agnes Padovani", "S-307", testCourse3C, 1, 30);
+    public Section testSection3C2 = new Section("040H", "LWV", "10:30AM-11:20AM", "Agnes Padovani", "S-307", testCourse3C, 1, 30);
+    public Section testSection3C3 = new Section("066", "MJ", "12:30PM-1:45PM", "Yang Li", "S-307",  testCourse3C, 1, 30);
+    public Section testSection3C4 = new Section("086", "MJ", "2:00PM-3:15PM", "Yang Li", "S-307",  testCourse3C, 1, 30);
+    public Section testSection3C5 = new Section("096", "MJ", "3:30PM-4:45PM", "Yang Li", "S-307",  testCourse3C, 1, 30);
 
-    public Section testSectionP1 = new Section("01", "MJ", "12:00PM-12:50PM", "Dr. Brock O. Lee", "ADEM777", testCourse16, 1, 50);
-    public Section testSectionP2 = new Section("02", "MJ", "12:30PM-1:20PM",  "Dr. Brock O. Lee", "ADEM778", testCourse16, 1, 50);
-    public Section testSectionP3 = new Section("03", "MJ", "1:00PM-1:50PM",   "Dr. Brock O. Lee", "ADEM779", testCourse16, 1, 50);
-    public Section testSectionP4 = new Section("04", "MJ", "1:30PM-2:20PM",   "Dr. Brock O. Lee", "ADEM775", testCourse16, 1, 50);
+    public Section testSection4A1 = new Section("010", "LW", "7:30AM-9:20AM", "Noel Artiles", "II-114",   testCourse4A, 1, 50);
+    public Section testSection4A2 = new Section("026", "MJ", "8:30AM-10:20AM", "Hector Colon", "II-114",   testCourse4A, 1, 50);
+    public Section testSection4A3 = new Section("030", "LW", "9:30AM-11:20AM", "Noel Artiles", "II-114",   testCourse4A, 1, 50);
+    public Section testSection4A4 = new Section("060", "LW", "12:30PM-2:20PM", "Saylisse Davila", "II-114", testCourse4A, 1, 50);
+    public Section testSection4A5 = new Section("066", "MJ", "12:30PM-2:20PM", "Hector Colon", "II-114", testCourse4A, 1, 50);
+    public Section testSection4A6 = new Section("090", "LW", "3:30PM-5:20PM", "Saylisse Davila", "II-114", testCourse4A, 1, 50);
+
+    public Section testSection4B1 = new Section("016", "MJ", "7:30AM-8:45AM", "Mayra Mendez", "II-201", testCourse4B, 1, 35);
+    public Section testSection4B2 = new Section("020", "LWV", "8:30AM-9:20AM", "Vancy Mendez", "II-201",  testCourse4B, 1, 35);
+    public Section testSection4B3 = new Section("030", "LWV", "9:30AM-10:20AM", "Griselle Toro", "II-201",   testCourse4B, 1, 35);
+    public Section testSection4B4 = new Section("036", "MJ", "9:00AM-10:15AM", "Mayra Mendez", "II-201",   testCourse4B, 1, 35);
+    public Section testSection4B5 = new Section("040", "LWV", "10:30AM-11:20AM", "Nancy Mendez", "II-201",   testCourse4B, 1, 35);
+    public Section testSection4B6 = new Section("070", "LWV", "1:30PM-2:30PM", "Griselle Toro", "II-201", testCourse4B,1, 35);
+
+    
+    public Section testSection5A1 = new Section("066", "MJ", "12:30PM-1:45PM", "Maria C. Quintero", "CH-224", testCourse5A, 1, 33);
+    public Section testSection5A2 = new Section("086", "MJ", "2:00PM-3:15PM",  "Maria C. Quintero", "CH-005",testCourse5A, 1, 32);
+    public Section testSection5A3 = new Section("096", "MJ", "3:30PM-4:45PM",   "Lawrence Chott", "CH-005", 
+            testCourse5A, 1, 31);
+    public Section testSection5A4 = new Section("100", "LW", "4:30PM-5:45PM",   "Stephania Uwakweh Evuleocha", "CH-319", 
+            testCourse5A, 1, 30);
+    public Section testSection5A5 = new Section("101", "LW", "4:30PM-5:45PM",   "Lawrence Chott", "CH-125", 
+            testCourse5A, 1, 32);
+    public Section testSection5A6 = new Section("116", "MJ", "5:00PM-6:15PM", "Lawrence Chott", "CH-005", 
+            testCourse5A, 1,31);
+    public Section testSection5A7 = new Section("120", "LW", "6:00PM-7:15PM", "Lawrence Chott", "CH-125", 
+            testCourse5A,1, 32);
+    
+    
+    public Section testSection5B1 = new Section("120", "LW", "6:00PM-7:15PM", "Stephania Uwakweh Evuleocha", "CH-325",
+            testCourse5B, 1, 31);
+   
+    
+
+    public Section testSection5C1 = new Section("010", "LMV", "7:30AM-8:20AM", "Laura Buitrago Garcia", "CH-224",
+            testCourse5C, 1, 30);
+    public Section testSection5C2 = new Section("016", "MJ", "7:30AM-8:20AM", "Myrna Rivera Montijo", "CH-318",
+            testCourse5C, 1, 30);
+    public Section testSection5C3 = new Section("017", "MJ", "7:30AM-8:20AM", "Waleska Morciglio Quintana", "CH-221", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C4 = new Section("018", "MJ", "7:30AM-8:20AM", "Iris Toro Manzano", "CH-123",
+            testCourse5C, 1, 30);
+    public Section testSection5C5 = new Section("020", "LWV", "8:30AM-9:20AM", "Laura Buitrago Garcia", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C6 = new Section("030", "LWV", "9:30AM-10:20AM", "Maria Orejarena Torres", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C7 = new Section("036", "MJ", "9:00AM-10:15AM", "Myrna Rivera Montijo", "CH-318", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C8 = new Section("037", "MJ", "9:00AM-10:15AM", "Waleska Morciglio Quintana", "CH-221",
+            testCourse5C, 1, 30);
+    public Section testSection5C9 = new Section("038", "MJ", "9:00AM-10:15AM", "Iris Toro Manzano", "CH-123",
+            testCourse5C, 1, 30);
+    public Section testSection5C10 = new Section("040", "LWV", "10:30AM-11:20AM", "Maria Orejarena Torres", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C11 = new Section("041", "LWV", "10:30AM-11:20AM", "Rosita Rivera", "CH-324",
+            testCourse5C, 1, 30);
+    public Section testSection5C12 = new Section("050", "LWV", "11:30AM-12:20PM", "William Carrero Vale", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C13 = new Section("051", "LWV", "11:30AM-12:20PM", "Rosita Rivera", "CH-324", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C14 = new Section("060", "LWV", "12:30PM-1:20PM", "William Carrero Vale", "CH-224", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C15 = new Section("061", "LWV", "12:30PM-1:20PM", "Ambar Rivera Beede", "CH-324",
+            testCourse1E, 1, 30);
+    public Section testSection5C16 = new Section("070", "LWV", "1:30PM-2:20PM", "Ambar Rivera Beede", "CH-224",
+            testCourse1E, 1, 30);
+    public Section testSection5C17 = new Section("086", "MJ", "2:00PM-3:15PM", "Myrna Rivera Montijo", "CH-318", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C18 = new Section("096", "MJ", "3:30PM-4:45PM", "Myrna Rivera Montijo", "CH-318",
+            testCourse5C, 1, 30);
+    public Section testSection5C19 = new Section("100", "LW", "4:30PM-5:45PM", "Iris Toro Manzano", "CH-221", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C20 = new Section("100L", "V", "4:30PM-5:20PM", "Rosita Rivera", "CH-325", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C21 = new Section("116", "MJ", "5:00PM-6:15PM", "Iris Toro Manzano", "CH-222", 
+            testCourse5C,
+            1, 30);
+    public Section testSection5C22 = new Section("117", "MJ", "5:00PM-6:15PM", "Javier I Fabre Quiñones", "CH-223",
+            testCourse5C, 1, 30);
+    public Section testSection5C23 = new Section("120", "LW", "6:00PM-7:15PM", "Javier I Fabre Quiñones", "CH-221",
+            testCourse5C, 1, 30);
+    public Section testSection5C24 = new Section("130L", "V", "7:30PM-8:20PM", "Rosita Rivera", "CH-221", 
+            testCourse5C,
+            1, 30);
+
+
+    public Section testSection5D1 = new Section("010", "LWV", "12:30PM-1:45PM", "Javier I Fabre Quiñones", "CH-223",
+            testCourse5D, 1, 30);
+    public Section testSection5D2 = new Section("020", "LWV", "2:00PM-3:15PM", "Javier I Fabre Quiñones", "CH-221",
+            testCourse5D, 1, 30);
+    public Section testSection5D3 = new Section("060", "V", "3:30PM-4:45PM", "Rosita Rivera", "CH-221", testCourse5D,
+            1, 60);
+
+
+    public Section testSection5F1 = new Section("020", "LWV", "8:30AM-9:20AM", "Diego Zaragoza Padilla", "CH-222",
+            testCourse5F, 1, 31);
+    public Section testSection5F2 = new Section("030", "LWV", "9:30AM-10:20AM", "Diego Zaragoza Padilla", "CH-222", testCourse5F, 1,
+            30);
+
+
+
+    public Section testSection5G1 = new Section("070", "LWV", "1:30PM-2:20PM", "Dariana Alicea Torres", "CH-324",
+            testCourse5G, 1, 30);
+    public Section testSection5G2 = new Section("096", "MJ", "3:30PM-4:45PM", "Dariana Alicea Torres", "CH-319",
+            testCourse5G, 1, 30);
+
+
+
+    public Section testSection5H1 = new Section("070", "LWV", "1:30PM-2:20PM", "Gabriel E. Romaguera Rodriguez", "CH-005",
+            testCourse5H, 1, 31);
+    public Section testSection5H2 = new Section("080", "LWV", "2:30PM-3:20PM", "Nicholas Haydock", "CH-005",
+            testCourse5H, 1, 30);
+    public Section testSection5H3 = new Section("100", "LW", "4:30PM-5:45PM", "Linda Rodriguez", "CH-124",
+            testCourse5H, 1, 66);
+    public Section testSection5H4 = new Section("116", "MJ", "5:00PM-6:15PM", "Gabriel E. Romaguera Rodriguez", "CH-324",
+            testCourse5H, 1, 45);
+    public Section testSection5H5 = new Section("120", "LW", "6:00PM-7:15PM", "Linda Rodriguez", "CH-124",
+            testCourse5H, 1, 64);
+        
 
     public JsonTest() {
 
@@ -308,29 +451,29 @@ public class JsonTest {
 
         // Real Values
   
-        testList.add(testSectionA4);
-        testList.add(testSectionB3);
-        testList.add(testSectionC2);
-        testList.add(testSectionD1);
+        testList.add(testSection1A1);
+        testList.add(testSection1B1);
+        testList.add(testSection1C1);
+        testList.add(testSection1D1);
 
         testStudent1.addMatricula(testMatricula2);
         testStudent1.addMatricula(testMatricula3);
         testStudent1.SetTurn(new Turn("12/25/2020 15:00-12/25/2020 15:30"));
 
-        testMatricula2.addSection(testSectionI1,testCourse9);
-        testMatricula2.addSection(testSectionJ1,testCourse10);
-        testMatricula2.addSection(testSectionK1,testCourse11);
-        testMatricula2.addSection(testSectionL1,testCourse12);
+        testMatricula2.addSection(testSection1A1,testCourse1A);
+        testMatricula2.addSection(testSection1B2,testCourse1B);
+        testMatricula2.addSection(testSection1C2,testCourse1C);
+        testMatricula2.addSection(testSection1D2,testCourse1D);
 
-        testMatricula2.addSection(testSectionM1,testCourse13);
-        testMatricula2.addSection(testSectionN1,testCourse14);
-        testMatricula2.addSection(testSectionO1,testCourse15);
-        testMatricula2.addSection(testSectionP1,testCourse16);
+        testMatricula3.addSection(testSection1A1,testCourse1A);
+        testMatricula3.addSection(testSection1B3,testCourse1B);
+        testMatricula3.addSection(testSection1C3,testCourse1C);
+        testMatricula3.addSection(testSection1D1,testCourse1D);
 
-        testStudent1.addPriority(testCourse5);
-        testStudent1.addPriority(testCourse6);
-        testStudent1.addPriority(testCourse7);
-        testStudent1.addPriority(testCourse8);
+        testStudent1.addPriority(testCourse1B);
+        testStudent1.addPriority(testCourse2A);
+        testStudent1.addPriority(testCourse3A);
+        testStudent1.addPriority(testCourse4A);
 
         try {
 

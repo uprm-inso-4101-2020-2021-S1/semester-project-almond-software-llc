@@ -14,7 +14,7 @@ export default function ScheduleCard(props) {
 
     return (
         <Card elevation={2} style={{ width: '500px', height: '300px' }}>
-            <Grid container style={{ backgroundColor: 'green', height: '8%', color: 'white' }}>
+            <Grid container style={{ backgroundColor: '#1e8449', height: '8%', color: 'white' }}>
                 <Grid item style={{ textAlign: 'center', width: '14.2857%' }}>◉</Grid>
                 <Grid item style={{ textAlign: 'center', width: '14.2857%' }}>MON</Grid>
                 <Grid item style={{ textAlign: 'center', width: '14.2857%' }}>TUE</Grid>
@@ -57,9 +57,9 @@ export default function ScheduleCard(props) {
                             <Grid item style={{ textAlign: 'center', height: '7.692%', width: '100%', borderTop: 'dotted 1px silver' }}></Grid>
                             {day.map((section, i) => (
 
-                                <Card style={{ backgroundColor: section.color, width: '100%', color: 'white', height: (section.period.endMinutes - section.period.startMinutes) * 0.355 + 'px', top: (section.period.startMinutes - 360) * 0.355 + 'px', position: 'absolute', flex: 1 }}>
+                                <Card style={{ backgroundColor: section.color, width: '100%', height: (section.period.endMinutes - section.period.startMinutes) * 0.355 + 'px', top: (section.period.startMinutes - 360) * 0.355 + 'px', position: 'absolute', flex: 1 }}>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, height: '100%' }}>
-                                        <Typography style={{ fontSize: '12px', fontWeight: 'bold' }}>
+                                        <Typography style={{ fontSize: '12px', fontWeight: 'bold', color: 'white'}}>
                                             {section.courseCode}
                                         </Typography>
                                     </div>

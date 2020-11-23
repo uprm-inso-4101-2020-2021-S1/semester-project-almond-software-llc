@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/CourseCard.js";
+import CourseCard from "../coursecard/coursecard.js";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -23,6 +23,7 @@ import axios from "axios";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
+import MacademiaTitle from './Macademia_title.png';
 
 const drawerWidth = 270;
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   image: {
-    width: 60,
+    width: '15rem',
     height: 60,
   },
   root: {
@@ -42,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     // width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    backgroundColor: "green",
+    backgroundColor: "#1e8449",
+    display: 'flex',
+    justifyContent:'space-between',
   },
   drawer: {
     width: drawerWidth,
@@ -56,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     // textShadow: "1px 1px 2px green",
     fontFamily: "Roboto",
-    padding: '10px'
+    padding: '10px',
+    //fontWeight:'700',
   },
   cardLists: {
     alignContent: "center",
@@ -342,7 +346,7 @@ export default function Main() {
           {departmentsList.map((department, departmentsIndex) => (
             <div key={departmentsIndex}>
               <ListItem>
-                <Typography>{department.name}</Typography>
+                <Typography style={{fontWeight:'800'}}>{department.name}</Typography>
               </ListItem>
               <List>
                 {department.courses.map((course, coursesIndex) => (
@@ -378,12 +382,30 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignContent: "center",
+            justifyContent: "center",
+            paddingTop:'1rem',
+          }}
+        >
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+          </Grid>
+        </Grid>
+
+        <List style={{ alignItems: "center" }}>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>
               <ListItem
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 draggable={true}
                 key={coursesIndex}
                 onDragStart={(e) =>
@@ -398,11 +420,15 @@ export default function Main() {
                   color={course.color}
                 />
               </ListItem>
-              <Collapse in={courseExpands[coursesIndex]} timeout="auto" unmountOnExit>
+              <Collapse
+                in={courseExpands[coursesIndex]}
+                timeout="auto"
+                unmountOnExit
+              >
                 <List>
                   {course.sections.map((section, sectionsIndex) => (
                     <ListItem
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: "pointer" }}
                       draggable={true}
                       key={sectionsIndex}
                       onDragStart={(e) =>
@@ -436,39 +462,51 @@ export default function Main() {
   const renderMatricula = (matriculaList, title, listIndex) => {
     return (
       <div
-        style={{ overflowY: 'scroll', height: '550px', width: '250px' }}
         onDragOver={(e) => {
           onDragOver(e);
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
-          {matriculaList.map((sections, sectionsIndex) => (
-            <ListItem
-              style={{ cursor: 'pointer' }}
-              draggable={matriculaIndex === 0}
-              key={sectionsIndex}
-              onDragStart={(e) =>
-                onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
-              }
-            >
-              <SectionCard
-                courseCode={sections.courseCode}
-                section={sections.secNum}
-                courseName={sections.courseName}
-                professor={sections.professor}
-                credits={sections.credits}
-                color={sections.color}
-                time={sections.time}
-                population={sections.population}
-                capacity={sections.capacity}
-                day={sections.day}
-                period={sections.period}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <Grid container style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <DeleteForeverIcon
+              style={{ height: "2rem", width: "2rem"}}
+            />
+          </Grid>
+        </Grid>
+        <div style={{ overflowY: "scroll", height: "550px", width: "250px" }}>
+          <List style={{ alignItems: "center" }}>
+            {matriculaList.map((sections, sectionsIndex) => (
+              <ListItem
+                style={{ cursor: "pointer" }}
+                draggable={matriculaIndex === 0}
+                key={sectionsIndex}
+                onDragStart={(e) =>
+                  onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
+                }
+              >
+                <SectionCard
+                  courseCode={sections.courseCode}
+                  section={sections.secNum}
+                  courseName={sections.courseName}
+                  professor={sections.professor}
+                  credits={sections.credits}
+                  color={sections.color}
+                  time={sections.time}
+                  population={sections.population}
+                  capacity={sections.capacity}
+                  day={sections.day}
+                  period={sections.period}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
     );
   };
@@ -477,11 +515,12 @@ export default function Main() {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <img src={Macademia} className={classes.image} />
-          <Typography variant="h6" className={classes.title}>
-            Macademia
-          </Typography>
-          <Button className={classes.logoutButton} style={{ outline: 0 }} onClick={() => logout()}>
+          <img src={MacademiaTitle} className={classes.image} />
+          <Button
+            className={classes.logoutButton}
+            style={{ outline: 0 }}
+            onClick={() => logout()}
+          >
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>
@@ -496,19 +535,21 @@ export default function Main() {
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
+             
           ) : (
-              <div />
-            )}
+            <div />
+          )}
           <Divider />
           {departments !== null ? (
             renderDepartments(departments, "Departments", 1)
           ) : (
-              <div />
-            )}
+            <div />
+          )}
+          <Divider />
         </div>
       </Drawer>
 
-      <main className={classes.content} style={{ height: '100vh' }}>
+      <main className={classes.content} style={{ height: "100vh" }}>
         <Toolbar />
         <div className={classes.centerContent}>
           <div
@@ -519,7 +560,7 @@ export default function Main() {
             </IconButton>
           </div>
 
-          <Card elevation={3} style={{ width: "70%" }}>
+          <Card elevation={3} style={{ width: "70%"}}>
             {matriculas !== null ? (
               <CardContent>
                 <Grid item style={{ textAlign: "center" }}>
@@ -565,8 +606,8 @@ export default function Main() {
                 </Grid>
               </CardContent>
             ) : (
-                <div />
-              )}
+              <div />
+            )}
           </Card>
 
           <div
