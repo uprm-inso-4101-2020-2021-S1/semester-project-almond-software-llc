@@ -3,6 +3,8 @@ package com.macademia.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.security.krb5.internal.crypto.Des;
+
 /*
  * Contains information for a Course
  * @author Kurcell
@@ -25,16 +27,17 @@ public class Course {
 	// -[Constructor]-----------------------------------------
 
 	public Course(String name, Department dept, String code, int credits, String Availability) {
-		this(name, dept, code, credits, null, null, Availability);
+		this(name, dept, code, credits, null, null, Availability, "lorem ipsum");
 	}
 
-	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq, String Availability) {
+	public Course(String name, Department dept, String code, int credits, List<Course> prereq, List<Course> coreq, String Availability, String Description) {
 		this.name = name;
 		this.dept = dept.getShortName();
 		this.code = code;
 		this.courseCode = dept.getShortName() + code;
 		this.credits = credits;
 		this.Availability = Availability;
+		this.Description = Description;
 		if (prereq == null) {this.prereq = new ArrayList<Course>();} else {this.prereq = prereq;} // If there isn't a specified list, create the list
 		if (coreq == null) {this.coreq = new ArrayList<Course>();} else {this.coreq = coreq;}
 		this.sections = new ArrayList<Section>(); // Create the list for later.

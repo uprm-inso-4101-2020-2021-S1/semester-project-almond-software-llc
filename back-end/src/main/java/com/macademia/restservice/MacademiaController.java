@@ -216,10 +216,13 @@ public class MacademiaController {
 	private boolean isAvailable(String period, Course c){
 		switch(period){
 			case "FALL": 
+			System.out.println(c.getAvailability().contains("FALL"));
 			return c.getAvailability().contains("FALL");
 			case "SPRING":
+			System.out.println(c.getAvailability().contains("SPRING"));
 			return c.getAvailability().contains("SPRING");
 			case "SUMMER":
+			System.out.println(c.getAvailability().contains("SUMMER"));
 			return c.getAvailability().contains("SUMMER");
 		}
 		return false;
