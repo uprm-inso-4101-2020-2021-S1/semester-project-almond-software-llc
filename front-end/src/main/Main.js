@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: drawerWidth,
     backgroundColor: "#1e8449",
     display: 'flex',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
   drawer: {
     width: drawerWidth,
@@ -346,7 +346,7 @@ export default function Main() {
           {departmentsList.map((department, departmentsIndex) => (
             <div key={departmentsIndex}>
               <ListItem>
-                <Typography style={{fontWeight:'800'}}>{department.name}</Typography>
+                <Typography style={{ fontWeight: '800' }}>{department.name}</Typography>
               </ListItem>
               <List>
                 {department.courses.map((course, coursesIndex) => (
@@ -388,7 +388,7 @@ export default function Main() {
             display: "flex",
             alignContent: "center",
             justifyContent: "center",
-            paddingTop:'1rem',
+            paddingTop: '1rem',
           }}
         >
           <Grid item>
@@ -447,6 +447,8 @@ export default function Main() {
                         capacity={section.capacity}
                         day={section.day}
                         period={section.period}
+                        availability={course.availability}
+                        description={course.description}
                       />
                     </ListItem>
                   ))}
@@ -467,7 +469,7 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <Grid container style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+        <Grid container style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
           <Grid item>
             <Typography className={classes.drawerTypography}>
               {title}
@@ -475,7 +477,7 @@ export default function Main() {
           </Grid>
           <Grid item>
             <DeleteForeverIcon
-              style={{ height: "2rem", width: "2rem"}}
+              style={{ height: "2rem", width: "2rem" }}
             />
           </Grid>
         </Grid>
@@ -502,6 +504,8 @@ export default function Main() {
                   capacity={sections.capacity}
                   day={sections.day}
                   period={sections.period}
+                  availability={matriculas[matriculaIndex].courses[sectionsIndex].availability}
+                  description={matriculas[matriculaIndex].courses[sectionsIndex].description}
                 />
               </ListItem>
             ))}
@@ -535,16 +539,16 @@ export default function Main() {
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
-             
+
           ) : (
-            <div />
-          )}
+              <div />
+            )}
           <Divider />
           {departments !== null ? (
             renderDepartments(departments, "Departments", 1)
           ) : (
-            <div />
-          )}
+              <div />
+            )}
           <Divider />
         </div>
       </Drawer>
@@ -560,7 +564,7 @@ export default function Main() {
             </IconButton>
           </div>
 
-          <Card elevation={3} style={{ width: "70%"}}>
+          <Card elevation={3} style={{ width: "70%" }}>
             {matriculas !== null ? (
               <CardContent>
                 <Grid item style={{ textAlign: "center" }}>
@@ -606,8 +610,8 @@ export default function Main() {
                 </Grid>
               </CardContent>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
 
           <div
