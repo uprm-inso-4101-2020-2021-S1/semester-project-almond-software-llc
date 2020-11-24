@@ -98,7 +98,20 @@ public class Matricula {
 	public boolean getReadOnly() {return ReadOnly;}
 	
 	public void setSections(List<Section> sections) {if(!this.ReadOnly) {this.sections = sections;}}
-	public void setCourse(List<Course> courses) {if(!this.ReadOnly) {this.courses=courses;}}
+	
+	/**
+	 * Sets courses, and recalculates totalcredits	
+	 * @param courses
+	 */
+	public void setCourse(List<Course> courses) {
+		if(this.ReadOnly) {return;}
+		this.courses=courses; //Set courses
+		
+		//Recalculate totalcredits
+		totalCredits=0; //Reset
+		for (Course course : courses) {totalCredits+=course.getCredits();} //Add
+	}
+	
 	public void setTotalCredits(int totalCredits) {if(!this.ReadOnly) {this.totalCredits = totalCredits;}}
 	public void setPeriod(MatriculaPeriod period) {if(!this.ReadOnly) {this.period = period;}}
 	public void setID(int ID) {this.ID=ID;}
