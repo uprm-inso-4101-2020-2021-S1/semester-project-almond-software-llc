@@ -423,7 +423,6 @@ export default function Main() {
             </div>
           </Grid>
         </Grid>
-
         <List style={{ alignItems: "center" }}>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>

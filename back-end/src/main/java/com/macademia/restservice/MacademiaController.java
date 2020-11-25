@@ -146,7 +146,6 @@ public class MacademiaController {
 				currentStudents.get(user).getPriority().add(tempCourse);
 		} else {
 			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse) && !conflict) {
-
 				currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
 			}
 		}
@@ -156,7 +155,7 @@ public class MacademiaController {
 				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
 		} else {
 			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
-			currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
+			currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
 		}
 		// save
 		try {
@@ -187,12 +186,21 @@ public class MacademiaController {
 
 	public boolean checkConflicts(Section s, List<Section> l) {
 		// if s start <= temp end && s end >= temp end, if temp start <= s end && temp
-		// end >= s edn, false
+		// end >= s end, false
 		for (Section temp : l) {
-			if ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
+			if (checkConflictsDays(s, temp) && ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
 					&& s.getPeriod().getEndMinutes() >= temp.getPeriod().getEndMinutes())
 					|| (temp.getPeriod().getStartMinutes() <= s.getPeriod().getEndMinutes()
-							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes())) {
+							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes()))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkConflictsDays(Section a, Section b) {
+		for (Character c : a.getDay().toCharArray()) {
+			if (b.getDay().contains(c.toString())) {
 				return true;
 			}
 		}

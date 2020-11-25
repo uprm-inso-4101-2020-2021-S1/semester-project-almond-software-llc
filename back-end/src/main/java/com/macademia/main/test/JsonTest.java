@@ -167,7 +167,7 @@ public class JsonTest {
 
     //---[User Info]-------------------------------------------------------------------------------------------------------------
 
-    public User testUser1 = new User("JohnSmitch82", "JS841178204");
+    public User testUser1 = new User("JohnSmitch82", "1234");
     public Student testStudent1 = new Student(testUser1, "John Smitch", "841-17-8204", testDepartment1);
 
     //---[Courses]---------------------------------------------------------------------------------------------------------------
@@ -404,9 +404,9 @@ public class JsonTest {
         testMatricula3.addSection(testSection1A1,testCourse1A);
         testMatricula3.addSection(testSection1B3,testCourse1B);
         testMatricula3.addSection(testSection1C3,testCourse1C);
-        testMatricula3.addSection(testSection1D1,testCourse1D);
+        // testMatricula3.addSection(testSection1D1,testCourse1D);
 
-        testStudent1.addPriority(testCourse1B);
+        // testStudent1.addPriority(testCourse1B);
         testStudent1.addPriority(testCourse2A);
         testStudent1.addPriority(testCourse3A);
         testStudent1.addPriority(testCourse4A);
