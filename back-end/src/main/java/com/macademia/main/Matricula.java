@@ -116,61 +116,32 @@ public class Matricula implements Comparable<Matricula> {
 	}
 
 	// -[Getters]---------------------------------------------
-	public List<Section> getSections() {
-		return sections;
-	}
-
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	public int getTotalCredits() {
-		return totalCredits;
-	}
-
-	public MatriculaPeriod getPeriod() {
-		return period;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public boolean getReadOnly() {
-		return ReadOnly;
-	}
-
-	public void setSections(List<Section> sections) {
-		if (!this.ReadOnly) {
-			this.sections = sections;
-		}
-	}
-
+	public List<Section> getSections() {return sections;}
+	public List<Course> getCourses() {return courses;}
+	public int getTotalCredits() {return totalCredits;}
+	public MatriculaPeriod getPeriod() {return period;}
+	public int getID() {return ID;}
+	public boolean getReadOnly() {return ReadOnly;}
+	
+	public void setSections(List<Section> sections) {if(!this.ReadOnly) {this.sections = sections;}}
+	
+	/**
+	 * Sets courses, and recalculates totalcredits	
+	 * @param courses
+	 */
 	public void setCourse(List<Course> courses) {
-		if (!this.ReadOnly) {
-			this.courses = courses;
-		}
+		if(this.ReadOnly) {return;}
+		this.courses=courses; //Set courses
+		
+		//Recalculate totalcredits
+		totalCredits=0; //Reset
+		for (Course course : courses) {totalCredits+=course.getCredits();} //Add
 	}
-
-	public void setTotalCredits(int totalCredits) {
-		if (!this.ReadOnly) {
-			this.totalCredits = totalCredits;
-		}
-	}
-
-	public void setPeriod(MatriculaPeriod period) {
-		if (!this.ReadOnly) {
-			this.period = period;
-		}
-	}
-
-	public void setID(int ID) {
-		this.ID = ID;
-	}
-
-	public void setReadOnly(boolean ReadOnly) {
-		this.ReadOnly = ReadOnly;
-	}
+	
+	public void setTotalCredits(int totalCredits) {if(!this.ReadOnly) {this.totalCredits = totalCredits;}}
+	public void setPeriod(MatriculaPeriod period) {if(!this.ReadOnly) {this.period = period;}}
+	public void setID(int ID) {this.ID=ID;}
+	public void setReadOnly(boolean ReadOnly) {this.ReadOnly=ReadOnly;}
 
 	/**
 	 * Returns a list of 6 lists of sections. Each list corresponds to a specified

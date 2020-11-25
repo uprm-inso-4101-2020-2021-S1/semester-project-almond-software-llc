@@ -154,8 +154,8 @@ public class MacademiaController {
 			if (!conflict)
 				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
 		} else {
-			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
 			currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
+			currentStudents.get(user).getMatricula(tempPeriod).removeCourse(tempCourse);
 		}
 		// save
 		try {
@@ -173,8 +173,9 @@ public class MacademiaController {
 			@RequestParam(value = "user") String user) {
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
 		Course tempCourse = currentStudents.get(user).getMatricula(tempPeriod).getCourses().get(valueIndex);
-		currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
-		currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
+		Section tempSection = currentStudents.get(user).getMatricula(tempPeriod).getSections().get(valueIndex);
+		currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
+		currentStudents.get(user).getMatricula(tempPeriod).removeCourse(tempCourse);
 		// save
 		try {
 			tester.db.SaveUser(currentStudents.get(user));

@@ -419,7 +419,7 @@ export default function Main() {
               removeCourse(listIndex);
               forceUpdate();
             }}>
-              <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
             </div>
           </Grid>
         </Grid>
@@ -510,7 +510,7 @@ export default function Main() {
               removeSection(listIndex);
               forceUpdate();
             }}>
-              <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
             </div>
           </Grid>
         </Grid>
