@@ -39,22 +39,6 @@ public class DBHandler {
 	private Connection SQLConn;
 
 	/**
-<<<<<<< HEAD
-	 * Creates a DBHandler without overwriting the specified file
-	 * 
-	 * @param FileName
-	 * @throws SQLException
-	 */
-	public DBHandler(String FileName) throws SQLException {
-		this(FileName, false);
-	}
-
-	/**
-	 * Initializes the department map and connection to the SQL database \n\n If a
-	 * file does not exist at the specified location, or if the overwrite flag is
-	 * set to true, it will create a new Macademia DB at that location.
-	 * 
-=======
 	 * Starts a DBHandler with a connection to the database in LocalHost, with default Credentials
 	 * @param Database
 	 * @throws SQLException
@@ -79,24 +63,10 @@ public class DBHandler {
 	/**
 	 * Initializes the department map and connection to the SQL database \n\n
 	 * If the database does not exist on the host, or the overwrite flag is on, A new Macademia DB will be created in the specified Host with the Database name given. 
->>>>>>> b56aa8ea03741ca3ddb656cfe1d32160053a39d3
 	 * @throws SQLException if a connection could not be created.
 	 */
 	public DBHandler(String Host, String Database, String Username, String Password, Boolean Overwrite) throws SQLException {
 		DepartmentMap = new HashMap<String, Department>();
-<<<<<<< HEAD
-
-		// Time to make this thing create databases if it doesn't find one. haha.
-		Creator.createNewMacademiaDatabase(FileName, Overwrite); // Creator doesn't overwrite tables if they already
-																	// exist so this is safe
-
-		SQLConn = DriverManager.getConnection("jdbc:sqlite:" + FileName);
-
-		// Sabes que lazy loading everything is probably not a good idea.
-		// Deps, Courses, and Sections should be loaded as soon as the de-esta cosa is
-		// istantiated.
-
-=======
 		
 		//Time to make this thing create databases if it doesn't find one. haha.
 		SQLConn = Creator.createNewMacademiaDatabase(Host, Database, Username, Password, Overwrite); //Creator doesn't overwrite tables if they already exist so this is safe
@@ -108,7 +78,6 @@ public class DBHandler {
 		//Sabes que lazy loading everything is probably not a good idea.
 		//Deps, Courses, and Sections should be loaded as soon as the de-esta cosa is istantiated.
 		
->>>>>>> b56aa8ea03741ca3ddb656cfe1d32160053a39d3
 		LoadEverything();
 
 		// Remove these lines of code to have the DBHandler *not* load Deps, Courses,
