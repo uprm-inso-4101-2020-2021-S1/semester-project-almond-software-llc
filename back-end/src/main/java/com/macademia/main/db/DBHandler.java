@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,20 +42,22 @@ public class DBHandler {
 	 * @param FileName
 	 * @throws SQLException
 	 */
-	public DBHandler(String FileName) throws SQLException {this(FileName,false);}
+	public DBHandler(String Host, String Database, String Username, String Password) throws SQLException {this(Host, Database, Username, Password,false);}
 	
 	/**
 	 * Initializes the department map and connection to the SQL database \n\n
 	 * If a file does not exist at the specified location, or if the overwrite flag is set to true, it will create a new Macademia DB at that location. 
 	 * @throws SQLException if a connection could not be created.
 	 */
-	public DBHandler(String FileName, Boolean Overwrite) throws SQLException {
+	public DBHandler(String Host, String Database, String Username, String Password, Boolean Overwrite) throws SQLException {
 		DepartmentMap = new HashMap<String, Department>();
 		
 		//Time to make this thing create databases if it doesn't find one. haha.
-		Creator.createNewMacademiaDatabase(FileName, Overwrite); //Creator doesn't overwrite tables if they already exist so this is safe
+		SQLConn = Creator.createNewMacademiaDatabase(Host, Database, Username, Password, Overwrite); //Creator doesn't overwrite tables if they already exist so this is safe
 		
-		SQLConn = DriverManager.getConnection("jdbc:sqlite:"+FileName);
+		//Hey since we run the Creator anyways, let's have it return a Connection. It allows us to be flexible if we have to change SQL handler any other time in the future.
+		
+		//Also we never caught Return Null. so uh...
 		
 		//Sabes que lazy loading everything is probably not a good idea.
 		//Deps, Courses, and Sections should be loaded as soon as the de-esta cosa is istantiated.
