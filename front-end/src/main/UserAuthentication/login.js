@@ -62,7 +62,7 @@ export default function Login() {
   let [password, setPassword] = useState(null);
 
   const verifyLogin = async () => {
-    await axios.get('http://localhost:8080/login?'
+    await axios.get('https://almond-macademia-back-end.herokuapp.com/login?'
       + 'user=' + user
       + '&password=' + password).then(res => {
         if (res.data) {

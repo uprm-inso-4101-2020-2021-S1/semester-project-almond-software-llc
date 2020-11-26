@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/CourseCard";
+import CourseCard from "../coursecard/coursecard";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -142,15 +142,15 @@ export default function Main() {
   async function fetchData() {
     if (Cookies.get("user") !== "") {
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/priority?" + "user=" + Cookies.get("user")
       );
       setPriorities(resultPriorities.data);
       const resultDepartments = await axios.get(
-        "http://localhost:8080/departments?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/departments?" + "user=" + Cookies.get("user")
       );
       setDepartments(resultDepartments.data);
       const resultMatriculas = await axios.get(
-        "http://localhost:8080/matriculas?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/matriculas?" + "user=" + Cookies.get("user")
       );
       setMatriculas(resultMatriculas.data);
     } else {
@@ -161,7 +161,7 @@ export default function Main() {
   async function setExpands() {
     if (Cookies.get("user") !== "") {
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/priority?" + "user=" + Cookies.get("user")
       );
       resultPriorities.data.map((course, coursesIndex) => {
         courseExpands[coursesIndex] = false;
@@ -182,7 +182,7 @@ export default function Main() {
   const logout = async () => {
     Cookies.set("user", "");
     history.push("/");
-    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
+    await axios.post('https://almond-macademia-back-end.herokuapp.com/logout?user=' + Cookies.get("user"))
   };
 
   const handleCourseExpand = (courseIndex) => {
@@ -230,7 +230,7 @@ export default function Main() {
     setAlertTitle("");
     setAlertMessage("");
     const resultTransferCourse = await axios.post(
-      "http://localhost:8080/transferCourse?" +
+      "https://almond-macademia-back-end.herokuapp.com/transferCourse?" +
       "sourceListIndex=" +
       sourceListIndex +
       "&targetListIndex=" +
@@ -257,7 +257,7 @@ export default function Main() {
     setAlertTitle("");
     setAlertMessage("");
     if (sourceListIndex === 0) {
-      const resultRemoveCourse = await axios.post('http://localhost:8080/removeCourse?'
+      const resultRemoveCourse = await axios.post('https://almond-macademia-back-end.herokuapp.com/removeCourse?'
         + 'valueIndex=' + tempValueIndex
         + '&user=' + Cookies.get("user"));
       setAlertType(resultRemoveCourse.data.alertType);
@@ -278,7 +278,7 @@ export default function Main() {
     setAlertTitle("");
     setAlertMessage("");
     const resultTransferSection = await axios.post(
-      "http://localhost:8080/transferSection?" +
+      "https://almond-macademia-back-end.herokuapp.com/transferSection?" +
       "sourceListIndex=" +
       sourceListIndex +
       "&targetListIndex=" +
@@ -305,7 +305,7 @@ export default function Main() {
       setAlertType("");
       setAlertTitle("");
       setAlertMessage("");
-      const resultRemoveSection = await axios.post('http://localhost:8080/removeSection?'
+      const resultRemoveSection = await axios.post('https://almond-macademia-back-end.herokuapp.com/removeSection?'
         + 'valueIndex=' + tempValueIndex
         + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
         + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semesterAsString

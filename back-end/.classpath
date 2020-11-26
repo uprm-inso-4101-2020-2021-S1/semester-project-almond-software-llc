@@ -26,25 +26,37 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
+		<attributes>
+<<<<<<< HEAD
+=======
+			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+>>>>>>> b56aa8ea03741ca3ddb656cfe1d32160053a39d3
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="m2e-apt" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/SQLite3/java/connect/sqlite-jdbc-3.32.3.2.jar"/>
-	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
-		<attributes>
+<<<<<<< HEAD
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="m2e-apt" value="true"/>
 			<attribute name="test" value="true"/>
+=======
+			<attribute name="maven.pomderived" value="true"/>
+>>>>>>> b56aa8ea03741ca3ddb656cfe1d32160053a39d3
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Macademia/postgresql-42.2.18.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
