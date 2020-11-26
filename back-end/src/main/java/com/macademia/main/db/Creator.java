@@ -23,10 +23,13 @@ public class Creator {
 	 * @param Overwrite Specify to overwrite the database or not.
 	 */
     public static Connection createNewMacademiaDatabase(String Host, String Database, String Username, String Password, boolean Overwrite) throws SQLException {  
-    	   
+    	
+    	Database=Database.replace(".", "").toLowerCase(); //Remove dots. Do this here for Backward Compatibility.
+    	//Also to lowercase. Do this here also for backward compatibility.
+    	
     	//Change to refer to the host.
-        String DatabaseURL = "jdbc:postgresql:" + Database;  
-        String HostURL = "jdbc:postgresql:" + "//" + Host + "/" + Database;
+        String DatabaseURL = "jdbc:postgresql:" + "//" + Host + "/" + Database;
+        String HostURL = "jdbc:postgresql:" + "//" + Host + "/postgres";
    
         if(new File(Database).exists() && Overwrite) {new File(Database).delete();}
         
@@ -57,7 +60,7 @@ public class Creator {
          * Username
          * Password (Encryption?)
          */
-        State.execute("CREATE TABLE IF NOT EXISTS Users (Username VarChar(50), Password VarChar(50));");
+        State.execute("CREATE TABLE IF NOT EXISTS Users (Username VarChar(100), Password VarChar(100));");
 
         System.out.println("Creating Students Table.");
         /*
@@ -70,7 +73,7 @@ public class Creator {
          * CoursesTaken (Comma Separated list of Courses taken)
          * TURN (parsable string for a turn)
          */
-        State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(50), Department Char(4), Matriculas VarChar(" + Integer.MAX_VALUE + "), PriorityCourses VarChar(" + Integer.MAX_VALUE + "), CoursesTaken VarChar("+Integer.MAX_VALUE+"), Turn VarChar(" + Integer.MAX_VALUE + "));"); 
+        State.execute("CREATE TABLE IF NOT EXISTS Students (ID Char(11), Name VarChar(100), TiedUser VarChar(100), Department Char(4), Matriculas VarChar(10485760), PriorityCourses VarChar(10485760), CoursesTaken VarChar(10485760), Turn VarChar(10485760));"); 
 
         System.out.println("Creating Matriculas Table.");
         /*
@@ -80,7 +83,7 @@ public class Creator {
          * YEAR (2020)
          * READONLY
          */
-        State.execute("CREATE TABLE IF NOT EXISTS Matriculas (ID int, Sections VarChar(" + Integer.MAX_VALUE + "),Period VarChar(20), Year int, ReadOnly bool);");
+        State.execute("CREATE TABLE IF NOT EXISTS Matriculas (ID int, Sections VarChar(10485760),Period VarChar(20), Year int, ReadOnly bool);");
 
         System.out.println("Creating Departments table.");            
         /*
@@ -100,7 +103,7 @@ public class Creator {
          * DESCRIPTION (Description of the course)
          * AVAILABILITY (Semesters/Years this course is available during)
          */
-        State.execute("CREATE TABLE IF NOT EXISTS Courses (ID Char(8), L bool , Name VarChar(75), Credits int, Prereq VarChar(" + Integer.MAX_VALUE + "), CoReq VarChar(" + Integer.MAX_VALUE + "), Description VarChar(" + Integer.MAX_VALUE + "), Availability VarChar(" + Integer.MAX_VALUE + "));");
+        State.execute("CREATE TABLE IF NOT EXISTS Courses (ID Char(8), L bool , Name VarChar(75), Credits int, Prereq VarChar(10485760), CoReq VarChar(10485760), Description VarChar(10485760), Availability VarChar(10485760));");
         
         System.out.println("Creating Sections Table.");
         /*
@@ -113,7 +116,7 @@ public class Creator {
          * CurCap (Current Capacity), 
          * MaxCap (Maximum Capacity)
          */
-        State.execute("CREATE TABLE IF NOT EXISTS Sections (ID Char(12), L Bool, DAYS VarChar(7), TIME VarChar(20), LOCATION VarChar(20), PROF VarChar(50) , CurCap int, MaxCap int);");
+        State.execute("CREATE TABLE IF NOT EXISTS Sections (ID Char(12), L Bool, DAYS VarChar(7), TIME VarChar(20), LOCATION VarChar(20), PROF VarChar(100) , CurCap int, MaxCap int);");
         
         return Dataconn;
     }
