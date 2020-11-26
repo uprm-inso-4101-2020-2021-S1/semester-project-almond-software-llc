@@ -24,6 +24,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
 import MacademiaTitle from './Macademia_title.png';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const drawerWidth = 270;
 
@@ -111,6 +113,14 @@ export default function Main() {
 
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
+  let [tempAlertType, setAlertType] = useState("");
+
+  let [tempAlertTitle, setAlertTitle] = useState("");
+
+  let [tempAlertMessage, setAlertMessage] = useState("");
+
+  let [openAlert, setOpenAlert] = useState(false);
+
   let [courseExpands, setCourseExpands] = useState({ [0]: false });
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
@@ -131,7 +141,6 @@ export default function Main() {
 
   async function fetchData() {
     if (Cookies.get("user") !== "") {
-      console.log('if userActive true in fetchData():', Cookies.get("userActive"));
       const resultPriorities = await axios.get(
         "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
       );
@@ -180,7 +189,17 @@ export default function Main() {
     courseExpands[courseIndex] = !courseExpands[courseIndex];
     setCourseExpands(courseExpands);
     forceUpdate();
-    console.log(courseExpands);
+  }
+
+  const handleAlertOpen = () => {
+    setOpenAlert(true);
+  }
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
   }
 
   const forceUpdate = () => {
@@ -207,7 +226,10 @@ export default function Main() {
     departmentIndex,
     matriculaPeriod
   ) => {
-    await axios.post(
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferCourse = await axios.post(
       "http://localhost:8080/transferCourse?" +
       "sourceListIndex=" +
       sourceListIndex +
@@ -224,13 +246,24 @@ export default function Main() {
       "&user=" +
       Cookies.get("user")
     );
+    setAlertType(resultTransferCourse.data.alertType);
+    setAlertTitle(resultTransferCourse.data.alertTitle);
+    setAlertMessage(resultTransferCourse.data.alertMessage);
+    handleAlertOpen();
   };
 
   const removeCourse = async (sourceListIndex) => {
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
     if (sourceListIndex === 0) {
-      await axios.post('http://localhost:8080/removeCourse?'
+      const resultRemoveCourse = await axios.post('http://localhost:8080/removeCourse?'
         + 'valueIndex=' + tempValueIndex
         + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveCourse.data.alertType);
+      setAlertTitle(resultRemoveCourse.data.alertTitle);
+      setAlertMessage(resultRemoveCourse.data.alertMessage);
+      handleAlertOpen();
     }
   }
 
@@ -241,7 +274,10 @@ export default function Main() {
     priorityCourseIndex,
     matriculaIndex
   ) => {
-    await axios.post(
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferSection = await axios.post(
       "http://localhost:8080/transferSection?" +
       "sourceListIndex=" +
       sourceListIndex +
@@ -258,15 +294,26 @@ export default function Main() {
       "&user=" +
       Cookies.get("user")
     );
+    setAlertType(resultTransferSection.data.alertType);
+    setAlertTitle(resultTransferSection.data.alertTitle);
+    setAlertMessage(resultTransferSection.data.alertMessage);
+    handleAlertOpen();
   };
 
   const removeSection = async (sourceListIndex) => {
     if (sourceListIndex === 2) {
-      await axios.post('http://localhost:8080/removeSection?'
+      setAlertType("");
+      setAlertTitle("");
+      setAlertMessage("");
+      const resultRemoveSection = await axios.post('http://localhost:8080/removeSection?'
         + 'valueIndex=' + tempValueIndex
         + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
         + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semesterAsString
         + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveSection.data.alertType);
+      setAlertTitle(resultRemoveSection.data.alertTitle);
+      setAlertMessage(resultRemoveSection.data.alertMessage);
+      handleAlertOpen();
     }
   }
 
@@ -514,7 +561,7 @@ export default function Main() {
             </div>
           </Grid>
         </Grid>
-        <div style={{ overflowY: 'scroll', height: '400px' }}>
+        <div style={{ overflowY: 'scroll', height: '425px' }}>
           <List style={{ alignItems: 'center' }}>
             {matriculaList.map((sections, sectionsIndex) => (
               <ListItem
@@ -596,6 +643,13 @@ export default function Main() {
             </IconButton>
           </div>
 
+          <Snackbar open={openAlert} autoHideDuration={4000} onClose={handleAlertClose}>
+            <Alert onClose={handleAlertOpen} severity={tempAlertType}>
+              <AlertTitle>{tempAlertTitle}</AlertTitle>
+              {tempAlertMessage}
+            </Alert>
+          </Snackbar>
+
           <Card elevation={3} style={{ width: "70%" }}>
             {matriculas !== null ? (
               <CardContent>
@@ -657,6 +711,7 @@ export default function Main() {
             </IconButton>
           </div>
         </div>
+
       </main>
     </div>
   );

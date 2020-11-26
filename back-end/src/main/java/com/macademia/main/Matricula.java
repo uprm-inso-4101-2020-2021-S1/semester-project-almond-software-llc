@@ -55,7 +55,7 @@ public class Matricula implements Comparable<Matricula> {
 			return;
 		} // make sure we have it before decreasing todo.
 		this.totalCredits -= e.getCredits();
-		this.sections.remove(f);
+		this.sections.remove(e);
 		this.courses.remove(f);
 	}
 
