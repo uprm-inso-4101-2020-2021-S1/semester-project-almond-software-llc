@@ -38,7 +38,22 @@ public class DBHandler {
 	private Connection SQLConn;
 	
 	/**
-	 * Creates a DBHandler without overwriting the specified file
+	 * Starts a DBHandler with a connection to the database in LocalHost, with default Credentials
+	 * @param Database
+	 * @throws SQLException
+	 */
+	public DBHandler(String Database) throws SQLException {this(Database,false);}
+	
+	/**
+	 * Starts a DBHandler with a connection to the database in LocalHost, with default credentials, Overwriting if specified
+	 * @param Database
+	 * @param Overwrite
+	 * @throws SQLException
+	 */
+	public DBHandler(String Database, Boolean Overwrite) throws SQLException {this("localhost",Database,CredentialHolder.Username,CredentialHolder.Password,Overwrite);}
+	
+	/**
+	 * Creates a DBHandler without overwriting the specified Host and Database with specified USername and Password
 	 * @param FileName
 	 * @throws SQLException
 	 */
@@ -46,7 +61,7 @@ public class DBHandler {
 	
 	/**
 	 * Initializes the department map and connection to the SQL database \n\n
-	 * If a file does not exist at the specified location, or if the overwrite flag is set to true, it will create a new Macademia DB at that location. 
+	 * If the database does not exist on the host, or the overwrite flag is on, A new Macademia DB will be created in the specified Host with the Database name given. 
 	 * @throws SQLException if a connection could not be created.
 	 */
 	public DBHandler(String Host, String Database, String Username, String Password, Boolean Overwrite) throws SQLException {
