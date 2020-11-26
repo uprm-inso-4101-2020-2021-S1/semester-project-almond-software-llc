@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Macademia from "./macademia.png";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import axios from "axios";
+import { Hidden } from "@material-ui/core";
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,6 +57,16 @@ export default function SignUp() {
   const classes = useStyles();
 
   let history = useHistory();
+
+  async function fetchData() {
+    if(Cookies.get("user") !== "") {
+      history.push("/");
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   const verifyRegister = async () => {
     if (password === passwordConfirmation) {

@@ -9,25 +9,24 @@ import Grid from '@material-ui/core/Grid';
 export default function CourseCard(props) {
     return (
         <Card elevation={2} style={{ width: '175px', height: '85px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <CardContent >
                     <Grid container direction='column' justify='center'>
                         <Grid item>
                             <Typography style={{ fontSize: 15, fontWeight: "bold" }}>{props.courseCode}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.courseName}</Typography>
+                            <Typography style={{ fontSize: 10, color: '#7f7f7f' }}>{props.courseName.length > 22 ? props.courseName.substring(0, 20) + '...' : props.courseName}</Typography>
                         </Grid>
                         <Grid item>
-                            <Typography style={{ fontSize: 13, color: '#7f7f7f' }}>{props.credits} credits</Typography>
+                            <Typography style={{ fontSize: 12, color: '#7f7f7f' }}>{props.credits} credits</Typography>
                         </Grid>
-
                     </Grid>
                 </CardContent>
                 <div>
                     <Grid container direction='column' justify='center'>
                         <Grid item>
-                            <div style={{ backgroundColor: props.color, borderRadius: '50%', width: '15px', height: '15px', margin: '20px' }} />
+                            <div style={{ backgroundColor: props.color, borderRadius: '50%', width: '15px', height: '15px', margin: '5px' }} />
                         </Grid>
                     </Grid>
                 </div>

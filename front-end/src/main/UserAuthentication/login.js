@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Macademia from "./macademia.png";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,12 +51,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn(props) {
+export default function Login() {
 
   const classes = useStyles();
 
   let history = useHistory();
+
   let [user, setUser] = useState(null);
+
   let [password, setPassword] = useState(null);
 
   const verifyLogin = async () => {
@@ -63,11 +66,22 @@ export default function SignIn(props) {
       + 'user=' + user
       + '&password=' + password).then(res => {
         if (res.data) {
-          props.setCurrUser(user);
+          Cookies.set("user", user);
           history.push("/home");
         }
       })
   }
+
+  function fetchData() {
+    console.log(Cookies.get("userActive"));
+    if (Cookies.get("user") !== "") {
+      history.push("/home");
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   return (
     <Container component="main" maxWidth="xs">

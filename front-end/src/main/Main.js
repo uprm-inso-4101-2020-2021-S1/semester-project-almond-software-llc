@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -23,7 +20,12 @@ import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import Cookies from 'js-cookie';
+import MacademiaTitle from './Macademia_title.png';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const drawerWidth = 270;
 
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   image: {
-    width: 60,
+    width: '15rem',
     height: 60,
   },
   root: {
@@ -43,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     // width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    backgroundColor: "green",
+    backgroundColor: "#1e8449",
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   drawer: {
     width: drawerWidth,
@@ -57,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     // textShadow: "1px 1px 2px green",
     fontFamily: "Roboto",
-    padding: '10px'
+    padding: '10px',
+    //fontWeight:'700',
   },
   cardLists: {
     alignContent: "center",
@@ -94,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main(props) {
+export default function Main() {
 
   const classes = useStyles();
 
@@ -108,7 +113,15 @@ export default function Main(props) {
 
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
-  let [courseExpands, setCourseExpands] = useState([0]);
+  let [tempAlertType, setAlertType] = useState("");
+
+  let [tempAlertTitle, setAlertTitle] = useState("");
+
+  let [tempAlertMessage, setAlertMessage] = useState("");
+
+  let [openAlert, setOpenAlert] = useState(false);
+
+  let [courseExpands, setCourseExpands] = useState({ [0]: false });
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
 
@@ -127,29 +140,67 @@ export default function Main(props) {
   let [elTicko, setElTicko] = useState(false);
 
   async function fetchData() {
-    if (props.currUser === "") {
-      history.push("/");
-    } else {
+    if (Cookies.get("user") !== "") {
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + props.currUser
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
       );
       setPriorities(resultPriorities.data);
-
       const resultDepartments = await axios.get(
-        "http://localhost:8080/departments?" + "user=" + props.currUser
+        "http://localhost:8080/departments?" + "user=" + Cookies.get("user")
       );
       setDepartments(resultDepartments.data);
-
       const resultMatriculas = await axios.get(
-        "http://localhost:8080/matriculas?" + "user=" + props.currUser
+        "http://localhost:8080/matriculas?" + "user=" + Cookies.get("user")
       );
       setMatriculas(resultMatriculas.data);
+    } else {
+      history.push("/");
     }
-  }
+  };
+
+  async function setExpands() {
+    if (Cookies.get("user") !== "") {
+      const resultPriorities = await axios.get(
+        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+      );
+      resultPriorities.data.map((course, coursesIndex) => {
+        courseExpands[coursesIndex] = false;
+      });
+    } else {
+      history.push("/");
+    }
+  };
+
+  useEffect(() => {
+    setExpands();
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, [elTicko]);
+
+  const logout = async () => {
+    Cookies.set("user", "");
+    history.push("/");
+    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
+  };
+
+  const handleCourseExpand = (courseIndex) => {
+    courseExpands[courseIndex] = !courseExpands[courseIndex];
+    setCourseExpands(courseExpands);
+    forceUpdate();
+  }
+
+  const handleAlertOpen = () => {
+    setOpenAlert(true);
+  }
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  }
 
   const forceUpdate = () => {
     setElTicko(!elTicko);
@@ -173,9 +224,12 @@ export default function Main(props) {
     valueIndex,
     priorityCourseIndex,
     departmentIndex,
-    matriculaIndex
+    matriculaPeriod
   ) => {
-    await axios.post(
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferCourse = await axios.post(
       "http://localhost:8080/transferCourse?" +
       "sourceListIndex=" +
       sourceListIndex +
@@ -187,12 +241,31 @@ export default function Main(props) {
       priorityCourseIndex +
       "&departmentIndex=" +
       departmentIndex +
-      "&matriculaIndex=" +
-      matriculaIndex +
+      "&matriculaPeriod=" +
+      matriculaPeriod +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
+    setAlertType(resultTransferCourse.data.alertType);
+    setAlertTitle(resultTransferCourse.data.alertTitle);
+    setAlertMessage(resultTransferCourse.data.alertMessage);
+    handleAlertOpen();
   };
+
+  const removeCourse = async (sourceListIndex) => {
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    if (sourceListIndex === 0) {
+      const resultRemoveCourse = await axios.post('http://localhost:8080/removeCourse?'
+        + 'valueIndex=' + tempValueIndex
+        + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveCourse.data.alertType);
+      setAlertTitle(resultRemoveCourse.data.alertTitle);
+      setAlertMessage(resultRemoveCourse.data.alertMessage);
+      handleAlertOpen();
+    }
+  }
 
   const transferSection = async (
     sourceListIndex,
@@ -201,7 +274,10 @@ export default function Main(props) {
     priorityCourseIndex,
     matriculaIndex
   ) => {
-    await axios.post(
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferSection = await axios.post(
       "http://localhost:8080/transferSection?" +
       "sourceListIndex=" +
       sourceListIndex +
@@ -216,16 +292,29 @@ export default function Main(props) {
       "&matriculaPeriod=" +
       matriculas[matriculaIndex].period.semester +
       "&user=" +
-      props.currUser
+      Cookies.get("user")
     );
+    setAlertType(resultTransferSection.data.alertType);
+    setAlertTitle(resultTransferSection.data.alertTitle);
+    setAlertMessage(resultTransferSection.data.alertMessage);
+    handleAlertOpen();
   };
 
-  const logout = async () => {
-    await axios.post('http://localhost:8080/logout?user=' + props.currUser).then(res => {
-      if (res) {
-        history.push("/");
-      }
-    })
+  const removeSection = async (sourceListIndex) => {
+    if (sourceListIndex === 2) {
+      setAlertType("");
+      setAlertTitle("");
+      setAlertMessage("");
+      const resultRemoveSection = await axios.post('http://localhost:8080/removeSection?'
+        + 'valueIndex=' + tempValueIndex
+        + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
+        + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semesterAsString
+        + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveSection.data.alertType);
+      setAlertTitle(resultRemoveSection.data.alertTitle);
+      setAlertMessage(resultRemoveSection.data.alertMessage);
+      handleAlertOpen();
+    }
   }
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
@@ -264,7 +353,7 @@ export default function Main(props) {
 
   const onDragOver = (e) => {
     e.preventDefault();
-  }
+  };
 
   const onDragStart = (e, listType, valueIndex, sourceListIndex, mainListIndex) => {
     setIsCourseSection(listType);
@@ -289,8 +378,8 @@ export default function Main(props) {
               valueIndex,
               priorityCourseIndex,
               departmentIndex,
-              matriculaIndex,
-              props.currUser
+              matriculas[matriculaIndex].period.semesterAsString,
+              Cookies.get("user")
             );
           }
           break;
@@ -302,7 +391,7 @@ export default function Main(props) {
               valueIndex,
               priorityCourseIndex,
               matriculaIndex,
-              props.currUser
+              Cookies.get("user")
             );
           }
           break;
@@ -322,20 +411,16 @@ export default function Main(props) {
           {departmentsList.map((department, departmentsIndex) => (
             <div key={departmentsIndex}>
               <ListItem>
-                <Typography>{department.name}</Typography>
+                <Typography style={{ fontWeight: '800' }}>{department.name}</Typography>
               </ListItem>
               <List>
                 {department.courses.map((course, coursesIndex) => (
                   <ListItem
                     style={{ cursor: 'pointer' }}
                     key={coursesIndex}
-                    draggable={true}
-                    onDragStart={(e) =>
-                      onDragStart(e, 0, coursesIndex, 1, departmentsIndex)
-                    }
-                    onClick={() => {
-                      onDragStart(null, 0, coursesIndex, 1, departmentIndex);
-                      onDrop(null, 0);
+                    onClick={(e) => {
+                      onDragStart(e, 0, coursesIndex, 1, departmentsIndex);
+                      onDrop(e, 0);
                     }}
                   >
                     <CourseCard
@@ -357,23 +442,45 @@ export default function Main(props) {
   const renderPriorityCourses = (coursesList, title, listIndex) => {
     return (
       <div
-        style={{ minHeight: "20px", minWidth: "20px" }}
         onDragOver={(e) => {
           onDragOver(e);
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: '1rem',
+          }}
+        >
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <div onDrop={() => {
+              removeCourse(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
+            </div>
+          </Grid>
+        </Grid>
+        <List style={{ alignItems: "center" }}>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>
               <ListItem
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 draggable={true}
                 key={coursesIndex}
                 onDragStart={(e) =>
                   onDragStart(e, 0, coursesIndex, 0, coursesIndex)
                 }
+                onClick={() => handleCourseExpand(coursesIndex)}
               >
                 <CourseCard
                   courseCode={course.courseCode}
@@ -382,30 +489,40 @@ export default function Main(props) {
                   color={course.color}
                 />
               </ListItem>
-              <List>
-                {course.sections.map((section, sectionsIndex) => (
-                  <ListItem
-                    style={{ cursor: 'pointer' }}
-                    draggable={true}
-                    key={sectionsIndex}
-                    onDragStart={(e) =>
-                      onDragStart(e, 1, sectionsIndex, 0, coursesIndex)
-                    }
-                  >
-                    <SectionCard
-                      courseCode={section.courseCode}
-                      section={section.secNum}
-                      courseName={section.courseName}
-                      professor={section.professor}
-                      credits={section.credits}
-                      color={section.color}
-                      time={section.time}
-                      population={section.population}
-                      capacity={section.capacity}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              <Collapse
+                in={courseExpands[coursesIndex]}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List>
+                  {course.sections.map((section, sectionsIndex) => (
+                    <ListItem
+                      style={{ cursor: "pointer" }}
+                      draggable={true}
+                      key={sectionsIndex}
+                      onDragStart={(e) =>
+                        onDragStart(e, 1, sectionsIndex, 0, coursesIndex)
+                      }
+                    >
+                      <SectionCard
+                        courseCode={section.courseCode}
+                        section={section.secNum}
+                        courseName={section.courseName}
+                        professor={section.professor}
+                        credits={section.credits}
+                        color={section.color}
+                        time={section.time}
+                        population={section.population}
+                        capacity={section.capacity}
+                        day={section.day}
+                        period={section.period}
+                        availability={course.availability}
+                        description={course.description}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
             </div>
           ))}
         </List>
@@ -416,37 +533,64 @@ export default function Main(props) {
   const renderMatricula = (matriculaList, title, listIndex) => {
     return (
       <div
-        style={{ overflowY: 'scroll', height: '550px', width: '250px' }}
         onDragOver={(e) => {
           onDragOver(e);
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
-          {matriculaList.map((sections, sectionsIndex) => (
-            <ListItem
-              style={{ cursor: 'pointer' }}
-              draggable={matriculaIndex === 0}
-              key={sectionsIndex}
-              onDragStart={(e) =>
-                onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
-              }
-            >
-              <SectionCard
-                courseCode={sections.courseCode}
-                section={sections.secNum}
-                courseName={sections.courseName}
-                professor={sections.professor}
-                credits={sections.credits}
-                color={sections.color}
-                time={sections.time}
-                population={sections.population}
-                capacity={sections.capacity}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: '1rem',
+          }}
+        >
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <div onDrop={() => {
+              removeSection(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
+            </div>
+          </Grid>
+        </Grid>
+        <div style={{ overflowY: 'scroll', height: '425px' }}>
+          <List style={{ alignItems: 'center' }}>
+            {matriculaList.map((sections, sectionsIndex) => (
+              <ListItem
+                style={{ cursor: 'pointer' }}
+                draggable={matriculaIndex === 0}
+                key={sectionsIndex}
+                onDragStart={(e) =>
+                  onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
+                }
+              >
+                <SectionCard
+                  courseCode={sections.courseCode}
+                  section={sections.secNum}
+                  courseName={sections.courseName}
+                  professor={sections.professor}
+                  credits={sections.credits}
+                  color={sections.color}
+                  time={sections.time}
+                  population={sections.population}
+                  capacity={sections.capacity}
+                  day={sections.day}
+                  period={sections.period}
+                  availability={matriculas[matriculaIndex].courses[sectionsIndex].availability}
+                  description={matriculas[matriculaIndex].courses[sectionsIndex].description}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
     );
   };
@@ -455,11 +599,12 @@ export default function Main(props) {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <img src={Macademia} className={classes.image} />
-          <Typography variant="h6" className={classes.title}>
-            Macademia
-          </Typography>
-          <Button className={classes.logoutButton} onClick={() => logout()}>
+          <img src={MacademiaTitle} className={classes.image} />
+          <Button
+            className={classes.logoutButton}
+            style={{ outline: 0 }}
+            onClick={() => logout()}
+          >
             <Typography>Logout</Typography>
           </Button>
         </Toolbar>
@@ -483,10 +628,11 @@ export default function Main(props) {
           ) : (
               <div />
             )}
+          <Divider />
         </div>
       </Drawer>
 
-      <main className={classes.content} style={{ height: '100vh' }}>
+      <main className={classes.content} style={{ height: "100vh" }}>
         <Toolbar />
         <div className={classes.centerContent}>
           <div
@@ -496,6 +642,13 @@ export default function Main(props) {
               <NavigateBeforeIcon style={{ height: "50px", width: "50px" }} />
             </IconButton>
           </div>
+
+          <Snackbar open={openAlert} autoHideDuration={4000} onClose={handleAlertClose}>
+            <Alert onClose={handleAlertOpen} severity={tempAlertType}>
+              <AlertTitle>{tempAlertTitle}</AlertTitle>
+              {tempAlertMessage}
+            </Alert>
+          </Snackbar>
 
           <Card elevation={3} style={{ width: "70%" }}>
             {matriculas !== null ? (
@@ -558,6 +711,7 @@ export default function Main(props) {
             </IconButton>
           </div>
         </div>
+
       </main>
     </div>
   );
