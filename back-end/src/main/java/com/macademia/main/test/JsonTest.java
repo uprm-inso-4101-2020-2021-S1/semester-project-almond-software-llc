@@ -214,42 +214,42 @@ public class JsonTest {
 
     public JsonTest() {
 
-        CIIC3015.setDescription("");
-        CIIC3015L.setDescription("");
-        CIIC3075.setDescription("");
-        CIIC4010.setDescription("");
-        CIIC4010L.setDescription("");
-        CIIC4020.setDescription("");
-        CIIC4020L.setDescription("");
-        CIIC4030.setDescription("");
-        CIIC4050.setDescription("");
-        CIIC4050L.setDescription("");
-        CIIC4060.setDescription("");
-        CIIC4070.setDescription("");
-        CIIC3081.setDescription("");
-        CIIC4082.setDescription("");
+        CIIC3015.setDescription("Analysis of algorithmic problems, development of solutions, and their implementation in a high level programming language using object-oriented programming techniques. Topics: Numerical systems, internal representation, constants, variables, and data types, selection, and iteration control structures, functions, and data passing mechanisms, basic data structures, pointers, and dynamic memory management, data input/output, files, and software development environments.");
+        CIIC3015L.setDescription("Analysis of algorithmic problems, development of solutions, and their implementation in a high level programming language using object-oriented programming techniques. Topics: Numerical systems, internal representation, constants, variables, and data types, selection, and iteration control structures, functions, and data passing mechanisms, basic data structures, pointers, and dynamic memory management, data input/output, files, and software development environments.");
+        CIIC3075.setDescription("Discrete structures in computer sciences and engineering with emphasis on problem-solving skills and algorithms. Topics include: set theory, logic and proof techniques, graph theory, computability, and discrete probability applied to computing problems.");
+        CIIC4010.setDescription("Advanced programming techniques applied to the solution of engineering problems, extensive use of subprograms, logical and specifications statements. Principles of multiprogramming, multiprocessing, and real-time systems.");
+        CIIC4010L.setDescription("Advanced programming techniques applied to the solution of engineering problems, extensive use of subprograms, logical and specifications statements. Principles of multiprogramming, multiprocessing, and real-time systems.");
+        CIIC4020.setDescription("Data structures in programming languages; representation of information as data lists in linear, orthogonal, string, and array form; tree structures; techniques for storage allocation, distribution collection, and sorting of data.");
+        CIIC4020L.setDescription("Data structures in programming languages; representation of information as data lists in linear, orthogonal, string, and array form; tree structures; techniques for storage allocation, distribution collection, and sorting of data.");
+        CIIC4030.setDescription("Comparative study of programming styles, including imperative, object-oriented, functional, logic, and concurrent programming. Concepts of data encapsulation and inheritance. Formal specification of the syntactic structure of a language. Context-free grammars and parse trees.");
+        CIIC4050.setDescription("Study of operating systems, multiprogramming, multiprocessing, batch, partitioned, and real time processing, organization and processing of file systems, queuing theory and information flow control.");
+        CIIC4050L.setDescription("Study of operating systems, multiprogramming, multiprocessing, batch, partitioned, and real time processing, organization and processing of file systems, queuing theory and information flow control.");
+        CIIC4060.setDescription("Study of database system architectures, design and implementation of database applications, conceptual and representational models, SQL and the relational model, functional dependencies and normalization, transaction processing.");
+        CIIC4070.setDescription("Study and development of skills required for the design of network protocols and network-centric applications, with emphasis on Internet protocols. Topics include: the ISO layered model, TCP/IP, routing, client-server model, World Wide Web, and Web Services. Practice with analysis and programming problems.");
+        CIIC3081.setDescription("Study of fundamental concepts of logic circuit analysis and design with the aim of understanding and designing the main components of a modern processor. Topics include: boolean algebra, logic gates, combinational and sequential circuits, arithmetic logic units (ALU ), memory and programmable logic devices, data paths, and control units. Practice with logic circuit design problems.");
+        CIIC4082.setDescription("Study of fundamental computer architecture concepts with the objective of designing efficient processors and computing systems to support operating systems and high-level programming languages. Topics include: subroutines, exceptions, input/output, pipelining, and hierarchical memories. Practice with analysis, design, and programming problems.");
 
-        INSO4101.setDescription("");
-        INSO4115.setDescription("");
-        INSO4116.setDescription("");
-        INSO4117.setDescription("");
-        INSO4151.setDescription("");
+        INSO4101.setDescription("Introduction to the software development cycle. Models for the software development process and related metrics. Ethical issues in software engineering.");
+        INSO4115.setDescription("Techniques used to determine the requirements of a complex software system: specification standards, the UML language, validation, specification management tools, and quality metrics. Elicitation and development of software system requirements. Discussion of ethical issues arising during requirements elicitation.");
+        INSO4116.setDescription("Fundamental principles and development of skills required for the effective design of complex software systems. Topics include: formal design methods, design specification standards, design patterns, design validation, and design metrics. Use of computer-aided software engineering (CASE) tools.");
+        INSO4117.setDescription("Software testing and validation techniques with the aim of developing the skills required to design reliable and fault-tolerant software systems. Topics include: unit, integrated, performance, stress, usability, and fault tolerance testing. Practice with computerized testing and debugging tools.");
+        INSO4151.setDescription("Team project to design, implement, test, and document a system that encompasses all phases of the software engineering development process to solve an academic, governmental, commercial, or industrial problem. ");
 
-        INGE3011.setDescription("");
-        INGE3035.setDescription("");
-        INGE3045.setDescription("");
+        INGE3011.setDescription("Principles of graphic language: fundamentals of delineation, analysis and solution of space problems, symbols and standards as applied in engineering. Freehand drawing as a tool for visualization. Principles of orthographic projection, sections, auxiliary views and conventional practices. Introduction to descriptive geometry. Hand and computer- aided drawing.");
+        INGE3035.setDescription("Analysis of force systems; the laws of equilibrium, friction; centroids and moments of inertia. Kinematics and dynamics of particles and rigid bodies.");
+        INGE3045.setDescription("Principles that determine the properties of conductors, semiconductors, and insulators. Electromechanical properties; diffusion, electrical conduction, thermal conduction, magnetic, and optical properties.");
 
         ININ4010.setDescription("");
         ININ4015.setDescription("");
 
-        INGL3211.setDescription("");
-        INGL3212.setDescription("");
-        INGL3101.setDescription("");
-        INGE3011.setDescription("");
-        INGE3011.setDescription("");
-        INGE3011.setDescription("");
-        INGE3011.setDescription("");
-        INGE3011.setDescription("");
+        INGL3211.setDescription("Development of reading, discussion, and writing skills through the experience, interpretation, and evaluation of short story, modern drama, poetry, and the essay. Introduction to library skills related to literary study.");
+        INGL3212.setDescription("Development of reading, discussion, and writing skills through the experience, interpretation, and evaluation of the novel, Shakespearean drama, and the complex texture of poetry. A research paper related to literary study will be required.");
+        INGL3101.setDescription("This course is designed to meet the student’s immediate needs, and to give him or her a command of the fundamental structure of the English language. The oral approach is used. Skills in reading and writing are developed. Students will be grouped according to their ability to use the language, and arrangements will be made to give additional help to those students who show poor preparation in English.");
+        INGL3102.setDescription("This course is designed to meet the student’s immediate needs, and to give him or her a command of the fundamental structure of the English language. The oral approach is used. Skills in reading and writing are developed. Students will be grouped according to their ability to use the language, and arrangements will be made to give additional help to those students who show poor preparation in English.");
+        INGL3103.setDescription("Analysis of selected readings, such as essays, fiction, poetry or drama, and practice in writing compositions with attention given as needed to grammar and idiomatic expressions.");
+        INGL3104.setDescription("Analysis of selected readings, such as essays, fiction, poetry or drama, and practice in writing compositions with attention given as needed to grammar and idiomatic expressions.");
+        INGL3289.setDescription("Development of naturalness, correctness and clarity in conversational English; analysis and correction of individual faults in speech delivery; application of phonetics to problems of pronunciation and articulation in North American English.");
+        INGL3345.setDescription("Introduction to English language film in the context of linguistic and literary analysis. Aspects of film to be covered include history, theory, selected genres, cinematic analysis and criticism, aesthetic response, and semiotics.");
 
         testList.add(testSection1A1);
         testList.add(testSection1B1);
