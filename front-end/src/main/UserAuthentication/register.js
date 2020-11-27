@@ -70,9 +70,9 @@ export default function SignUp() {
 
   const verifyRegister = async () => {
     if (password === passwordConfirmation) {
-      await axios.get('http://localhost:8080/userExists?user=' + user).then(res => {
+      await axios.get('https://almond-macademia-back-end.herokuapp.com/userExists?user=' + user).then(res => {
         if (!res.data) {
-          axios.post('http://localhost:8080/register?'
+          axios.post('https://almond-macademia-back-end.herokuapp.com/register?'
             + 'user=' + user
             + '&password=' + password
             + '&fullName=' + fullName

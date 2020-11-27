@@ -17,9 +17,34 @@ import com.macademia.main.*;
 import com.macademia.main.auth.User;
 import com.macademia.main.test.JsonTest;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://almond-macademia-front-end.herokuapp.com")
 @RestController
 public class MacademiaController {
+
+	class ToastMessage {
+		String alertType;
+		String alertTitle;
+		String alertMessage;
+
+		ToastMessage(String alertType, String alertTitle, String alertMessage) {
+			this.alertType = alertType;
+			this.alertTitle = alertTitle;
+			this.alertMessage = alertMessage;
+		}
+
+		public String getAlertType() {
+			return this.alertType;
+		}
+
+		public String getAlertTitle() {
+			return this.alertTitle;
+		}
+
+		public String getAlertMessage() {
+			return this.alertMessage;
+		}
+
+	}
 
 	private JsonTest tester = new JsonTest();
 	private Map<String, Student> currentStudents = new HashMap<String, Student>();
@@ -28,6 +53,17 @@ public class MacademiaController {
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
 			@RequestParam(value = "lastName", defaultValue = "NULL2") String lastName) {
 		return "Welcome! " + firstName + " " + lastName;
+	}
+
+	@GetMapping("/test")
+	public boolean test(@RequestParam(value = "user") String user) {
+		try {			
+			return tester.db.UserExists(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@GetMapping("/login")
@@ -52,6 +88,12 @@ public class MacademiaController {
 	@PostMapping("/logout")
 	public boolean logout(@RequestParam(value = "user") String user) {
 		if (currentStudents.containsKey(user)) {
+			try {
+				tester.db.SaveStudent(currentStudents.get(user));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			currentStudents.remove(user);
 			return true;
 		} else {
@@ -85,7 +127,7 @@ public class MacademiaController {
 
 	@GetMapping("/userExists")
 	public boolean userExists(@RequestParam(value = "user") String user) {
-		try {
+		try {			
 			return tester.db.UserExists(user);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -121,7 +163,7 @@ public class MacademiaController {
 	}
 
 	@PostMapping("/transferSection")
-	public void transferSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+	public ToastMessage transferSection(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
@@ -134,6 +176,7 @@ public class MacademiaController {
 		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
 		Boolean conflict = checkConflicts(tempSection,
 				currentStudents.get(user).getMatricula(tempPeriod).getSections());
+		ToastMessage tempToast = null;
 		try {
 			tempCourse = tester.db.getCourse(tempSection.getCourseCode());
 		} catch (SQLException e) {
@@ -142,39 +185,83 @@ public class MacademiaController {
 		}
 		// add
 		if (targetListIndex == 0) {
-			if (!currentStudents.get(user).getPriority().contains(tempCourse))
+			if (!currentStudents.get(user).getPriority().contains(tempCourse)) {
 				currentStudents.get(user).getPriority().add(tempCourse);
+				tempToast = new ToastMessage("success", "Success!",
+						"Course has been successfully added to Priority Courses from Matricula");
+			} else {
+				tempToast = new ToastMessage("error", "Error!", "Course already exists in Priority Courses");
+			}
 		} else {
-			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse) && !conflict) {
-
-				currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
+			if (!currentStudents.get(user).getMatricula(tempPeriod).getCourses().contains(tempCourse)) {
+				if (conflict) {
+					tempToast = new ToastMessage("error", "Error!", "Course will conflict with schedule");
+				} else {
+					currentStudents.get(user).getMatricula(tempPeriod).addSection(tempSection, tempCourse);
+					tempToast = new ToastMessage("success", "Success!",
+							"Course has been successfully added to Matricula from Priority Courses");
+				}
+			} else {
+				tempToast = new ToastMessage("error", "Error!", "Course already exists in Matricula");
 			}
 		}
 		// remove
 		if (sourceListIndex == 0) {
 			if (!conflict)
-				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+				currentStudents.get(user).removePriority(priorityCourseIndex);
 		} else {
-			currentStudents.get(user).getMatricula(tempPeriod).getSections().remove(valueIndex);
-			currentStudents.get(user).getMatricula(tempPeriod).getCourses().remove(tempCourse);
+			currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
+			currentStudents.get(user).getMatricula(tempPeriod).removeCourse(tempCourse);
 		}
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return tempToast;
+	}
+
+	@PostMapping("/removeSection")
+	public ToastMessage removeSection(@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "matriculaYear") int matriculaYear,
+			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
+			@RequestParam(value = "user") String user) {
+		MatriculaPeriod tempPeriod = new MatriculaPeriod(matriculaYear, matriculaPeriod);
+		Course tempCourse = currentStudents.get(user).getMatricula(tempPeriod).getCourses().get(valueIndex);
+		Section tempSection = currentStudents.get(user).getMatricula(tempPeriod).getSections().get(valueIndex);
+		ToastMessage tempToast = null;
+		currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
+		tempToast = new ToastMessage("warning", "Section Removed!",
+				"Section has been successfully removed from Matricula");
+		// save
+		try {
+			tester.db.SaveStudent(currentStudents.get(user));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tempToast;
 	}
 
 	public boolean checkConflicts(Section s, List<Section> l) {
 		// if s start <= temp end && s end >= temp end, if temp start <= s end && temp
-		// end >= s edn, false
+		// end >= s end, false
 		for (Section temp : l) {
-			if ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
+			if (checkConflictsDays(s, temp) && ((s.getPeriod().getStartMinutes() <= temp.getPeriod().getEndMinutes()
 					&& s.getPeriod().getEndMinutes() >= temp.getPeriod().getEndMinutes())
 					|| (temp.getPeriod().getStartMinutes() <= s.getPeriod().getEndMinutes()
-							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes())) {
+							&& temp.getPeriod().getEndMinutes() >= s.getPeriod().getEndMinutes()))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkConflictsDays(Section a, Section b) {
+		for (Character c : a.getDay().toCharArray()) {
+			if (b.getDay().contains(c.toString())) {
 				return true;
 			}
 		}
@@ -182,7 +269,7 @@ public class MacademiaController {
 	}
 
 	@PostMapping("/transferCourse")
-	public void transferCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
+	public ToastMessage transferCourse(@RequestParam(value = "sourceListIndex") int sourceListIndex,
 			@RequestParam(value = "targetListIndex") int targetListIndex,
 			@RequestParam(value = "valueIndex") int valueIndex,
 			@RequestParam(value = "priorityCourseIndex") int priorityCourseIndex,
@@ -190,40 +277,61 @@ public class MacademiaController {
 			@RequestParam(value = "matriculaPeriod") String matriculaPeriod,
 			@RequestParam(value = "user") String user) {
 		Course tempCourse = courseListSwitch(sourceListIndex, departmentIndex, user).get(valueIndex);
-		
+		ToastMessage tempToast = null;
 		// add
 		if (targetListIndex == 0) {
-			if ((!currentStudents.get(user).getPriority().contains(tempCourse)
-					|| currentStudents.get(user).getPriority().isEmpty())
-					&& !currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)
-					&& isAvailable(matriculaPeriod, tempCourse)) {
+			if (currentStudents.get(user).getPriority().contains(tempCourse)) {
+				tempToast = new ToastMessage("error", "Error!", "Course already exists in Priority Courses");
+			} else if (currentStudents.get(user).getMatriculas().get(0).getCourses().contains(tempCourse)) {
+				tempToast = new ToastMessage("error", "Error!", "Course already exists in Matricula");
+			} else if (!isAvailable(matriculaPeriod, tempCourse)) {
+				tempToast = new ToastMessage("error", "Error!", "Course is not offered this semester");
+			} else {
 				currentStudents.get(user).getPriority().add(tempCourse);
+				tempToast = new ToastMessage("success", "Success!",
+						"Course has been successfully added from Department to Priority Courses");
 			}
 		}
 		// remove
 		if (sourceListIndex == 0) {
-			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+			currentStudents.get(user).removePriority(priorityCourseIndex);
 		}
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return tempToast;
 	}
 
-	private boolean isAvailable(String period, Course c){
-		switch(period){
-			case "FALL": 
-			System.out.println(c.getAvailability().contains("FALL"));
-			return c.getAvailability().contains("FALL");
+	@PostMapping("/removeCourse")
+	public ToastMessage removeCourse(@RequestParam(value = "valueIndex") int valueIndex,
+			@RequestParam(value = "user") String user) {
+		// Course tempCourse = currentStudents.get(user).getPriority().get(valueIndex);
+		ToastMessage tempToast = null;
+		currentStudents.get(user).removePriority(valueIndex);
+		tempToast = new ToastMessage("warning", "Course Removed!",
+				"Course has been successfully removed from Priority Courses");
+		// save
+		try {
+			tester.db.SaveStudent(currentStudents.get(user));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tempToast;
+	}
+
+	private boolean isAvailable(String period, Course c) {
+		switch (period) {
+			case "FALL":
+				return c.getAvailability().contains("FALL");
 			case "SPRING":
-			System.out.println(c.getAvailability().contains("SPRING"));
-			return c.getAvailability().contains("SPRING");
+				return c.getAvailability().contains("SPRING");
 			case "SUMMER":
-			System.out.println(c.getAvailability().contains("SUMMER"));
-			return c.getAvailability().contains("SUMMER");
+				return c.getAvailability().contains("SUMMER");
 		}
 		return false;
 	}

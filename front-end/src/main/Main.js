@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import SectionCard from "../sectioncard/SectionCard";
-import CourseCard from "../coursecard/coursecard.js";
+import CourseCard from "../coursecard/coursecard";
 import Macademia from "./macademia.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -24,6 +24,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
 import MacademiaTitle from './Macademia_title.png';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const drawerWidth = 270;
 
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: drawerWidth,
     backgroundColor: "#1e8449",
     display: 'flex',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
   },
   drawer: {
     width: drawerWidth,
@@ -111,6 +113,14 @@ export default function Main() {
 
   const [isCourseSection, setIsCourseSection] = useState(0); //0 = course, 1 = section
 
+  let [tempAlertType, setAlertType] = useState("");
+
+  let [tempAlertTitle, setAlertTitle] = useState("");
+
+  let [tempAlertMessage, setAlertMessage] = useState("");
+
+  let [openAlert, setOpenAlert] = useState(false);
+
   let [courseExpands, setCourseExpands] = useState({ [0]: false });
 
   let [priorityCourseIndex, setPriorityCourseIndex] = useState(0);
@@ -131,17 +141,16 @@ export default function Main() {
 
   async function fetchData() {
     if (Cookies.get("user") !== "") {
-      console.log('if userActive true in fetchData():', Cookies.get("userActive"));
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/priority?" + "user=" + Cookies.get("user")
       );
       setPriorities(resultPriorities.data);
       const resultDepartments = await axios.get(
-        "http://localhost:8080/departments?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/departments?" + "user=" + Cookies.get("user")
       );
       setDepartments(resultDepartments.data);
       const resultMatriculas = await axios.get(
-        "http://localhost:8080/matriculas?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/matriculas?" + "user=" + Cookies.get("user")
       );
       setMatriculas(resultMatriculas.data);
     } else {
@@ -152,7 +161,7 @@ export default function Main() {
   async function setExpands() {
     if (Cookies.get("user") !== "") {
       const resultPriorities = await axios.get(
-        "http://localhost:8080/priority?" + "user=" + Cookies.get("user")
+        "https://almond-macademia-back-end.herokuapp.com/priority?" + "user=" + Cookies.get("user")
       );
       resultPriorities.data.map((course, coursesIndex) => {
         courseExpands[coursesIndex] = false;
@@ -170,11 +179,27 @@ export default function Main() {
     fetchData();
   }, [elTicko]);
 
+  const logout = async () => {
+    Cookies.set("user", "");
+    history.push("/");
+    await axios.post('https://almond-macademia-back-end.herokuapp.com/logout?user=' + Cookies.get("user"))
+  };
+
   const handleCourseExpand = (courseIndex) => {
     courseExpands[courseIndex] = !courseExpands[courseIndex];
     setCourseExpands(courseExpands);
     forceUpdate();
-    console.log(courseExpands);
+  }
+
+  const handleAlertOpen = () => {
+    setOpenAlert(true);
+  }
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
   }
 
   const forceUpdate = () => {
@@ -201,8 +226,11 @@ export default function Main() {
     departmentIndex,
     matriculaPeriod
   ) => {
-    await axios.post(
-      "http://localhost:8080/transferCourse?" +
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferCourse = await axios.post(
+      "https://almond-macademia-back-end.herokuapp.com/transferCourse?" +
       "sourceListIndex=" +
       sourceListIndex +
       "&targetListIndex=" +
@@ -218,7 +246,26 @@ export default function Main() {
       "&user=" +
       Cookies.get("user")
     );
+    setAlertType(resultTransferCourse.data.alertType);
+    setAlertTitle(resultTransferCourse.data.alertTitle);
+    setAlertMessage(resultTransferCourse.data.alertMessage);
+    handleAlertOpen();
   };
+
+  const removeCourse = async (sourceListIndex) => {
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    if (sourceListIndex === 0) {
+      const resultRemoveCourse = await axios.post('https://almond-macademia-back-end.herokuapp.com/removeCourse?'
+        + 'valueIndex=' + tempValueIndex
+        + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveCourse.data.alertType);
+      setAlertTitle(resultRemoveCourse.data.alertTitle);
+      setAlertMessage(resultRemoveCourse.data.alertMessage);
+      handleAlertOpen();
+    }
+  }
 
   const transferSection = async (
     sourceListIndex,
@@ -227,8 +274,11 @@ export default function Main() {
     priorityCourseIndex,
     matriculaIndex
   ) => {
-    await axios.post(
-      "http://localhost:8080/transferSection?" +
+    setAlertType("");
+    setAlertTitle("");
+    setAlertMessage("");
+    const resultTransferSection = await axios.post(
+      "https://almond-macademia-back-end.herokuapp.com/transferSection?" +
       "sourceListIndex=" +
       sourceListIndex +
       "&targetListIndex=" +
@@ -244,13 +294,28 @@ export default function Main() {
       "&user=" +
       Cookies.get("user")
     );
+    setAlertType(resultTransferSection.data.alertType);
+    setAlertTitle(resultTransferSection.data.alertTitle);
+    setAlertMessage(resultTransferSection.data.alertMessage);
+    handleAlertOpen();
   };
 
-  const logout = async () => {
-    Cookies.set("user", "");
-    history.push("/");
-    await axios.post('http://localhost:8080/logout?user=' + Cookies.get("user"))
-  };
+  const removeSection = async (sourceListIndex) => {
+    if (sourceListIndex === 2) {
+      setAlertType("");
+      setAlertTitle("");
+      setAlertMessage("");
+      const resultRemoveSection = await axios.post('https://almond-macademia-back-end.herokuapp.com/removeSection?'
+        + 'valueIndex=' + tempValueIndex
+        + '&matriculaYear=' + matriculas[matriculaIndex].period.matyear
+        + '&matriculaPeriod=' + matriculas[matriculaIndex].period.semesterAsString
+        + '&user=' + Cookies.get("user"));
+      setAlertType(resultRemoveSection.data.alertType);
+      setAlertTitle(resultRemoveSection.data.alertTitle);
+      setAlertMessage(resultRemoveSection.data.alertMessage);
+      handleAlertOpen();
+    }
+  }
 
   const listCourseSwitch = (listIndex, departmentIndex) => {
     switch (listIndex) {
@@ -346,7 +411,7 @@ export default function Main() {
           {departmentsList.map((department, departmentsIndex) => (
             <div key={departmentsIndex}>
               <ListItem>
-                <Typography style={{fontWeight:'800'}}>{department.name}</Typography>
+                <Typography style={{ fontWeight: '800' }}>{department.name}</Typography>
               </ListItem>
               <List>
                 {department.courses.map((course, coursesIndex) => (
@@ -386,9 +451,9 @@ export default function Main() {
           container
           style={{
             display: "flex",
-            alignContent: "center",
+            alignItems: "center",
             justifyContent: "center",
-            paddingTop:'1rem',
+            paddingTop: '1rem',
           }}
         >
           <Grid item>
@@ -397,10 +462,14 @@ export default function Main() {
             </Typography>
           </Grid>
           <Grid item>
-            <DeleteForeverIcon style={{ height: "2rem", width: "2rem" }} />
+            <div onDrop={() => {
+              removeCourse(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
+            </div>
           </Grid>
         </Grid>
-
         <List style={{ alignItems: "center" }}>
           {coursesList.map((course, coursesIndex) => (
             <div key={coursesIndex}>
@@ -469,35 +538,59 @@ export default function Main() {
         }}
         onDrop={(e) => onDrop(e, listIndex)}
       >
-        <List style={{ alignItems: 'center' }}>
-          <Typography className={classes.drawerTypography}>{title}</Typography>
-          {matriculaList.map((sections, sectionsIndex) => (
-            <ListItem
-              style={{ cursor: 'pointer' }}
-              draggable={matriculaIndex === 0}
-              key={sectionsIndex}
-              onDragStart={(e) =>
-                onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
-              }
-            >
-              <SectionCard
-                courseCode={sections.courseCode}
-                section={sections.secNum}
-                courseName={sections.courseName}
-                professor={sections.professor}
-                credits={sections.credits}
-                color={sections.color}
-                time={sections.time}
-                population={sections.population}
-                capacity={sections.capacity}
-                day={sections.day}
-                period={sections.period}
-                availability={matriculas[matriculaIndex].courses[sectionsIndex].availability}
-                description={matriculas[matriculaIndex].courses[sectionsIndex].description}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: '1rem',
+          }}
+        >
+          <Grid item>
+            <Typography className={classes.drawerTypography}>
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <div onDrop={() => {
+              removeSection(listIndex);
+              forceUpdate();
+            }}>
+              <DeleteForeverIcon style={{ height: "2rem", width: "2rem", color: "gray" }} />
+            </div>
+          </Grid>
+        </Grid>
+        <div style={{ overflowY: 'scroll', height: '425px' }}>
+          <List style={{ alignItems: 'center' }}>
+            {matriculaList.map((sections, sectionsIndex) => (
+              <ListItem
+                style={{ cursor: 'pointer' }}
+                draggable={matriculaIndex === 0}
+                key={sectionsIndex}
+                onDragStart={(e) =>
+                  onDragStart(e, 1, sectionsIndex, 2, matriculaIndex)
+                }
+              >
+                <SectionCard
+                  courseCode={sections.courseCode}
+                  section={sections.secNum}
+                  courseName={sections.courseName}
+                  professor={sections.professor}
+                  credits={sections.credits}
+                  color={sections.color}
+                  time={sections.time}
+                  population={sections.population}
+                  capacity={sections.capacity}
+                  day={sections.day}
+                  period={sections.period}
+                  availability={matriculas[matriculaIndex].courses[sectionsIndex].availability}
+                  description={matriculas[matriculaIndex].courses[sectionsIndex].description}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
     );
   };
@@ -526,16 +619,15 @@ export default function Main() {
         <div className={classes.drawerContainer}>
           {priorities !== null ? (
             renderPriorityCourses(priorities, "Priority Courses", 0)
-             
           ) : (
-            <div />
-          )}
+              <div />
+            )}
           <Divider />
           {departments !== null ? (
             renderDepartments(departments, "Departments", 1)
           ) : (
-            <div />
-          )}
+              <div />
+            )}
           <Divider />
         </div>
       </Drawer>
@@ -551,7 +643,14 @@ export default function Main() {
             </IconButton>
           </div>
 
-          <Card elevation={3} style={{ width: "70%"}}>
+          <Snackbar open={openAlert} autoHideDuration={4000} onClose={handleAlertClose}>
+            <Alert onClose={handleAlertOpen} severity={tempAlertType}>
+              <AlertTitle>{tempAlertTitle}</AlertTitle>
+              {tempAlertMessage}
+            </Alert>
+          </Snackbar>
+
+          <Card elevation={3} style={{ width: "70%" }}>
             {matriculas !== null ? (
               <CardContent>
                 <Grid item style={{ textAlign: "center" }}>
@@ -597,8 +696,8 @@ export default function Main() {
                 </Grid>
               </CardContent>
             ) : (
-              <div />
-            )}
+                <div />
+              )}
           </Card>
 
           <div
@@ -612,6 +711,7 @@ export default function Main() {
             </IconButton>
           </div>
         </div>
+
       </main>
     </div>
   );

@@ -223,9 +223,10 @@ Creator creates the Macademia Database. It includes the following methods:
 
 |Static Method|Description|
 |-|-|
-|createNewMacademiaDatabase()|Creates a new Macademia Database at provided filename. If the file exists and provided overwrite flag is true, it deletes the file and creates a fresh Macademia Database straight from the Database Oven. Mmmmm... Tasty.|
-|*DummyData()*|Deprecated function that used to directly input dummy data into the database. Its now very incomplete. Do not use it.|
-|Main()|Overwrites and creates Macademia.db|
+|createNewMacademiaDatabase()|Creates a new Macademia Database at given host, with given name, with given username and password. If the file exists and provided overwrite flag is true, it deletes the file and creates a fresh Macademia Database straight from the Database Oven. Mmmmm... Tasty.|
+
+### CredentialsHolder
+Static class which holds username and password used to access the database by default. In a real project, this would be considered a vulnerability, and should be ommitted. However, because this is just a college project, it is ok (I think).
 
 ### DBHandler
 This is the super big class that handles any and all connections to a Macademia Database. It also holds departments in memory, which in turn hold courses, which in turn hold sections. It includes the following methods:
