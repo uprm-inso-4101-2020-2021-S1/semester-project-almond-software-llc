@@ -1,4 +1,5 @@
 @startuml classDiagram
+Student "1..*" <-- "1" User
 Student "1" -- "1..*" Matricula 
 Student "1" -- "1..*" Course
 Student "1" -- "1" Department
@@ -16,9 +17,7 @@ class User{
     boolean checkPassword(String Password)
 
 }
-Class Student extends User{
-    -matricula : Matricula
-    -department: Department
+Class Student{
     -name : String
     -StudentNumber : String
     -matricula : List<Matricula>
