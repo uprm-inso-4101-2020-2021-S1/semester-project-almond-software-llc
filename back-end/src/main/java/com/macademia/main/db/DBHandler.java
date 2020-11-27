@@ -39,6 +39,16 @@ public class DBHandler {
 	private Connection SQLConn;
 
 	/**
+	 * DBHandler Constructor EXCLUSIVELY FOR HEROKU. It uses the environment variable to create the database. MUCHO CUIDADO
+	 * @throws SQLException
+	 */
+	public DBHandler() throws SQLException {
+		DepartmentMap = new HashMap<String, Department>();
+		SQLConn = Creator.createNewHerokuMacademiaDatabase();
+		LoadEverything();
+	}
+	
+	/**
 	 * Starts a DBHandler with a connection to the database in LocalHost, with default Credentials
 	 * @param Database
 	 * @throws SQLException
