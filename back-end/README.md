@@ -18,6 +18,8 @@ Course is an object to hold course information, and holds all sections offered f
 |PreReq|List of other courses that are Prerequesites for this course|
 |CoReq|List of other courses that are corequesites for this course|
 |Color|Color of this course (Used by the front-end to render a course card). This property is handed down from the department|
+|Description|Description of this course.|
+|Availability|Availability of this course (Semester/Year)|
 
 |Method|Description|
 |-|-|
@@ -36,7 +38,6 @@ Department is an object to hold University Department information, and holds all
 |ShortName|Short Name of this department used for course codes (IE: DRAM)|
 |Color|Color of this department (Used by the front-end to render a course card)|
 |Catalog|A <Stirng,String> Map of all courses offered by this department. The key for this map is a course's code number (IE 3011).|
-|
 
 |Method|Description|
 |-|-|
@@ -91,6 +92,8 @@ Period holds two integers representing two times for sections using ints to stor
 |-|-|
 |Start|Start of this period as an integer with military time. (IE 3:00PM is stored as 1500)|
 |End|End of this period stored the same way start is|
+|StartMinutes|Start of this period in minutes since midnight.|
+|EndMinutes|End of this period in minutes since midnight.|
 
 |Static Method|Description|
 |-|-|
