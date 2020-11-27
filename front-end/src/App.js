@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import "date-fns";
+import Main from './main/Main.js';
 import './App.css';
+import Login from './main/userauthentication/login';
+import Register from './main/userauthentication/register';
+import { BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/" exact>
+          <Login />
+        </Route>
+        <Route path="/home" exact>
+          <Main />
+        </Route>
+        <Route path="/register" exact>
+          <Register />
+        </Route>
+      </Switch>
+    </Router >
   );
 }
-
 export default App;
+
