@@ -104,10 +104,7 @@ public class Student extends User {
 	}
 
 	public void Turntime(Date day, int time){
-		if(!this.turn.getDayturn().before(day)&&!this.turn.getDayturn().after(day))
-			if(this.turn.getPeriod().inPeriod(time)){
-				this.matricula.setReadOnly(true);
-			}
-		this.matricula.setReadOnly(false);
+		if(!this.turn.getDayturn().before(day)&&!this.turn.getDayturn().after(day)&&this.turn.getPeriod().inPeriod(time)) this.matricula.setReadOnly(false);	
+		this.matricula.setReadOnly(true);
 	}
 }

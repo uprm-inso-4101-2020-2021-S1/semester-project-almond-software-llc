@@ -15,7 +15,7 @@ public class Matricula {
 		this.Sections = Sections;
 		this.totalCredits = totalCredits;
 		this.period = period;
-		this.ReadOnly=false;
+		this.ReadOnly=true;
 	}
 	
 	//-[Getters]---------------------------------------------
