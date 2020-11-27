@@ -73,9 +73,10 @@ export default function Login() {
   }
 
   function fetchData() {
-    console.log(Cookies.get("userActive"));
-    if (Cookies.get("user") !== "") {
-      history.push("/home");
+    if (Cookies.get("user") !== undefined) {
+      if (Cookies.get("user") !== "") {
+        history.push("/home");
+      }
     }
   }
 
