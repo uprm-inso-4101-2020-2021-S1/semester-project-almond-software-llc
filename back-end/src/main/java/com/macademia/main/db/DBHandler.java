@@ -1027,7 +1027,7 @@ public class DBHandler {
 
 	// All of these methods can be made public if needed... though for some it
 	// *probably* shouldn't
-	private int deleteUser(String Username) throws SQLException {
+	public int deleteUser(String Username) throws SQLException {
 		return deleteFromWhere("Users", "Username", Username);
 	}
 

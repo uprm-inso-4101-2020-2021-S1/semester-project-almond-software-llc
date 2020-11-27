@@ -49,21 +49,31 @@ public class MacademiaController {
 	private JsonTest tester = new JsonTest();
 	private Map<String, Student> currentStudents = new HashMap<String, Student>();
 
+	@GetMapping("/getStudents")
+	public List<Student> getStudents() {
+		try {
+			return tester.db.getStudents();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@GetMapping("/macademia")
 	public String macademia(@RequestParam(value = "firstName", defaultValue = "NULL1") String firstName,
 			@RequestParam(value = "lastName", defaultValue = "NULL2") String lastName) {
 		return "Welcome! " + firstName + " " + lastName;
 	}
 
-	@GetMapping("/test")
-	public boolean test(@RequestParam(value = "user") String user) {
+	@GetMapping("/deleteUser")
+	public void deleteUser(@RequestParam(value = "user") String user) {
 		try {			
-			return tester.db.UserExists(user);
+			tester.db.deleteUser(user);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
 	}
 
 	@GetMapping("/login")
