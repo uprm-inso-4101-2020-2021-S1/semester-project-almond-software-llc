@@ -177,9 +177,11 @@ public class DBHandler {
 
 		String Name = RS.getString("Name");
 		String ID = RS.getString("ID");
+		String TurnText = RS.getString("Turn");
 
 		Department Dep = getDepartment(RS.getString("Department"));
 		Student ReturnStudent = new Student(user, Name, ID, Dep);
+		ReturnStudent.SetTurn(new Turn(TurnText));
 
 		// Get all matriculas
 		for (String MatID : RS.getString("Matriculas").split(",")) {
@@ -1240,9 +1242,9 @@ public class DBHandler {
 		pstmt.setString(3, Department);
 		pstmt.setString(4, Matriculas);
 		pstmt.setString(5, PriorityCourses);
-		pstmt.setString(7, CoursesTaken);
-		pstmt.setString(8, Turn);
-		pstmt.setString(9, ID);
+		pstmt.setString(6, CoursesTaken);
+		pstmt.setString(7, Turn);
+		pstmt.setString(8, ID);
 
 		pstmt.executeUpdate();
 		pstmt.close();

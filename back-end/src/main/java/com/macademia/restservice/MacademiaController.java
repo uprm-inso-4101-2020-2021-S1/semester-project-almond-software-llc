@@ -17,7 +17,7 @@ import com.macademia.main.*;
 import com.macademia.main.auth.User;
 import com.macademia.main.test.JsonTest;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://almond-macademia-front-end.herokuapp.com")
 @RestController
 public class MacademiaController {
 
@@ -55,6 +55,17 @@ public class MacademiaController {
 		return "Welcome! " + firstName + " " + lastName;
 	}
 
+	@GetMapping("/test")
+	public boolean test(@RequestParam(value = "user") String user) {
+		try {			
+			return tester.db.UserExists(user);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	@GetMapping("/login")
 	public boolean login(@RequestParam(value = "user") String user, @RequestParam(value = "password") String password) {
 		try {
@@ -77,6 +88,12 @@ public class MacademiaController {
 	@PostMapping("/logout")
 	public boolean logout(@RequestParam(value = "user") String user) {
 		if (currentStudents.containsKey(user)) {
+			try {
+				tester.db.SaveStudent(currentStudents.get(user));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			currentStudents.remove(user);
 			return true;
 		} else {
@@ -110,7 +127,7 @@ public class MacademiaController {
 
 	@GetMapping("/userExists")
 	public boolean userExists(@RequestParam(value = "user") String user) {
-		try {
+		try {			
 			return tester.db.UserExists(user);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -191,14 +208,14 @@ public class MacademiaController {
 		// remove
 		if (sourceListIndex == 0) {
 			if (!conflict)
-				currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+				currentStudents.get(user).removePriority(priorityCourseIndex);
 		} else {
 			currentStudents.get(user).getMatricula(tempPeriod).removeSection(tempSection, tempCourse);
 			currentStudents.get(user).getMatricula(tempPeriod).removeCourse(tempCourse);
 		}
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,7 +237,7 @@ public class MacademiaController {
 				"Section has been successfully removed from Matricula");
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,11 +294,11 @@ public class MacademiaController {
 		}
 		// remove
 		if (sourceListIndex == 0) {
-			currentStudents.get(user).getPriority().remove(priorityCourseIndex);
+			currentStudents.get(user).removePriority(priorityCourseIndex);
 		}
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -294,12 +311,12 @@ public class MacademiaController {
 			@RequestParam(value = "user") String user) {
 		// Course tempCourse = currentStudents.get(user).getPriority().get(valueIndex);
 		ToastMessage tempToast = null;
-		currentStudents.get(user).getPriority().remove(valueIndex);
+		currentStudents.get(user).removePriority(valueIndex);
 		tempToast = new ToastMessage("warning", "Course Removed!",
 				"Course has been successfully removed from Priority Courses");
 		// save
 		try {
-			tester.db.SaveUser(currentStudents.get(user));
+			tester.db.SaveStudent(currentStudents.get(user));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
