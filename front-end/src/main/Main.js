@@ -135,9 +135,17 @@ export default function Main() {
 
   let [disablePrevious, setDisablePrevious] = useState(true);
 
-  let [disableNext, setDisableNext] = useState(false);
+  let [disableNext, setDisableNext] = useState(true);
 
   let [elTicko, setElTicko] = useState(false);
+
+  useEffect(() => {
+    setExpands();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [elTicko]);
 
   async function fetchData() {
     if (Cookies.get("user") !== "") {
@@ -152,6 +160,9 @@ export default function Main() {
       const resultMatriculas = await axios.get(
         "https://almond-macademia-back-end.herokuapp.com/matriculas?" + "user=" + Cookies.get("user")
       );
+      if(resultMatriculas.data.length > 1){
+        setDisablePrevious(false);
+      }
       setMatriculas(resultMatriculas.data);
     } else {
       history.push("/");
@@ -170,14 +181,6 @@ export default function Main() {
       history.push("/");
     }
   };
-
-  useEffect(() => {
-    setExpands();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [elTicko]);
 
   const logout = async () => {
     Cookies.set("user", "");
