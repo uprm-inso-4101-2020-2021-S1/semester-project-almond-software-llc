@@ -413,7 +413,7 @@ public class JsonTest {
 
         try {
 
-            db = new DBHandler("sql-dabatase", true);
+            db = new DBHandler();
             
             db.SaveDepartment(testDepartment1);
             db.SaveDepartment(testDepartment2);

@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 //import java.sql.PreparedStatement;
 import java.sql.SQLException; 
-import java.io.File;
+//import java.io.File;
 
 /**
  * Holder for Creating Macademia Databases.
@@ -30,9 +30,7 @@ public class Creator {
     	//Change to refer to the host.
         String DatabaseURL = "jdbc:postgresql:" + "//" + Host + "/" + Database;
         String HostURL = "jdbc:postgresql:" + "//" + Host + "/postgres";
-   
-        if(new File(Database).exists() && Overwrite) {new File(Database).delete();}
-        
+           
         //=[Host Connection for Check Exists and Actual Database Creation]====================================
         
     	Connection Hostconn = DriverManager.getConnection(HostURL, Username, Password);  
@@ -51,10 +49,23 @@ public class Creator {
         
         Connection Dataconn = DriverManager.getConnection(DatabaseURL, Username, Password);  
         if (Dataconn == null) { return null; } //Make sure to catch this if it happens.
-        Statement State = Dataconn.createStatement();
+        AddTables(Dataconn.createStatement());
         
-            
-            
+        return Dataconn;
+    }
+    
+    /**
+     * Uses the JDBC_DATABASE_URL environment variable to create a Heroku Macademia Database.
+     * @return
+     * @throws SQLException 
+     */
+    public static Connection createNewHerokuMacademiaDatabase() throws SQLException {
+    	Connection DataConn = DriverManager.getConnection(System.getenv("JDBC_DATABASE_URL"));
+    	AddTables(DataConn.createStatement());
+    	return DataConn;
+    }
+    
+    private static void AddTables(Statement State) throws SQLException {
         System.out.println("Creating Users table.");            
         /*
          * Username
@@ -117,8 +128,7 @@ public class Creator {
          * MaxCap (Maximum Capacity)
          */
         State.execute("CREATE TABLE IF NOT EXISTS Sections (ID Char(12), L Bool, DAYS VarChar(7), TIME VarChar(20), LOCATION VarChar(20), PROF VarChar(100) , CurCap int, MaxCap int);");
-        
-        return Dataconn;
+
     }
     
     public static Boolean CheckDatabaseExist(Statement State, String Database) throws SQLException {
