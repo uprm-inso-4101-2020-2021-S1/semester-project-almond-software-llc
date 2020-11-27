@@ -1,9 +1,11 @@
-# Macademia Back-End
-
+![Macademia Logo](https://cdn.discordapp.com/attachments/745003867720122532/758819444251688990/Macademia_Blank_tight.png)<hr><br>
 This is the Macademia Back-End. It is comprised of the following objects under the following packages under src/main/java:
 
 ## com.macademia.main
 Macademia Main holds the main classes used for Macademia
+
+![Macademia PlantUML](https://cdn.discordapp.com/attachments/745003601050599507/772897298216124416/unknown.png)<br>
+This is a PlantUML Diagram of the main classes. It is missing some recent changes, but it shows the relations between *most* objects present and *most* field. We'll be back to update it (hopefully).
 
 ### Course
 Course is an object to hold course information, and holds all sections offered for this course. It includes the following properties and methods:
@@ -18,6 +20,8 @@ Course is an object to hold course information, and holds all sections offered f
 |PreReq|List of other courses that are Prerequesites for this course|
 |CoReq|List of other courses that are corequesites for this course|
 |Color|Color of this course (Used by the front-end to render a course card). This property is handed down from the department|
+|Description|Description of this course.|
+|Availability|Availability of this course (Semester/Year)|
 
 |Method|Description|
 |-|-|
@@ -36,7 +40,6 @@ Department is an object to hold University Department information, and holds all
 |ShortName|Short Name of this department used for course codes (IE: DRAM)|
 |Color|Color of this department (Used by the front-end to render a course card)|
 |Catalog|A <Stirng,String> Map of all courses offered by this department. The key for this map is a course's code number (IE 3011).|
-|
 
 |Method|Description|
 |-|-|
@@ -91,6 +94,8 @@ Period holds two integers representing two times for sections using ints to stor
 |-|-|
 |Start|Start of this period as an integer with military time. (IE 3:00PM is stored as 1500)|
 |End|End of this period stored the same way start is|
+|StartMinutes|Start of this period in minutes since midnight.|
+|EndMinutes|End of this period in minutes since midnight.|
 
 |Static Method|Description|
 |-|-|
@@ -217,16 +222,22 @@ User pairs a username and password, and handles encryption of passwords. It incl
 
 ## com.macademia.main.db
 DB holds classes related to Database Creation, and saving/loading objects to/from the database.
+![How the database is organized](https://cdn.discordapp.com/attachments/745003601050599507/772878094923071548/TL7DJiCm3BxdANP7VO4UqAJsWWG8iN50Y4FK617H9iD911FYtR4Jp-f0N5R7tyzdUzkKBUQop6QQRKgRXmJuPIxgDzW5gBoZ_aT4.png)<br>
+
+This is how the Database is organized.<br><br> Due to the fact we use Heroku, we switched from SQLite to PostgreSQL. Thanks to how isolated the code was organized, only a change on Creator was necessary.
 
 ### Creator
 Creator creates the Macademia Database. It includes the following methods:
 
 |Static Method|Description|
 |-|-|
-|createNewMacademiaDatabase()|Creates a new Macademia Database at given host, with given name, with given username and password. If the file exists and provided overwrite flag is true, it deletes the file and creates a fresh Macademia Database straight from the Database Oven. Mmmmm... Tasty.|
+|createNewMacademiaDatabase()|Creates a new Macademia Database at given host, with given name, with given username and password. If the database exists and provided overwrite flag is true, it deletes the Database and creates a fresh Macademia Database straight from the Database Oven. Mmmmm... Tasty.|
+|CreateNewHerokuMacademiaDatabase()|Creates a new Macademia Database with the JDBC URL Environment variable. Adds tables if they don't exist|
 
 ### CredentialsHolder
-Static class which holds username and password used to access the database by default. In a real project, this would be considered a vulnerability, and should be ommitted. However, because this is just a college project, it is ok (I think).
+Static class which was originally designed to hold username and password used to access the database by default. In a real project, this would be considered a vulnerability, and should be ommitted. However, because this is just a college project, it is ok.
+
+However now this isn't used, because Heroku works entirely differently and in a much more smart way. So this class is actually useless. Woops ¯\_(ツ)_/¯
 
 ### DBHandler
 This is the super big class that handles any and all connections to a Macademia Database. It also holds departments in memory, which in turn hold courses, which in turn hold sections. It includes the following methods:
@@ -315,8 +326,8 @@ PeriodJUnit is a JUnit to test the period class. It includes the following tests
 |CreatePeriodFromMilitaryTime()|Tests that a Period can be created from a Military Time String.|
 |CreatePeriodFromStandardTime()|Tests that a Period can be created from a Standard Time String.|
 |MilitaryToStandardTime()|Tests that a period can correctly convert stored Military Time back to a Standard Time String|
-|ConflictYes|Tests that Period can correctly identify two periods that conflict|
-|ConflictNo|Tests that Period can correctly identify two periods that don't conflict|
+|ConflictYes()|Tests that Period can correctly identify two periods that conflict|
+|ConflictNo()|Tests that Period can correctly identify two periods that don't conflict|
 
 ### TurnTest
 TurnJUnit is a JUnit to test the Turn class. It includes the following Tests:
